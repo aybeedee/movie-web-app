@@ -11,11 +11,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "sequelize": "^6.37.3"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.12.8",
+    "@types/pg": "^8.11.6",
+    "@types/sequelize": "^4.28.20",
     "typescript": "^5.4.5"
   }
 }
