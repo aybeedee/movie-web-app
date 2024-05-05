@@ -13,6 +13,7 @@
   "dependencies": {
     "express": "^4.19.2",
     "pg": "^8.11.5",
+    "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.3"
   },
   "devDependencies": {
@@ -20,6 +21,7 @@
     "@types/node": "^20.12.8",
     "@types/pg": "^8.11.6",
     "@types/sequelize": "^4.28.20",
+    "sequelize-auto": "^0.8.8",
     "typescript": "^5.4.5"
   }
 }
