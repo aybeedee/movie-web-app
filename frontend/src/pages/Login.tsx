@@ -1,4 +1,5 @@
 import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/assets/illustrations";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   return (
@@ -19,7 +20,12 @@ export default function Login() {
           </p>
           <div className="flex justify-center items-center gap-4">
             <p className="text-white text-lg font-light">New Here?</p>
-            <button className="bg-white w-fit px-4 py-1 rounded-sm">Sign Up</button>
+            <Link
+              to="/signup"
+              className="z-50 bg-white w-fit px-4 py-1 rounded-sm"
+            >
+              Sign Up
+            </Link>
           </div>
         </div>
       </div>
@@ -30,7 +36,7 @@ export default function Login() {
             <label className="text-white font-light">Email</label>
             <input
               type="email"
-              placeholder="Your Email"
+              placeholder="username@email.com"
               required={true}
               className="px-2 py-1"
             />
@@ -39,7 +45,7 @@ export default function Login() {
             <label className="text-white font-light">Password</label>
             <input
               type="password"
-              placeholder="Enter Password"
+              placeholder="********"
               required={true}
               className="px-2 py-1"
             />
@@ -47,7 +53,9 @@ export default function Login() {
           <button
             type="submit"
             className="bg-white w-fit px-4 py-1 rounded-sm"
-          >Login</button>
+          >
+            Login
+          </button>
         </form>
       </div>
     </div>
