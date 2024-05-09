@@ -14,3 +14,10 @@ export interface User {
 	lastName: string;
 	email: string;
 }
+
+export interface SignupData {
+	firstName: string;
+	lastName: string;
+	email: string;
+	password: string;
+}

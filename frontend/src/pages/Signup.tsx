@@ -1,7 +1,12 @@
+import { signup } from "@/api/auth";
 import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/assets/illustrations";
 import { Link } from "react-router-dom";
 
 export default function Signup() {
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+  }
+
   return (
     <div className="w-screen h-screen flex flex-row bg-[#18181a]">
       <div className="w-1/2 relative overflow-hidden">
@@ -31,7 +36,7 @@ export default function Signup() {
       </div>
       <div className="w-1/2 flex flex-col items-center border border-red-500">
         <h1 className="text-white text-3xl font-semibold">Sign Up</h1>
-        <form className="flex flex-col">
+        <form onSubmit={handleSignup} className="flex flex-col">
           <div className="flex flex-col">
             <label className="text-white font-light">First Name</label>
             <input

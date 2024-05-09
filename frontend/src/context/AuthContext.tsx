@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       : "",
   });
 
-  console.log(auth);
+  console.log("AuthProvider: ", auth);
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>

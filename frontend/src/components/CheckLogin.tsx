@@ -4,6 +4,8 @@ import { useAuth } from "@/hooks";
 export default function VerifyAuth() {
   const { auth } = useAuth();
 
+  console.log("CheckLogin: ", auth);
+
   if (auth.token) return <Navigate to="/" replace />;
   return <Outlet />;
 };
