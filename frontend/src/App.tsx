@@ -1,7 +1,7 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { Home, Login, Signup, MyMovies, AddMovie } from "@/pages";
-import { CheckLogin, VerifyAuth } from "@/components";
+import { CheckLogin, VerifyAuth } from "@/components/core";
 import { AuthProvider } from "./context/AuthContext";
 
 export default function App() {

@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "@/hooks";
 
-export default function VerifyAuth() {
+export default function CheckLogin() {
   const { auth } = useAuth();
 
   console.log("CheckLogin: ", auth);
