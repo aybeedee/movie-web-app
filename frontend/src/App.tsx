@@ -2,7 +2,8 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { Home, Login, Signup, MyMovies, AddMovie } from "@/pages";
 import { CheckLogin, VerifyAuth } from "@/components/core";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "@/context/AuthContext";
+import { NavbarLayout } from "@/layout";
 
 export default function App() {
   return (
@@ -13,9 +14,11 @@ export default function App() {
           <Route path="/signup" element={<Signup />} />
         </Route>
         <Route element={<VerifyAuth />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/my-movies" element={<MyMovies />} />
-          <Route path="/add-movie" element={<AddMovie />} />
+          <Route element={<NavbarLayout />} >
+            <Route path="/" element={<Home />} />
+            <Route path="/my-movies" element={<MyMovies />} />
+            <Route path="/add-movie" element={<AddMovie />} />
+          </Route>
         </Route>
         <Route path="*" element={<div>404</div>} />
       </Routes>
