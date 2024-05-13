@@ -25,11 +25,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.error(error);
       localStorage.removeItem("user");
       localStorage.removeItem("jwtToken");
-      // setAuth(prevState => ({
-      //   ...prevState,
-      //   user: null,
-      //   token: null
-      // }));
+      setAuth(prevState => ({
+        ...prevState,
+        user: null,
+        token: null
+      }));
       return false;
     }
   }
@@ -48,7 +48,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const removeSession = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("jwtToken");
-    // setAuth back null too ?
+    setAuth(prevState => ({
+      ...prevState,
+      user: null,
+      token: null
+    }));
   }
 
   return (
