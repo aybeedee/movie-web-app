@@ -1,10 +1,42 @@
 import { signup } from "@/api/auth";
 import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/assets/illustrations";
+import { SignupData } from "@/lib/types";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Signup() {
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const [signupData, setSignupData] = useState<SignupData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: ""
+  });
+
+  console.log(signupData);
+
+  const { toast } = useToast();
+
+  const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const res = await signup(signupData);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "An error occured while processing your request.",
+        description: "There was a problem with your request."
+      });
+    }
+  }
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSignupData((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value
+    }))
   }
 
   return (
@@ -16,7 +48,7 @@ export default function Signup() {
         <div className="absolute bottom-0 left-0 opacity-60 -translate-x-1/2">
           <BackgroundIllustrationBottom />
         </div>
-        <div className="flex flex-col gap-4 border border-red-500 h-full justify-center items-center">
+        <div className="flex flex-col gap-4 border border-red-500 h-full justify-center items-center px-10">
           <h1 className="text-white font-semibold text-4xl text-center">
             Create a New Account
           </h1>
@@ -44,6 +76,10 @@ export default function Signup() {
               placeholder="Abdullah"
               required={true}
               className="px-2 py-1"
+              id="firstName"
+              name="firstName"
+              value={signupData.firstName}
+              onChange={handleInputChange}
             />
           </div>
           <div className="flex flex-col">
@@ -53,6 +89,10 @@ export default function Signup() {
               placeholder="Umer"
               required={true}
               className="px-2 py-1"
+              id="lastName"
+              name="lastName"
+              value={signupData.lastName}
+              onChange={handleInputChange}
             />
           </div>
           <div className="flex flex-col">
@@ -62,6 +102,10 @@ export default function Signup() {
               placeholder="username@email.com"
               required={true}
               className="px-2 py-1"
+              id="email"
+              name="email"
+              value={signupData.email}
+              onChange={handleInputChange}
             />
           </div>
           <div className="flex flex-col">
@@ -71,12 +115,18 @@ export default function Signup() {
               placeholder="********"
               required={true}
               className="px-2 py-1"
+              id="password"
+              name="password"
+              value={signupData.password}
+              onChange={handleInputChange}
             />
           </div>
           <button
             type="submit"
             className="bg-white w-fit px-4 py-1 rounded-sm"
-          >Create Account</button>
+          >
+            Create Account
+          </button>
         </form>
       </div>
     </div>

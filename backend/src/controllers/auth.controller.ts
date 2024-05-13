@@ -3,9 +3,11 @@ import { signUpService } from "../services/auth.service";
 import { User } from "../models";
 import bcrypt from "bcryptjs";
 import { generateJwtToken } from "../utils/generateJwtToken";
+import { validate } from "class-validator";
+import { SignupData } from "../utils/validators";
 
 /**
- * receive first name, last name, email, password
+ * receive first name, last name, email, password - validate inputs
  * check if a user with that email already exists
  * if does, err
  * else, hash password, create user
@@ -13,10 +15,24 @@ import { generateJwtToken } from "../utils/generateJwtToken";
  * return user and jwt
  */
 export const signUp = async (req: Request, res: Response) => {
-	const { firstName, lastName, email, password } = req.body;
-
 	try {
-		const user = await User.findOne({ where: { email: email } });
+		console.log(req.body);
+		const signupPostData: SignupData = new SignupData();
+		signupPostData.firstName = req.body.firstName;
+		signupPostData.lastName = req.body.lastName;
+		signupPostData.email = req.body.email;
+		signupPostData.password = req.body.password;
+
+		const errors = await validate(signupPostData);
+		if (errors.length > 0) {
+			return res.status(400).json({
+				error: true,
+				message: "Invalid input",
+				data: errors,
+			});
+		}
+
+		const user = await User.findOne({ where: { email: signupPostData.email } });
 		if (user) {
 			return res.status(400).json({
 				error: true,
@@ -25,12 +41,12 @@ export const signUp = async (req: Request, res: Response) => {
 		}
 
 		const salt = await bcrypt.genSalt(10);
-		const encryptedPassword = await bcrypt.hash(password, salt);
+		const encryptedPassword = await bcrypt.hash(signupPostData.password, salt);
 
 		const newUser = await User.create({
-			firstName: firstName,
-			lastName: lastName,
-			email: email,
+			firstName: signupPostData.firstName,
+			lastName: signupPostData.lastName,
+			email: signupPostData.email,
 			password: encryptedPassword,
 		});
 
