@@ -4,7 +4,7 @@ import { User } from "../models";
 import bcrypt from "bcryptjs";
 import { generateJwtToken } from "../utils/generateJwtToken";
 import { validate } from "class-validator";
-import { SignupData } from "../utils/validators";
+import { LoginData, SignupData } from "../utils/validators";
 
 /**
  * receive first name, last name, email, password - validate inputs
@@ -75,7 +75,7 @@ export const signUp = async (req: Request, res: Response) => {
 };
 
 /**
- * receive email and password
+ * receive email and password - validate inputs
  * check if a user with that email exists
  * if doesn't, err
  * else, compare passwords
@@ -84,11 +84,23 @@ export const signUp = async (req: Request, res: Response) => {
  * return user and jwt
  */
 export const login = async (req: Request, res: Response) => {
-	const { email, password } = req.body;
-
 	try {
+		console.log(req.body);
+		const loginPostData: LoginData = new LoginData();
+		loginPostData.email = req.body.email;
+		loginPostData.password = req.body.password;
+
+		const errors = await validate(loginPostData);
+		if (errors.length > 0) {
+			return res.status(400).json({
+				error: true,
+				message: "Invalid input",
+				data: errors,
+			});
+		}
+
 		const user = await User.scope("withPassword").findOne({
-			where: { email: email },
+			where: { email: loginPostData.email },
 		});
 
 		if (!user) {
@@ -98,7 +110,10 @@ export const login = async (req: Request, res: Response) => {
 			});
 		}
 
-		const passwordVerified = bcrypt.compare(password, user.password);
+		const passwordVerified = bcrypt.compare(
+			loginPostData.password,
+			user.password
+		);
 
 		if (!passwordVerified) {
 			return res.status(400).json({

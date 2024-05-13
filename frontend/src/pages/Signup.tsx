@@ -32,11 +32,8 @@ export default function Signup() {
       navigate("/");
     } catch (error: any) {
       console.error(error);
-      console.log(error.response.data);
-
-      const errorMessage = error.response?.data ?
+      const errorMessage = error.response?.data?.message ?
         error.response.data.message : "There was a problem processing your request.";
-
       toast({
         variant: "destructive",
         title: "An error occured",
