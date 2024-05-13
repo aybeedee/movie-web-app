@@ -11,7 +11,7 @@ export default function Login() {
         <div className="absolute bottom-0 left-0 opacity-60 -translate-x-1/2">
           <BackgroundIllustrationBottom />
         </div>
-        <div className="flex flex-col gap-4 border border-red-500 h-full justify-center items-center px-10">
+        <div className="flex flex-col gap-4 h-full justify-center items-center px-10">
           <h1 className="text-white font-semibold text-4xl text-center">
             Login to Your Account
           </h1>
@@ -29,7 +29,7 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <div className="w-1/2 flex flex-col items-center border border-red-500">
+      <div className="w-1/2 flex flex-col items-center">
         <h1 className="text-white text-3xl font-semibold">Sign In</h1>
         <form className="flex flex-col">
           <div className="flex flex-col">

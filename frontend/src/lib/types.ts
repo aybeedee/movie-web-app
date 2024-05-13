@@ -1,10 +1,13 @@
 export interface AuthContextType {
 	auth: AuthInfo;
 	setAuth: React.Dispatch<React.SetStateAction<AuthInfo>>;
+	isVerified: () => Promise<boolean>;
+	saveUser: (authInfo: AuthInfo) => void;
+	removeSession: () => void;
 }
 
 export interface AuthInfo {
-	user: User;
+	user: User | null;
 	token: string | null;
 }
 

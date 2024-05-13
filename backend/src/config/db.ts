@@ -1,4 +1,7 @@
 import { Sequelize, Options } from "sequelize";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const config: Options = {
 	database: process.env.POSTGRES_DATABASE,

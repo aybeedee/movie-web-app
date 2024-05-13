@@ -4,17 +4,18 @@ import { SignupData } from "@/lib/types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks";
 
 export default function Signup() {
+  const { saveUser } = useAuth();
   const [signupData, setSignupData] = useState<SignupData>({
     firstName: "",
     lastName: "",
     email: "",
     password: ""
   });
-
-  console.log(signupData);
-
+  const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -22,12 +23,24 @@ export default function Signup() {
     try {
       const res = await signup(signupData);
       console.log(res);
-    } catch (error) {
+      saveUser(res.data);
+      toast({
+        variant: "default",
+        title: "Success",
+        description: res.message
+      });
+      navigate("/");
+    } catch (error: any) {
       console.error(error);
+      console.log(error.response.data);
+
+      const errorMessage = error.response?.data ?
+        error.response.data.message : "There was a problem processing your request.";
+
       toast({
         variant: "destructive",
-        title: "An error occured while processing your request.",
-        description: "There was a problem with your request."
+        title: "An error occured",
+        description: errorMessage
       });
     }
   }
@@ -48,7 +61,7 @@ export default function Signup() {
         <div className="absolute bottom-0 left-0 opacity-60 -translate-x-1/2">
           <BackgroundIllustrationBottom />
         </div>
-        <div className="flex flex-col gap-4 border border-red-500 h-full justify-center items-center px-10">
+        <div className="flex flex-col gap-4 h-full justify-center items-center px-10">
           <h1 className="text-white font-semibold text-4xl text-center">
             Create a New Account
           </h1>
@@ -66,13 +79,13 @@ export default function Signup() {
           </div>
         </div>
       </div>
-      <div className="w-1/2 flex flex-col items-center border border-red-500">
+      <div className="w-1/2 flex flex-col items-center">
         <h1 className="text-white text-3xl font-semibold">Sign Up</h1>
         <form onSubmit={handleSignup} className="flex flex-col">
           <div className="flex flex-col">
             <label className="text-white font-light">First Name</label>
             <input
-              type="email"
+              type="text"
               placeholder="Abdullah"
               required={true}
               className="px-2 py-1"
@@ -85,7 +98,7 @@ export default function Signup() {
           <div className="flex flex-col">
             <label className="text-white font-light">Last Name</label>
             <input
-              type="email"
+              type="text"
               placeholder="Umer"
               required={true}
               className="px-2 py-1"

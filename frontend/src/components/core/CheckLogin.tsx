@@ -6,6 +6,6 @@ export default function CheckLogin() {
 
   console.log("CheckLogin: ", auth);
 
-  if (auth.token) return <Navigate to="/" replace />;
+  // if (auth.token) return <Navigate to="/" replace />;
   return <Outlet />;
 };
