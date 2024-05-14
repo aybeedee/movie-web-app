@@ -32,15 +32,15 @@ CREATE TABLE reviews (
   rating INTEGER NOT NULL,
   created_at TIMESTAMPTZ NOT NULL,
   edited BOOLEAN NOT NULL DEFAULT false,
-  PRIMARY KEY (user_id, movie_id)
+  PRIMARY KEY (user_id, movie_id),
   CONSTRAINT fk_reviews_users
     FOREIGN KEY(user_id)
       REFERENCES users(id)
-      ON DELETE CASCADE
+      ON DELETE CASCADE,
   CONSTRAINT fk_reviews_movies
     FOREIGN KEY(movie_id)
       REFERENCES movies(id)
-      ON DELETE CASCADE
+      ON DELETE CASCADE,
   CONSTRAINT check_rating_range
     CHECK (rating BETWEEN 0 AND 5)
 );
