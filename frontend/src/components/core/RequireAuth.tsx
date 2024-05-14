@@ -1,16 +1,16 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "@/hooks";
 
-export default function CheckLogin() {
+export default function RequireAuth() {
   const { isLoggedIn, loadingAuth } = useAuth();
 
-  console.log("CheckLogin: ", {
+  console.log("RequireAuth: ", {
     isLoggedIn: isLoggedIn,
     loadingAuth: loadingAuth
   });
 
   if (!loadingAuth) {
-    if (isLoggedIn) return <Navigate to="/" replace />;
-    return <Outlet />;
+    if (isLoggedIn) return <Outlet />;
+    return <Navigate to="/login" replace />;
   }
 };

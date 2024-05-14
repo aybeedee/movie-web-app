@@ -1,2 +1,3 @@
 export { default as CheckLogin } from "./CheckLogin";
-export { default as VerifyAuth } from "./VerifyAuth";
+export { default as RequireAuth } from "./RequireAuth";
+export { default as Navbar } from "./Navbar";
