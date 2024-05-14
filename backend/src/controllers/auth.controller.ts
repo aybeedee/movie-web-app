@@ -17,13 +17,13 @@ import { LoginData, SignupData } from "../utils/validations";
 export const signUp = async (req: Request, res: Response) => {
 	try {
 		console.log(req.body);
-		const signupPostData: SignupData = new SignupData();
-		signupPostData.firstName = req.body.firstName;
-		signupPostData.lastName = req.body.lastName;
-		signupPostData.email = req.body.email;
-		signupPostData.password = req.body.password;
+		const signupData: SignupData = new SignupData();
+		signupData.firstName = req.body.firstName;
+		signupData.lastName = req.body.lastName;
+		signupData.email = req.body.email;
+		signupData.password = req.body.password;
 
-		const errors = await validate(signupPostData);
+		const errors = await validate(signupData);
 		if (errors.length > 0) {
 			return res.status(400).json({
 				error: true,
@@ -32,7 +32,7 @@ export const signUp = async (req: Request, res: Response) => {
 			});
 		}
 
-		const user = await User.findOne({ where: { email: signupPostData.email } });
+		const user = await User.findOne({ where: { email: signupData.email } });
 		if (user) {
 			return res.status(400).json({
 				error: true,
@@ -41,12 +41,12 @@ export const signUp = async (req: Request, res: Response) => {
 		}
 
 		const salt = await bcrypt.genSalt(10);
-		const encryptedPassword = await bcrypt.hash(signupPostData.password, salt);
+		const encryptedPassword = await bcrypt.hash(signupData.password, salt);
 
 		const newUser = await User.create({
-			firstName: signupPostData.firstName,
-			lastName: signupPostData.lastName,
-			email: signupPostData.email,
+			firstName: signupData.firstName,
+			lastName: signupData.lastName,
+			email: signupData.email,
 			password: encryptedPassword,
 		});
 
@@ -86,11 +86,11 @@ export const signUp = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
 	try {
 		console.log(req.body);
-		const loginPostData: LoginData = new LoginData();
-		loginPostData.email = req.body.email;
-		loginPostData.password = req.body.password;
+		const loginData: LoginData = new LoginData();
+		loginData.email = req.body.email;
+		loginData.password = req.body.password;
 
-		const errors = await validate(loginPostData);
+		const errors = await validate(loginData);
 		if (errors.length > 0) {
 			return res.status(400).json({
 				error: true,
@@ -100,7 +100,7 @@ export const login = async (req: Request, res: Response) => {
 		}
 
 		const user = await User.scope("withPassword").findOne({
-			where: { email: loginPostData.email },
+			where: { email: loginData.email },
 		});
 
 		if (!user) {
@@ -110,10 +110,7 @@ export const login = async (req: Request, res: Response) => {
 			});
 		}
 
-		const passwordVerified = bcrypt.compare(
-			loginPostData.password,
-			user.password
-		);
+		const passwordVerified = bcrypt.compare(loginData.password, user.password);
 
 		if (!passwordVerified) {
 			return res.status(400).json({

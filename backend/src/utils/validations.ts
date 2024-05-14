@@ -1,4 +1,12 @@
-import { IsNotEmpty, IsString, IsEmail } from "class-validator";
+import {
+	IsNotEmpty,
+	IsString,
+	IsEmail,
+	IsInt,
+	Min,
+	Max,
+	IsUUID,
+} from "class-validator";
 
 export class SignupData {
 	@IsNotEmpty()
@@ -26,4 +34,29 @@ export class LoginData {
 	@IsNotEmpty()
 	@IsString()
 	password!: string;
+}
+
+export class MovieData {
+	@IsNotEmpty()
+	@IsString()
+	title!: string;
+
+	@IsNotEmpty()
+	@IsString()
+	description!: string;
+
+	@IsNotEmpty()
+	@IsInt()
+	@Min(0)
+	duration_hours!: number;
+
+	@IsNotEmpty()
+	@IsInt()
+	@Min(0)
+	@Max(59)
+	duration_minutes!: number;
+
+	@IsNotEmpty()
+	@IsUUID()
+	user_id!: string;
 }

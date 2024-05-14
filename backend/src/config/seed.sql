@@ -22,7 +22,13 @@ CREATE TABLE movies(
   CONSTRAINT fk_movies_users
     FOREIGN KEY(user_id)
       REFERENCES users(id)
-      ON DELETE CASCADE
+      ON DELETE CASCADE,
+  CONSTRAINT check_duration_hours_range
+    CHECK (duration_hours > 0),
+  CONSTRAINT check_duration_minutes_range
+    CHECK (duration_minutes BETWEEN 0 AND 59),
+  CONSTRAINT check_review_count_range
+    CHECK (review_count > 0)
 );
 
 CREATE TABLE reviews (
