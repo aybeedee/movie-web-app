@@ -112,6 +112,12 @@ export class User
 				},
 			},
 			{
+				defaultScope: {
+					attributes: { exclude: ["password"] },
+				},
+				scopes: {
+					withPassword: {},
+				},
 				tableName: "users",
 				schema: "public",
 				timestamps: false,
