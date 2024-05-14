@@ -4,7 +4,7 @@ import { User } from "../models";
 import bcrypt from "bcryptjs";
 import { generateJwtToken } from "../utils/generateJwtToken";
 import { validate } from "class-validator";
-import { LoginData, SignupData } from "../utils/validators";
+import { LoginData, SignupData } from "../utils/validations";
 
 /**
  * receive first name, last name, email, password - validate inputs
