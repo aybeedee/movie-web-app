@@ -29,7 +29,7 @@ export const verify = (req: Request, res: Response, next: NextFunction) => {
 				});
 			}
 
-			req.body.id = (result as JwtPayload).user.id;
+			req.body.userId = (result as JwtPayload).user.id;
 			return next();
 		});
 	} catch (error) {

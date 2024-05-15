@@ -7,12 +7,11 @@ import { validate } from "class-validator";
 import { LoginData, SignupData } from "../utils/validations";
 
 /**
- * receive first name, last name, email, password - validate inputs
- * check if a user with that email already exists
- * if does, err
- * else, hash password, create user
- * generate jwt
- * return user and jwt
+ * validate inputs, err if invalid |
+ * check if a user with that email already exists, err if does |
+ * hash password, create user |
+ * generate jwt |
+ * return user and jwt |
  */
 export const signUp = async (req: Request, res: Response) => {
 	try {
@@ -75,13 +74,11 @@ export const signUp = async (req: Request, res: Response) => {
 };
 
 /**
- * receive email and password - validate inputs
- * check if a user with that email exists
- * if doesn't, err
- * else, compare passwords
- * if don't match, err
- * else generate jwt
- * return user and jwt
+ * validate inputs, err if invalid |
+ * check if a user with that email exists, err if doesn't |
+ * compare passwords, err if don't match |
+ * generate jwt |
+ * return user and jwt |
  */
 export const login = async (req: Request, res: Response) => {
 	try {
@@ -145,7 +142,7 @@ export const login = async (req: Request, res: Response) => {
 
 export const getUser = async (req: Request, res: Response) => {
 	try {
-		const user = await User.findByPk(req.body.id);
+		const user = await User.findByPk(req.body.userId);
 		if (user) {
 			return res.status(200).json({
 				error: false,

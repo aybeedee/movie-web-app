@@ -12,6 +12,7 @@ CREATE TABLE movies(
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title VARCHAR(255) UNIQUE NOT NULL,
   description TEXT NOT NULL,
+  release_year INTEGER NOT NULL,
   duration_hours INTEGER NOT NULL,
   duration_minutes INTEGER NOT NULL,
   review_count INTEGER NOT NULL DEFAULT 0,
@@ -23,12 +24,14 @@ CREATE TABLE movies(
     FOREIGN KEY(user_id)
       REFERENCES users(id)
       ON DELETE CASCADE,
+  CONSTRAINT check_release_year_range
+    CHECK (duration_hours >= 1900),
   CONSTRAINT check_duration_hours_range
-    CHECK (duration_hours > 0),
+    CHECK (duration_hours >= 0),
   CONSTRAINT check_duration_minutes_range
     CHECK (duration_minutes BETWEEN 0 AND 59),
   CONSTRAINT check_review_count_range
-    CHECK (review_count > 0)
+    CHECK (review_count >= 0)
 );
 
 CREATE TABLE reviews (

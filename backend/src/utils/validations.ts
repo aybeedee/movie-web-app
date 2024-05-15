@@ -5,7 +5,6 @@ import {
 	IsInt,
 	Min,
 	Max,
-	IsUUID,
 } from "class-validator";
 
 export class SignupData {
@@ -47,16 +46,17 @@ export class MovieData {
 
 	@IsNotEmpty()
 	@IsInt()
+	@Min(1900)
+	releaseYear!: number;
+
+	@IsNotEmpty()
+	@IsInt()
 	@Min(0)
-	duration_hours!: number;
+	durationHours!: number;
 
 	@IsNotEmpty()
 	@IsInt()
 	@Min(0)
 	@Max(59)
-	duration_minutes!: number;
-
-	@IsNotEmpty()
-	@IsUUID()
-	user_id!: string;
+	durationMinutes!: number;
 }
