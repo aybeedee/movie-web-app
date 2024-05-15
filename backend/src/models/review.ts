@@ -14,7 +14,7 @@ export interface ReviewAttributes {
 
 export type ReviewPk = "userId" | "movieId";
 export type ReviewId = Review[ReviewPk];
-export type ReviewOptionalAttributes = "createdAt";
+export type ReviewOptionalAttributes = "edited" | "createdAt";
 export type ReviewCreationAttributes = Optional<
 	ReviewAttributes,
 	ReviewOptionalAttributes

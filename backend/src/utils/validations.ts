@@ -5,6 +5,7 @@ import {
 	IsInt,
 	Min,
 	Max,
+	IsUUID,
 } from "class-validator";
 
 export class SignupData {
@@ -59,4 +60,20 @@ export class MovieData {
 	@Min(0)
 	@Max(59)
 	durationMinutes!: number;
+}
+
+export class ReviewData {
+	@IsNotEmpty()
+	@IsUUID()
+	movieId!: string;
+
+	@IsNotEmpty()
+	@IsString()
+	comment!: string;
+
+	@IsNotEmpty()
+	@IsInt()
+	@Min(0)
+	@Min(5)
+	rating!: number;
 }
