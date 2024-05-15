@@ -7,6 +7,7 @@ export interface MovieAttributes {
 	id: string;
 	title: string;
 	description: string;
+	releaseYear: number;
 	durationHours: number;
 	durationMinutes: number;
 	reviewCount: number;
@@ -31,6 +32,7 @@ export class Movie
 	id!: string;
 	title!: string;
 	description!: string;
+	releaseYear!: number;
 	durationHours!: number;
 	durationMinutes!: number;
 	reviewCount!: number;
@@ -93,6 +95,11 @@ export class Movie
 				description: {
 					type: DataTypes.TEXT,
 					allowNull: false,
+				},
+				releaseYear: {
+					type: DataTypes.INTEGER,
+					allowNull: false,
+					field: "release_year",
 				},
 				durationHours: {
 					type: DataTypes.INTEGER,
