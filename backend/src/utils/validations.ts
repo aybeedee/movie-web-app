@@ -74,6 +74,6 @@ export class ReviewData {
 	@IsNotEmpty()
 	@IsInt()
 	@Min(0)
-	@Min(5)
+	@Max(5)
 	rating!: number;
 }
