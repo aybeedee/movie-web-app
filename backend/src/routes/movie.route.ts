@@ -4,6 +4,6 @@ import { verify } from "../middleware/verify";
 
 const router: Router = express.Router();
 
-router.route("/add-movie").post(verify, addMovie);
+router.route("/").post(verify, addMovie);
 
 export { router as movieRouter };

@@ -4,6 +4,11 @@ import { validate } from "class-validator";
 import { Review } from "../models";
 import { Op } from "sequelize";
 
+// some edge cases for later:
+//  - movie does not exist
+//  - a review for the movie from that user already exists
+// note: I believe these are already being checked by database constraints but would be nice
+// to have appropriate error messages rather than internal server for all such cases
 /**
  * validate inputs, err if invalid |
  * get user id from req.body.userId |
@@ -58,9 +63,86 @@ export const addReview = async (req: Request, res: Response) => {
  * validate inputs, err if invalid |
  * get user id from req.body.userId |
  * find review by userId and movieId, err if doesn't exist |
+ * set edited true if not already |
  * update review, return review |
  */
 export const editReview = async (req: Request, res: Response) => {
+	try {
+		console.log(req.body);
+		const reviewData: ReviewData = new ReviewData();
+		reviewData.movieId = req.body.movieId;
+		reviewData.comment = req.body.comment;
+		reviewData.rating = req.body.rating;
+
+		const errors = await validate(reviewData);
+		if (errors.length > 0) {
+			return res.status(400).json({
+				error: true,
+				message: "Invalid input",
+				data: errors,
+			});
+		}
+
+		const review = await Review.findOne({
+			where: {
+				[Op.and]: {
+					userId: req.body.userId,
+					movieId: reviewData.movieId,
+				},
+			},
+		});
+
+		if (!review) {
+			return res.status(400).json({
+				error: true,
+				message: "Review does not exist",
+			});
+		}
+
+		// only set edited true once - on the first edit
+		if (review.edited) {
+			review.set({
+				comment: reviewData.comment,
+				rating: reviewData.rating,
+			});
+		} else {
+			review.set({
+				comment: reviewData.comment,
+				rating: reviewData.rating,
+				edited: true,
+			});
+		}
+
+		await review.save();
+
+		return res.status(200).json({
+			error: false,
+			message: "Review successfully updated",
+			data: {
+				review: {
+					userId: review.userId,
+					movieId: review.movieId,
+					comment: review.comment,
+					rating: review.rating,
+				},
+			},
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({
+			error: true,
+			message: "Internal server error",
+		});
+	}
+};
+
+/**
+ * validate inputs, err if invalid |
+ * get user id from req.body.userId |
+ * find review by userId and movieId, err if doesn't exist |
+ * update review, return review |
+ */
+export const deleteReview = async (req: Request, res: Response) => {
 	try {
 		console.log(req.body);
 		const reviewData: ReviewData = new ReviewData();
