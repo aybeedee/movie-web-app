@@ -127,6 +127,11 @@ export class Movie
 					allowNull: false,
 					field: "trailer_url",
 				},
+				createdAt: {
+					type: Sequelize.DATE,
+					allowNull: false,
+					field: "created_at",
+				},
 				userId: {
 					type: DataTypes.UUID,
 					allowNull: false,
@@ -141,6 +146,7 @@ export class Movie
 				tableName: "movies",
 				schema: "public",
 				timestamps: true,
+				updatedAt: false,
 				indexes: [
 					{
 						name: "movies_pkey",

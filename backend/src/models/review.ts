@@ -74,6 +74,11 @@ export class Review
 					type: DataTypes.INTEGER,
 					allowNull: false,
 				},
+				createdAt: {
+					type: Sequelize.DATE,
+					allowNull: false,
+					field: "created_at",
+				},
 				edited: {
 					type: DataTypes.BOOLEAN,
 					allowNull: false,
@@ -84,6 +89,7 @@ export class Review
 				tableName: "reviews",
 				schema: "public",
 				timestamps: true,
+				updatedAt: false,
 				indexes: [
 					{
 						name: "reviews_pkey",

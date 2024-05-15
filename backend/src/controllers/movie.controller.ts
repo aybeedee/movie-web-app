@@ -40,9 +40,10 @@ export const addMovie = async (req: Request, res: Response) => {
 
 		// seeding with movie title (which is always unique in implementation)
 		// although copmressing title to only alphanumeric may potentially cause collisions with particularly similar titles
-		const posterUrl = `https://picsum.photos/seed/
-    ${movieData.title.replace(/[^a-zA-Z0-9]/g, "")}
-    /500/750`;
+		const posterUrl = `https://picsum.photos/seed/${movieData.title.replace(
+			/[^a-zA-Z0-9]/g,
+			""
+		)}/500/750`;
 
 		const trailerUrl = getRandomTrailerUrl();
 

@@ -1,6 +1,6 @@
 CREATE DATABASE movie_web_app;
 
-CREATE TABLE users(
+CREATE TABLE users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE users(
   password VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE movies(
+CREATE TABLE movies (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title VARCHAR(255) UNIQUE NOT NULL,
   description TEXT NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE movies(
       REFERENCES users(id)
       ON DELETE CASCADE,
   CONSTRAINT check_release_year_range
-    CHECK (duration_hours >= 1900),
+    CHECK (release_year >= 1900),
   CONSTRAINT check_duration_hours_range
     CHECK (duration_hours >= 0),
   CONSTRAINT check_duration_minutes_range
