@@ -57,6 +57,7 @@ export const addReview = async (req: Request, res: Response) => {
 /**
  * validate inputs, err if invalid |
  * get user id from req.body.userId |
+ * find review by userId and movieId, err if doesn't exist |
  * update review, return review |
  */
 export const editReview = async (req: Request, res: Response) => {
@@ -76,32 +77,38 @@ export const editReview = async (req: Request, res: Response) => {
 			});
 		}
 
-		// update() does not return the record model, it returns affectedCount instead
-		// this is why returning updated result using data from the body below
-		await Review.update(
-			{
-				comment: reviewData.comment,
-				rating: reviewData.rating,
-			},
-			{
-				where: {
-					[Op.and]: {
-						userId: req.body.userId,
-						movieId: reviewData.movieId,
-					},
+		const review = await Review.findOne({
+			where: {
+				[Op.and]: {
+					userId: req.body.userId,
+					movieId: reviewData.movieId,
 				},
-			}
-		);
+			},
+		});
+
+		if (!review) {
+			return res.status(400).json({
+				error: true,
+				message: "Review does not exist",
+			});
+		}
+
+		review.set({
+			comment: reviewData.comment,
+			rating: reviewData.rating,
+		});
+
+		await review.save();
 
 		return res.status(200).json({
 			error: false,
 			message: "Review successfully updated",
 			data: {
 				review: {
-					userId: req.body.userId,
-					movieId: reviewData.movieId,
-					comment: reviewData.comment,
-					rating: reviewData.rating,
+					userId: review.userId,
+					movieId: review.movieId,
+					comment: review.comment,
+					rating: review.rating,
 				},
 			},
 		});
