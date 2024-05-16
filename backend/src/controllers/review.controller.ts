@@ -8,7 +8,7 @@ import { Op } from "sequelize";
 //  - movie does not exist
 //  - a review for the movie from that user already exists
 // note: I believe these are already being checked by database constraints but would be nice
-// to have appropriate error messages rather than internal server for all such cases
+// to have appropriate error messages rather than internal server for all such cases ?
 /**
  * validate inputs, err if invalid |
  * get user id from req.body.userId |
@@ -69,12 +69,12 @@ export const addReview = async (req: Request, res: Response) => {
 export const editReview = async (req: Request, res: Response) => {
 	try {
 		console.log(req.body);
-		const reviewData: ReviewData = new ReviewData();
-		reviewData.movieId = req.body.movieId;
-		reviewData.comment = req.body.comment;
-		reviewData.rating = req.body.rating;
+		const editReviewData: ReviewData = new ReviewData();
+		editReviewData.movieId = req.body.movieId;
+		editReviewData.comment = req.body.comment;
+		editReviewData.rating = req.body.rating;
 
-		const errors = await validate(reviewData);
+		const errors = await validate(editReviewData);
 		if (errors.length > 0) {
 			return res.status(400).json({
 				error: true,
@@ -87,7 +87,7 @@ export const editReview = async (req: Request, res: Response) => {
 			where: {
 				[Op.and]: {
 					userId: req.body.userId,
-					movieId: reviewData.movieId,
+					movieId: editReviewData.movieId,
 				},
 			},
 		});
@@ -102,13 +102,13 @@ export const editReview = async (req: Request, res: Response) => {
 		// only set edited true once - on the first edit
 		if (review.edited) {
 			review.set({
-				comment: reviewData.comment,
-				rating: reviewData.rating,
+				comment: editReviewData.comment,
+				rating: editReviewData.rating,
 			});
 		} else {
 			review.set({
-				comment: reviewData.comment,
-				rating: reviewData.rating,
+				comment: editReviewData.comment,
+				rating: editReviewData.rating,
 				edited: true,
 			});
 		}
@@ -137,20 +137,21 @@ export const editReview = async (req: Request, res: Response) => {
 };
 
 /**
- * validate inputs, err if invalid |
+ * get movieId from req params |
  * get user id from req.body.userId |
- * find review by userId and movieId, err if doesn't exist |
- * update review, return review |
+ * delete review, err if doesn't exist |
  */
 export const deleteReview = async (req: Request, res: Response) => {
 	try {
-		console.log(req.body);
-		const reviewData: ReviewData = new ReviewData();
-		reviewData.movieId = req.body.movieId;
-		reviewData.comment = req.body.comment;
-		reviewData.rating = req.body.rating;
+		console.log(req.params.movieId);
 
-		const errors = await validate(reviewData);
+		const deleteReviewData: ReviewData = new ReviewData();
+		deleteReviewData.movieId = req.params.movieId;
+
+		const errors = await validate(deleteReviewData, {
+			skipMissingProperties: true,
+		});
+
 		if (errors.length > 0) {
 			return res.status(400).json({
 				error: true,
@@ -159,39 +160,25 @@ export const deleteReview = async (req: Request, res: Response) => {
 			});
 		}
 
-		const review = await Review.findOne({
+		const deleteCount = await Review.destroy({
 			where: {
-				[Op.and]: {
-					userId: req.body.userId,
-					movieId: reviewData.movieId,
-				},
+				movieId: req.params.movieId,
+				userId: req.body.userId,
 			},
 		});
 
-		if (!review) {
+		if (deleteCount === 0) {
 			return res.status(400).json({
 				error: true,
 				message: "Review does not exist",
 			});
 		}
 
-		review.set({
-			comment: reviewData.comment,
-			rating: reviewData.rating,
-		});
-
-		await review.save();
-
 		return res.status(200).json({
 			error: false,
-			message: "Review successfully updated",
+			message: "Review successfully deleted",
 			data: {
-				review: {
-					userId: review.userId,
-					movieId: review.movieId,
-					comment: review.comment,
-					rating: review.rating,
-				},
+				count: deleteCount,
 			},
 		});
 	} catch (error) {

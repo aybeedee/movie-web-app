@@ -10,6 +10,6 @@ const router: Router = express.Router();
 
 router.route("/").post(verify, addReview);
 router.route("/").put(verify, editReview);
-router.route("/:reviewId").delete(verify, deleteReview);
+router.route("/:movieId").delete(verify, deleteReview);
 
 export { router as reviewRouter };
