@@ -275,41 +275,34 @@ export const getMovies = async (req: Request, res: Response) => {
 export const getMovieById = async (req: Request, res: Response) => {
 	try {
 		console.log("req.params: ", req.params);
-		console.log("req.query: ", req.query);
 
-		// const movieIdData: MovieIdData = new MovieIdData();
-		// movieIdData.movieId = req.params.movieId;
+		const movieIdData: MovieIdData = new MovieIdData();
+		movieIdData.movieId = req.params.movieId;
 
-		// const errors = await validate(movieIdData);
+		const errors = await validate(movieIdData);
 
-		// if (errors.length > 0) {
-		// 	return res.status(400).json({
-		// 		error: true,
-		// 		message: "Invalid input",
-		// 		data: errors,
-		// 	});
-		// }
+		if (errors.length > 0) {
+			return res.status(400).json({
+				error: true,
+				message: "Invalid input",
+				data: errors,
+			});
+		}
 
-		// const deleteCount = await Movie.destroy({
-		// 	where: {
-		// 		id: movieIdData.movieId,
-		// 		// ensures that the requesting user is the owner
-		// 		userId: req.body.userId,
-		// 	},
-		// });
+		const movie = await Movie.findByPk(movieIdData.movieId);
 
-		// if (deleteCount === 0) {
-		// 	return res.status(400).json({
-		// 		error: true,
-		// 		message: "Movie does not exist",
-		// 	});
-		// }
+		if (!movie) {
+			return res.status(400).json({
+				error: true,
+				message: "Movie does not exist",
+			});
+		}
 
 		return res.status(200).json({
 			error: false,
-			message: "Movies successfully fetched",
+			message: "Movie successfully fetched",
 			data: {
-				routeHit: "getMovieById",
+				movie: movie,
 			},
 		});
 	} catch (error) {
