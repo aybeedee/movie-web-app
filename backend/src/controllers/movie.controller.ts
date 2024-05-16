@@ -1,8 +1,14 @@
 import { Request, Response } from "express";
-import { MovieData, MovieIdData, MovieTypeData } from "../utils/validations";
+import {
+	MovieData,
+	MovieIdData,
+	MovieQueryData,
+	MovieTypeData,
+} from "../utils/validations";
 import { validate } from "class-validator";
 import { Movie } from "../models";
 import { getRandomTrailerUrl } from "../utils/getRandomTrailerUrl";
+import { Op } from "sequelize";
 
 /**
  * validate inputs, err if invalid |
@@ -316,42 +322,38 @@ export const getMovieById = async (req: Request, res: Response) => {
 
 export const searchMovies = async (req: Request, res: Response) => {
 	try {
-		console.log("req.params: ", req.params);
 		console.log("req.query: ", req.query);
+		console.log("req.query.type: ", req.query.query);
 
-		// const movieIdData: MovieIdData = new MovieIdData();
-		// movieIdData.movieId = req.params.movieId;
+		const movieQueryData: MovieQueryData = new MovieQueryData();
+		movieQueryData.query = req.query.query as string;
 
-		// const errors = await validate(movieIdData);
+		const errors = await validate(movieQueryData);
 
-		// if (errors.length > 0) {
-		// 	return res.status(400).json({
-		// 		error: true,
-		// 		message: "Invalid input",
-		// 		data: errors,
-		// 	});
-		// }
+		if (errors.length > 0) {
+			return res.status(400).json({
+				error: true,
+				message: "Invalid query",
+				data: errors,
+			});
+		}
 
-		// const deleteCount = await Movie.destroy({
-		// 	where: {
-		// 		id: movieIdData.movieId,
-		// 		// ensures that the requesting user is the owner
-		// 		userId: req.body.userId,
-		// 	},
-		// });
-
-		// if (deleteCount === 0) {
-		// 	return res.status(400).json({
-		// 		error: true,
-		// 		message: "Movie does not exist",
-		// 	});
-		// }
+		const movies = await Movie.findAll({
+			attributes: {
+				exclude: ["createdAt", "userId"],
+			},
+			where: {
+				title: {
+					[Op.iLike]: `%${movieQueryData.query}%`,
+				},
+			},
+		});
 
 		return res.status(200).json({
 			error: false,
-			message: "Movies successfully fetched",
+			message: "New movies successfully fetched",
 			data: {
-				routeHit: "searchMovies",
+				movies: movies,
 			},
 		});
 	} catch (error) {

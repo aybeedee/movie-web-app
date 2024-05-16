@@ -95,5 +95,5 @@ export class MovieTypeData {
 export class MovieQueryData {
 	@IsNotEmpty()
 	@IsString()
-	type!: string;
+	query!: string;
 }
