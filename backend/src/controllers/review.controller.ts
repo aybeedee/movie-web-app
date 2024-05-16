@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ReviewData } from "../utils/validations";
+import { MovieIdData, ReviewData } from "../utils/validations";
 import { validate } from "class-validator";
 import { Review } from "../models";
 import { Op } from "sequelize";
@@ -145,12 +145,10 @@ export const deleteReview = async (req: Request, res: Response) => {
 	try {
 		console.log(req.params.movieId);
 
-		const deleteReviewData: ReviewData = new ReviewData();
-		deleteReviewData.movieId = req.params.movieId;
+		const movieIdData: MovieIdData = new MovieIdData();
+		movieIdData.movieId = req.params.movieId;
 
-		const errors = await validate(deleteReviewData, {
-			skipMissingProperties: true,
-		});
+		const errors = await validate(movieIdData);
 
 		if (errors.length > 0) {
 			return res.status(400).json({
@@ -162,7 +160,7 @@ export const deleteReview = async (req: Request, res: Response) => {
 
 		const deleteCount = await Review.destroy({
 			where: {
-				movieId: req.params.movieId,
+				movieId: movieIdData.movieId,
 				userId: req.body.userId,
 			},
 		});

@@ -77,3 +77,9 @@ export class ReviewData {
 	@Max(5)
 	rating!: number;
 }
+
+export class MovieIdData {
+	@IsNotEmpty()
+	@IsUUID()
+	movieId!: string;
+}

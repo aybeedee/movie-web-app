@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { MovieData } from "../utils/validations";
+import { MovieData, MovieIdData } from "../utils/validations";
 import { validate } from "class-validator";
 import { Movie } from "../models";
 import { getRandomTrailerUrl } from "../utils/getRandomTrailerUrl";
@@ -75,6 +75,59 @@ export const addMovie = async (req: Request, res: Response) => {
 					createdAt: newMovie.createdAt,
 					userId: newMovie.userId,
 				},
+			},
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({
+			error: true,
+			message: "Internal server error",
+		});
+	}
+};
+
+/**
+ * get movieId from req params |
+ * get user id from req.body.userId |
+ * delete movie, err if doesn't exist |
+ */
+export const deleteMovie = async (req: Request, res: Response) => {
+	try {
+		console.log(req.params.movieId);
+
+		const movieIdData: MovieIdData = new MovieIdData();
+		movieIdData.movieId = req.params.movieId;
+
+		const errors = await validate(movieIdData);
+
+		if (errors.length > 0) {
+			return res.status(400).json({
+				error: true,
+				message: "Invalid input",
+				data: errors,
+			});
+		}
+
+		const deleteCount = await Movie.destroy({
+			where: {
+				id: movieIdData.movieId,
+				// ensures that the requesting user is the owner
+				userId: req.body.userId,
+			},
+		});
+
+		if (deleteCount === 0) {
+			return res.status(400).json({
+				error: true,
+				message: "Movie does not exist",
+			});
+		}
+
+		return res.status(200).json({
+			error: false,
+			message: "Movie successfully deleted",
+			data: {
+				count: deleteCount,
 			},
 		});
 	} catch (error) {
