@@ -5,8 +5,7 @@ import { Movie, Review } from "../models";
 import { Op } from "sequelize";
 
 // some edge cases for later:
-//  - movie does not exist | update: dealt with while implementing review count increment
-//                            can still in other places e.g delete review - check if movie exists
+//  - movie does not exist | update: dealt with while implementing review count increment/decrement
 //  - a review for the movie from that user already exists
 // note: I believe these are already being checked by database constraints but would be nice
 // to have appropriate error messages rather than internal server for all such cases ?
@@ -172,6 +171,15 @@ export const deleteReview = async (req: Request, res: Response) => {
 			});
 		}
 
+		const movie = await Movie.findByPk(movieIdData.movieId);
+
+		if (!movie) {
+			return res.status(400).json({
+				error: true,
+				message: "Movie does not exist",
+			});
+		}
+
 		const deleteCount = await Review.destroy({
 			where: {
 				movieId: movieIdData.movieId,
@@ -185,6 +193,11 @@ export const deleteReview = async (req: Request, res: Response) => {
 				message: "Review does not exist",
 			});
 		}
+
+		// decrement the review count of related movie
+		// Note: I believe this is a race-free transaction
+		// but if race occurs, need to check for reviewCount >= 0
+		await movie.decrement("reviewCount");
 
 		return res.status(200).json({
 			error: false,
