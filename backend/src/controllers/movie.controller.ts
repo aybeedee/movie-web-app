@@ -31,6 +31,7 @@ export const addMovie = async (req: Request, res: Response) => {
 		}
 
 		const movie = await Movie.findOne({ where: { title: movieData.title } });
+
 		if (movie) {
 			return res.status(400).json({
 				error: true,

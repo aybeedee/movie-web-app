@@ -1,18 +1,20 @@
 import { Request, Response } from "express";
 import { MovieIdData, ReviewData } from "../utils/validations";
 import { validate } from "class-validator";
-import { Review } from "../models";
+import { Movie, Review } from "../models";
 import { Op } from "sequelize";
 
 // some edge cases for later:
-//  - movie does not exist
+//  - movie does not exist | update: dealt with while implementing review count increment
+//                            can still in other places e.g delete review - check if movie exists
 //  - a review for the movie from that user already exists
 // note: I believe these are already being checked by database constraints but would be nice
 // to have appropriate error messages rather than internal server for all such cases ?
 /**
  * validate inputs, err if invalid |
+ * get movie by pk, err if does not exist |
  * get user id from req.body.userId |
- * create review, return review |
+ * create review, increment movie review count, return review |
  */
 export const addReview = async (req: Request, res: Response) => {
 	try {
@@ -31,12 +33,24 @@ export const addReview = async (req: Request, res: Response) => {
 			});
 		}
 
+		const movie = await Movie.findByPk(reviewData.movieId);
+
+		if (!movie) {
+			return res.status(400).json({
+				error: true,
+				message: "Movie does not exist",
+			});
+		}
+
 		const newReview = await Review.create({
 			userId: req.body.userId,
 			movieId: reviewData.movieId,
 			comment: reviewData.comment,
 			rating: reviewData.rating,
 		});
+
+		// increment the review count of related movie
+		await movie.increment("reviewCount");
 
 		return res.status(201).json({
 			error: false,
