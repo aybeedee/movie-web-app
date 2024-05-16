@@ -172,6 +172,41 @@ export const getMovies = async (req: Request, res: Response) => {
 			}
 
 			if (movieTypeData.type === "featured") {
+				// the idea is to return a random 5 movies for now
+				const movies = await Movie.findAll({
+					attributes: {
+						exclude: ["createdAt", "userId"],
+					},
+				});
+
+				// if total records are less than 5, return all
+				if (movies.length < 5) {
+					return res.status(200).json({
+						error: false,
+						message: "Featured movies successfully fetched",
+						data: {
+							movies: movies,
+						},
+					});
+				} else {
+					// get 5 random indices
+					// potential issue: this might slow down the response significantly if movies.length is close to 5
+					// update: apparently not, would have to be a very bad random seed for this to choke
+					const randomIndices = new Set<number>();
+					while (randomIndices.size < 5) {
+						randomIndices.add(Math.floor(Math.random() * movies.length));
+					}
+
+					return res.status(200).json({
+						error: false,
+						message: "Featured movies successfully fetched",
+						data: {
+							movies: Array.from(randomIndices).map(
+								(randomIndex) => movies[randomIndex]
+							),
+						},
+					});
+				}
 			} else if (movieTypeData.type === "ranked") {
 			} else if (movieTypeData.type === "new") {
 			} else {
