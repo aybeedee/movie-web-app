@@ -209,6 +209,21 @@ export const getMovies = async (req: Request, res: Response) => {
 				}
 			} else if (movieTypeData.type === "ranked") {
 			} else if (movieTypeData.type === "new") {
+				const movies = await Movie.findAll({
+					attributes: {
+						exclude: ["createdAt", "userId"],
+					},
+					order: [["createdAt", "DESC"]],
+					limit: 5,
+				});
+
+				return res.status(200).json({
+					error: false,
+					message: "New movies successfully fetched",
+					data: {
+						movies: movies,
+					},
+				});
 			} else {
 				// I believe this segment will never be reached
 				// since the validator has already checked all possible values
