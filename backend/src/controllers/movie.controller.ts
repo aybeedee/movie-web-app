@@ -208,6 +208,20 @@ export const getMovies = async (req: Request, res: Response) => {
 					});
 				}
 			} else if (movieTypeData.type === "ranked") {
+				const movies = await Movie.findAll({
+					attributes: {
+						exclude: ["createdAt", "userId"],
+					},
+					order: [["reviewCount", "DESC"]],
+				});
+
+				return res.status(200).json({
+					error: false,
+					message: "Ranked movies successfully fetched",
+					data: {
+						movies: movies,
+					},
+				});
 			} else if (movieTypeData.type === "new") {
 				const movies = await Movie.findAll({
 					attributes: {
