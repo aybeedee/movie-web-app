@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { MovieData, MovieIdData } from "../utils/validations";
+import { MovieData, MovieIdData, MovieTypeData } from "../utils/validations";
 import { validate } from "class-validator";
 import { Movie } from "../models";
 import { getRandomTrailerUrl } from "../utils/getRandomTrailerUrl";
@@ -140,6 +140,11 @@ export const deleteMovie = async (req: Request, res: Response) => {
 	}
 };
 
+// extract req.query - query params/string
+// if all null, just retrieve all and return
+// if type === featured, return 5 random
+// if type === ranked, return all sorted by reviews
+// if type === new, return 5 sorted by created_at
 /**
  * get movieId from req params |
  * get user id from req.body.userId |
@@ -147,41 +152,100 @@ export const deleteMovie = async (req: Request, res: Response) => {
  */
 export const getMovies = async (req: Request, res: Response) => {
 	try {
-		console.log(req.params.movieId);
+		console.log("req.params: ", req.params);
+		console.log("req.query: ", req.query);
+		console.log("req.query.type: ", req.query.type);
 
-		const movieIdData: MovieIdData = new MovieIdData();
-		movieIdData.movieId = req.params.movieId;
+		// if query string available, validate input, return records according to type
+		if (Object.keys(req.query).length) {
+			const movieTypeData: MovieTypeData = new MovieTypeData();
+			movieTypeData.type = req.query.type as string;
 
-		const errors = await validate(movieIdData);
+			const errors = await validate(movieTypeData);
 
-		if (errors.length > 0) {
-			return res.status(400).json({
-				error: true,
-				message: "Invalid input",
-				data: errors,
+			if (errors.length > 0) {
+				return res.status(400).json({
+					error: true,
+					message: "Invalid query",
+					data: errors,
+				});
+			}
+
+			if (movieTypeData.type === "featured") {
+			} else if (movieTypeData.type === "ranked") {
+			} else if (movieTypeData.type === "new") {
+			} else {
+				// I believe this segment will never be reached
+				// since the validator has already checked all possible values
+				// but still erring just in case an edge case has been missed out
+				return res.status(400).json({
+					error: true,
+					message: "Invalid query",
+				});
+			}
+		} else {
+			// if no query string, then simply return all records
+			const movies = await Movie.findAll({
+				attributes: {
+					exclude: ["createdAt", "userId"],
+				},
+			});
+
+			return res.status(200).json({
+				error: false,
+				message: "All movies successfully fetched",
+				data: {
+					movies: movies,
+				},
 			});
 		}
-
-		const deleteCount = await Movie.destroy({
-			where: {
-				id: movieIdData.movieId,
-				// ensures that the requesting user is the owner
-				userId: req.body.userId,
-			},
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({
+			error: true,
+			message: "Internal server error",
 		});
+	}
+};
 
-		if (deleteCount === 0) {
-			return res.status(400).json({
-				error: true,
-				message: "Movie does not exist",
-			});
-		}
+export const getMovieById = async (req: Request, res: Response) => {
+	try {
+		console.log("req.params: ", req.params);
+		console.log("req.query: ", req.query);
+
+		// const movieIdData: MovieIdData = new MovieIdData();
+		// movieIdData.movieId = req.params.movieId;
+
+		// const errors = await validate(movieIdData);
+
+		// if (errors.length > 0) {
+		// 	return res.status(400).json({
+		// 		error: true,
+		// 		message: "Invalid input",
+		// 		data: errors,
+		// 	});
+		// }
+
+		// const deleteCount = await Movie.destroy({
+		// 	where: {
+		// 		id: movieIdData.movieId,
+		// 		// ensures that the requesting user is the owner
+		// 		userId: req.body.userId,
+		// 	},
+		// });
+
+		// if (deleteCount === 0) {
+		// 	return res.status(400).json({
+		// 		error: true,
+		// 		message: "Movie does not exist",
+		// 	});
+		// }
 
 		return res.status(200).json({
 			error: false,
-			message: "Movie successfully deleted",
+			message: "Movies successfully fetched",
 			data: {
-				count: deleteCount,
+				routeHit: "getMovieById",
 			},
 		});
 	} catch (error) {
@@ -193,6 +257,51 @@ export const getMovies = async (req: Request, res: Response) => {
 	}
 };
 
-export const getMovieById = async (req: Request, res: Response) => {};
+export const searchMovies = async (req: Request, res: Response) => {
+	try {
+		console.log("req.params: ", req.params);
+		console.log("req.query: ", req.query);
 
-export const searchMovies = async (req: Request, res: Response) => {};
+		// const movieIdData: MovieIdData = new MovieIdData();
+		// movieIdData.movieId = req.params.movieId;
+
+		// const errors = await validate(movieIdData);
+
+		// if (errors.length > 0) {
+		// 	return res.status(400).json({
+		// 		error: true,
+		// 		message: "Invalid input",
+		// 		data: errors,
+		// 	});
+		// }
+
+		// const deleteCount = await Movie.destroy({
+		// 	where: {
+		// 		id: movieIdData.movieId,
+		// 		// ensures that the requesting user is the owner
+		// 		userId: req.body.userId,
+		// 	},
+		// });
+
+		// if (deleteCount === 0) {
+		// 	return res.status(400).json({
+		// 		error: true,
+		// 		message: "Movie does not exist",
+		// 	});
+		// }
+
+		return res.status(200).json({
+			error: false,
+			message: "Movies successfully fetched",
+			data: {
+				routeHit: "searchMovies",
+			},
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({
+			error: true,
+			message: "Internal server error",
+		});
+	}
+};

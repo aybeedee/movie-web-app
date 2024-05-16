@@ -6,6 +6,7 @@ import {
 	Min,
 	Max,
 	IsUUID,
+	IsIn,
 } from "class-validator";
 
 export class SignupData {
@@ -82,4 +83,17 @@ export class MovieIdData {
 	@IsNotEmpty()
 	@IsUUID()
 	movieId!: string;
+}
+
+export class MovieTypeData {
+	@IsNotEmpty()
+	@IsString()
+	@IsIn(["featured", "ranked", "new"])
+	type!: string;
+}
+
+export class MovieQueryData {
+	@IsNotEmpty()
+	@IsString()
+	type!: string;
 }
