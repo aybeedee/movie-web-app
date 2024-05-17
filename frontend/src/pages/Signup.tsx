@@ -50,7 +50,7 @@ export default function Signup() {
   }
 
   return (
-    <div className="w-screen h-screen flex flex-row bg-[#18181a]">
+    <div className="w-full h-full flex flex-row bg-[#18181a] text-white">
       <div className="w-1/2 relative overflow-hidden">
         <div className="absolute top-0 right-0 opacity-60 translate-x-1/2">
           <BackgroundIllustrationTop />
@@ -59,17 +59,17 @@ export default function Signup() {
           <BackgroundIllustrationBottom />
         </div>
         <div className="flex flex-col gap-4 h-full justify-center items-center px-10">
-          <h1 className="text-white font-semibold text-4xl text-center">
+          <h1 className="font-semibold text-4xl text-center">
             Create a New Account
           </h1>
-          <p className="text-white text-lg text-center font-light">
+          <p className="text-lg text-center font-light">
             Welcome Back! Login wtih your credentials to access all features of CMDb.
           </p>
           <div className="flex justify-center items-center gap-4">
-            <p className="text-white text-lg font-light">Have an account?</p>
+            <p className="text-lg font-light">Have an account?</p>
             <Link
               to="/login"
-              className="z-50 bg-white w-fit px-4 py-1 rounded-sm"
+              className="z-50 bg-white text-black w-fit px-4 py-1 rounded-sm"
             >
               Sign In
             </Link>
@@ -77,10 +77,10 @@ export default function Signup() {
         </div>
       </div>
       <div className="w-1/2 flex flex-col items-center">
-        <h1 className="text-white text-3xl font-semibold">Sign Up</h1>
+        <h1 className="text-3xl font-semibold">Sign Up</h1>
         <form onSubmit={handleSignup} className="flex flex-col">
           <div className="flex flex-col">
-            <label className="text-white font-light">First Name</label>
+            <label className="font-light">First Name</label>
             <input
               type="text"
               placeholder="Abdullah"
@@ -93,7 +93,7 @@ export default function Signup() {
             />
           </div>
           <div className="flex flex-col">
-            <label className="text-white font-light">Last Name</label>
+            <label className="font-light">Last Name</label>
             <input
               type="text"
               placeholder="Umer"
@@ -106,7 +106,7 @@ export default function Signup() {
             />
           </div>
           <div className="flex flex-col">
-            <label className="text-white font-light">Email</label>
+            <label className="font-light">Email</label>
             <input
               type="email"
               placeholder="username@email.com"
@@ -119,7 +119,7 @@ export default function Signup() {
             />
           </div>
           <div className="flex flex-col">
-            <label className="text-white font-light">Password</label>
+            <label className="font-light">Password</label>
             <input
               type="password"
               placeholder="********"
@@ -133,7 +133,7 @@ export default function Signup() {
           </div>
           <button
             type="submit"
-            className="bg-white w-fit px-4 py-1 rounded-sm"
+            className="bg-white text-black w-fit px-4 py-1 rounded-sm"
           >
             Create Account
           </button>
