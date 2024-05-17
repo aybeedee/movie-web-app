@@ -59,14 +59,14 @@ export default function Signup() {
           <BackgroundIllustrationBottom />
         </div>
         <div className="flex flex-col gap-4 h-full justify-center items-center px-10">
-          <h1 className="font-semibold text-4xl text-center">
+          <h1 className="font-semibold text-3xl text-center">
             Create a New Account
           </h1>
-          <p className="text-lg text-center font-light">
+          <p className="text-base text-center font-light">
             Welcome Back! Login wtih your credentials to access all features of CMDb.
           </p>
           <div className="flex justify-center items-center gap-4">
-            <p className="text-lg font-light">Already have an account?</p>
+            <p className="text-base font-light">Already have an account?</p>
             <Link
               to="/login"
               className="z-50 bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
