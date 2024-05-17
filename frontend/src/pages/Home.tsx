@@ -10,7 +10,7 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 opacity-60 -translate-x-1/2">
           <BackgroundIllustrationBottom />
         </div>
-        <div className="flex flex-col gap-8 mt-4">
+        <div className="flex flex-col gap-8 mt-4 mx-8">
           <div className="flex flex-col gap-4">
             <div className="flex flex-row justify-start gap-3 items-baseline">
               <h1 className="font-semibold text-2xl">
@@ -43,17 +43,6 @@ export default function Home() {
               </p>
             </div>
             <div className="h-28 w-1/2 border border-slate-700"></div>
-          </div>
-          <div className="flex flex-col gap-4 h-full justify-center items-center px-10">
-            <h1 className="font-semibold text-4xl text-center">
-              Login to Your Account
-            </h1>
-            <p className="text-lg text-center font-light">
-              Welcome Back! Login wtih your credentials to access all features of CMDb.
-            </p>
-            <div className="flex justify-center items-center gap-4">
-              <p className="text-lg font-light">New Here?</p>
-            </div>
           </div>
         </div>
       </div>

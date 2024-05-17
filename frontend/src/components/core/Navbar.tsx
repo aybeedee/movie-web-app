@@ -23,7 +23,7 @@ export default function Navbar() {
         <div className="absolute top-0 right-0 opacity-60 translate-x-1/2">
           <BackgroundIllustrationTop />
         </div>
-        <div className="flex flex-row justify-between items-center py-2 backdrop-blur-3xl">
+        <div className="flex flex-row justify-between items-center py-2 px-4 backdrop-blur-3xl">
           <h1 className="min-w-min text-white">
             {
               isLoggedIn ?
