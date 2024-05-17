@@ -74,41 +74,49 @@ export default function Login() {
         </div>
       </div>
       <div className="w-1/2 flex flex-col items-center">
-        <h1 className="text-3xl font-semibold">Sign In</h1>
-        <form onSubmit={handleLogin} className="flex flex-col">
-          <div className="flex flex-col">
-            <label className="font-light">Email</label>
-            <input
-              type="email"
-              placeholder="username@email.com"
-              required={true}
-              className="px-2 py-1 text-black"
-              id="email"
-              name="email"
-              value={loginData.email}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="font-light">Password</label>
-            <input
-              type="password"
-              placeholder="********"
-              required={true}
-              className="px-2 py-1 text-black"
-              id="password"
-              name="password"
-              value={loginData.password}
-              onChange={handleInputChange}
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-white text-black w-fit px-4 py-1 rounded-sm"
-          >
-            Login
-          </button>
-        </form>
+        <div className="w-full flex justify-start border-b border-[#3abab4]">
+          <h1 className="text-lg font-bold">
+            C<span className="text-[#3abab4]">M</span>Db
+          </h1>
+        </div>
+        <div className="flex flex-col">
+          <h1 className="text-3xl font-semibold">Sign In</h1>
+          <form onSubmit={handleLogin} className="flex flex-col">
+            <div className="flex flex-col">
+              <label className="font-light">Email</label>
+              <input
+                type="email"
+                placeholder="username@email.com"
+                required={true}
+                className="px-2 py-1 text-black"
+                id="email"
+                name="email"
+                value={loginData.email}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="font-light">Password</label>
+              <input
+                type="password"
+                placeholder="********"
+                required={true}
+                className="px-2 py-1 text-black"
+                id="password"
+                name="password"
+                value={loginData.password}
+                onChange={handleInputChange}
+              />
+            </div>
+            <button
+              type="submit"
+              className="bg-white text-black w-fit px-4 py-1 rounded-sm"
+            >
+              Login
+            </button>
+          </form>
+        </div>
+        <div></div>
       </div>
     </div>
   );
