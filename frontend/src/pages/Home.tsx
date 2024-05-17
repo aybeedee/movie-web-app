@@ -3,6 +3,7 @@ import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/asset
 import { Movie } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { MovieCard } from "@/components/core";
 
 export default function Home() {
   const [featuredMovies, setFeaturedMovies] = useState<Movie[]>([]);
@@ -10,10 +11,11 @@ export default function Home() {
   const [newMovies, setNewMovies] = useState<Movie[]>([]);
   const { toast } = useToast();
 
+
   const fetchFeaturedMovies = async () => {
     try {
       const res = await getFeaturedMovies();
-      setFeaturedMovies(res);
+      setFeaturedMovies(res.data.movies);
     } catch (error) {
       console.error(error);
       toast({
@@ -27,7 +29,7 @@ export default function Home() {
   const fetchAllRankedMovies = async () => {
     try {
       const res = await getAllRankedMovies();
-      setAllRankedMovies(res);
+      setAllRankedMovies(res.data);
     } catch (error) {
       console.error(error);
       toast({
@@ -41,7 +43,7 @@ export default function Home() {
   const fetchNewMovies = async () => {
     try {
       const res = await getNewMovies();
-      setNewMovies(res);
+      setNewMovies(res.data);
     } catch (error) {
       console.error(error);
       toast({
@@ -77,7 +79,13 @@ export default function Home() {
                 Carefully curated list of featured movies for the day
               </p>
             </div>
-            <div className="h-28 w-1/2 border border-slate-700"></div>
+            <div className="flex flex-row gap-4 z-10">
+              {
+                featuredMovies.map(featuredMovie => (
+                  <MovieCard key={featuredMovie.id} movie={featuredMovie} />
+                ))
+              }
+            </div>
           </div>
           <div className="flex flex-col gap-4">
             <div className="flex flex-row justify-start gap-3 items-baseline">
