@@ -45,6 +45,7 @@ export default function Login() {
       [event.target.name]: event.target.value
     }))
   }
+
   return (
     <div className="w-full h-full flex flex-row bg-[#18181a] text-white">
       <div className="w-1/2 relative overflow-hidden">
@@ -81,7 +82,7 @@ export default function Login() {
               type="email"
               placeholder="username@email.com"
               required={true}
-              className="px-2 py-1"
+              className="px-2 py-1 text-black"
               id="email"
               name="email"
               value={loginData.email}
@@ -94,7 +95,7 @@ export default function Login() {
               type="password"
               placeholder="********"
               required={true}
-              className="px-2 py-1"
+              className="px-2 py-1 text-black"
               id="password"
               name="password"
               value={loginData.password}

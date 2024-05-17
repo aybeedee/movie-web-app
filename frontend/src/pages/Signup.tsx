@@ -85,7 +85,7 @@ export default function Signup() {
               type="text"
               placeholder="Abdullah"
               required={true}
-              className="px-2 py-1"
+              className="px-2 py-1 text-black"
               id="firstName"
               name="firstName"
               value={signupData.firstName}
@@ -98,7 +98,7 @@ export default function Signup() {
               type="text"
               placeholder="Umer"
               required={true}
-              className="px-2 py-1"
+              className="px-2 py-1 text-black"
               id="lastName"
               name="lastName"
               value={signupData.lastName}
@@ -111,7 +111,7 @@ export default function Signup() {
               type="email"
               placeholder="username@email.com"
               required={true}
-              className="px-2 py-1"
+              className="px-2 py-1 text-black"
               id="email"
               name="email"
               value={signupData.email}
@@ -124,7 +124,7 @@ export default function Signup() {
               type="password"
               placeholder="********"
               required={true}
-              className="px-2 py-1"
+              className="px-2 py-1 text-black"
               id="password"
               name="password"
               value={signupData.password}
