@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }));
       setIsLoggedIn(true);
     } catch (error) {
+      // needs to be a toast here probably
       console.error(error);
       removeSession();
       setIsLoggedIn(false);

@@ -1,6 +1,63 @@
+import { getAllRankedMovies, getFeaturedMovies, getNewMovies } from "@/api/movies";
 import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/assets/illustrations";
+import { Movie } from "@/lib/types";
+import { useEffect, useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Home() {
+  const [featuredMovies, setFeaturedMovies] = useState<Movie[]>([]);
+  const [allRankedMovies, setAllRankedMovies] = useState<Movie[]>([]);
+  const [newMovies, setNewMovies] = useState<Movie[]>([]);
+  const { toast } = useToast();
+
+  const fetchFeaturedMovies = async () => {
+    try {
+      const res = await getFeaturedMovies();
+      setFeaturedMovies(res);
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "An error occured",
+        description: "There was a problem fetching featured movies."
+      });
+    }
+  }
+
+  const fetchAllRankedMovies = async () => {
+    try {
+      const res = await getAllRankedMovies();
+      setAllRankedMovies(res);
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "An error occured",
+        description: "There was a problem fetching ranked movies."
+      });
+    }
+  }
+
+  const fetchNewMovies = async () => {
+    try {
+      const res = await getNewMovies();
+      setNewMovies(res);
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "An error occured",
+        description: "There was a problem fetching new movies."
+      });
+    }
+  }
+
+  useEffect(() => {
+    fetchFeaturedMovies();
+    fetchAllRankedMovies();
+    fetchNewMovies();
+  }, []);
+
   return (
     <div className="w-full h-full flex flex-row bg-[#18181a] text-white">
       <div className="w-full relative overflow-hidden">

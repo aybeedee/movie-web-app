@@ -29,3 +29,15 @@ export interface LoginData {
 	email: string;
 	password: string;
 }
+
+export interface Movie {
+	id: string;
+	title: string;
+	description: string;
+	releaseYear: number;
+	durationHours: number;
+	durationMinutes: number;
+	reviewCount: number;
+	posterUrl: string;
+	trailerUrl: string;
+}
