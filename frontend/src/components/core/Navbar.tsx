@@ -68,18 +68,20 @@ export default function Navbar() {
                     Signout
                   </button>
                 </>
-                : <>
+                : <div className="flex flex-row gap-2">
                   <Link
                     to="/login"
-                    className="bg-black text-white w-fit px-4 py-1 rounded-sm">
+                    className="bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white font-semibold w-fit px-4 py-1 rounded-sm"
+                  >
                     Login
                   </Link>
                   <Link
                     to="/signup"
-                    className="bg-black text-white w-fit px-4 py-1 rounded-sm">
+                    className="bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white font-semibold w-fit px-4 py-1 rounded-sm"
+                  >
                     Signup
                   </Link>
-                </>
+                </div>
             }
           </div>
         </div>
