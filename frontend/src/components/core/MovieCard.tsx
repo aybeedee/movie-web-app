@@ -11,17 +11,17 @@ export default function MovieCard({ movie }: { movie: Movie }) {
       <img src={movie.posterUrl} className="object-cover h-52 rounded-sm" />
       <div className="flex flex-col p-2">
         <div className="flex flex-row justify-between items-baseline">
-          <h1 className="font-bold text-sm">
+          <h1 className="font-semibold text-xs max-w-[70%] text-nowrap overflow-hidden text-ellipsis">
             {movie.title}
           </h1>
           <h2 className="text-xs font-light">
             {movie.durationHours}h {movie.durationMinutes}m
           </h2>
         </div>
-        <h2 className="w-full text-start text-xs">
+        <h2 className="w-full text-start text-xs font-normal mb-1">
           {movie.releaseYear}
         </h2>
-        <p className="w-full text-center font-normal">
+        <p className="w-full text-center font-medium text-xs border-t border-white/25 pt-1">
           {movie.reviewCount} <span className="font-light">reviews</span>
         </p>
       </div>
