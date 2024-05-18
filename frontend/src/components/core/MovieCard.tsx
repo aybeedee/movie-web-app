@@ -22,7 +22,11 @@ export default function MovieCard({ movie }: { movie: Movie }) {
           {movie.releaseYear}
         </h2>
         <p className="w-full text-center font-medium text-xs border-t border-white/25 pt-1">
-          {movie.reviewCount} <span className="font-light">reviews</span>
+          {movie.reviewCount}
+          {" "}
+          <span className="font-light">
+            review{movie.reviewCount === 1 ? "" : "s"}
+          </span>
         </p>
       </div>
       {/* <div className="rounded-md border border-secondaryGrey p-1 mb-2">

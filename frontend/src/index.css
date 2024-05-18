@@ -74,3 +74,21 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+@layer utilities {
+	.scrollbar::-webkit-scrollbar {
+		@apply w-1;
+	}
+
+	.scrollbar::-webkit-scrollbar-track {
+		@apply rounded-full bg-transparent;
+	}
+
+	.scrollbar::-webkit-scrollbar-thumb {
+		@apply rounded-full bg-[#3abab4]/80;
+	}
+
+	.scrollbar::-webkit-scrollbar-thumb:hover {
+		@apply bg-[#3abab4];
+	}
+}
