@@ -14,3 +14,8 @@ export const getNewMovies = async () => {
 	const res = await apiClient.get("/api/movie?type=new");
 	return res.data;
 };
+
+export const getSearchResults = async (searchQuery: string) => {
+	const res = await apiClient.get(`/api/movie/search?query=${searchQuery}`);
+	return res.data;
+};

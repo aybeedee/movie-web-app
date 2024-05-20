@@ -1,11 +1,15 @@
 import { Search } from "@/assets/icons";
 import { BackgroundIllustrationTop } from "@/assets/illustrations";
 import { useAuth } from "@/hooks";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 
 export default function Navbar() {
+  const [searchInput, setSearchInput] = useState<string>("");
   const { authInfo, isLoggedIn, removeSession } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   console.log("Navbar: ", {
     authInfo: authInfo,
@@ -15,6 +19,10 @@ export default function Navbar() {
   const signout = () => {
     removeSession();
     navigate("/login");
+  }
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(event.target.value);
   }
 
   return (
@@ -47,22 +55,33 @@ export default function Navbar() {
               className="relative w-1/3"
               onSubmit={(event) => {
                 event.preventDefault();
-                // const newSearchParams = new URLSearchParams(searchParams);
-                // if (productSearchValue === "") {
-                //   newSearchParams.delete("search");
-                //   setSearchParams(newSearchParams);
-                // } else {
-                //   newSearchParams.set("search", productSearchValue);
-                //   setSearchParams(newSearchParams);
-                // }
+                console.log(searchInput);
+                console.log(location);
+                // if already on search results page, simply udpate url param with new query
+                if (location.pathname === "/search") {
+                  const newSearchParams = new URLSearchParams(searchParams);
+                  newSearchParams.set("query", searchInput);
+                  setSearchParams(newSearchParams);
+                } else {
+                  navigate(`/search?query=${searchInput}`);
+                }
               }}
             >
-              <div className="absolute left-2 top-[0.3rem] pr-2 border-r border-slate-200" >
-                <Search />
+              {
+                // pretty sure this can be made much simpler with the right css
+              }
+              <div className="absolute left-2 h-full pr-2 border-r border-slate-200">
+                <div className="h-full flex items-center">
+                  <Search />
+                </div>
               </div>
               <input
-                className="pl-10 text-black border border-slate-200 w-full"
+                className="text-sm py-1 pl-10 text-black border border-slate-200 w-full rounded-sm focus:outline-none"
                 type="text"
+                placeholder="Search for a title"
+                required={true}
+                value={searchInput}
+                onChange={handleInputChange}
               />
             </form>
           </div>
