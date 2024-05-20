@@ -55,7 +55,5 @@ export interface Review {
 	edited: boolean;
 	createdAt: string;
 	userId: string;
-	firstName: string;
-	lastName: string;
 	user: User;
 }

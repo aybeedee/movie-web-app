@@ -73,6 +73,20 @@ export default function MovieDetails() {
     event.preventDefault();
     try {
       const res = await addReview(reviewPayload);
+      if (movie && authInfo.user) {
+        // this is just a local version for reactivity - still, does ensure that addReview() request was successful though ig
+        setUserReview({
+          ...reviewPayload,
+          edited: false,
+          createdAt: "",
+          userId: authInfo.user.id,
+          user: authInfo.user
+        });
+      }
+      setReviewPayload((prevState) => ({
+        ...prevState,
+        comment: ""
+      }));
       toast({
         variant: "default",
         title: "Success",
@@ -103,6 +117,10 @@ export default function MovieDetails() {
           comment: reviewPayload.comment
         });
       }
+      setReviewPayload((prevState) => ({
+        ...prevState,
+        comment: ""
+      }));
       toast({
         variant: "default",
         title: "Success",
@@ -122,16 +140,12 @@ export default function MovieDetails() {
 
   const handleDeleteReview = async () => {
     try {
-      // checking just in case but I believe userReview will not be undefined since you can only delete if your review has been found and set
       let res;
+      // checking just in case but I believe userReview will not be undefined since you can only delete if your review has been found and set
       if (userReview) {
         res = await deleteReview(userReview?.movieId);
       }
       setUserReview(undefined);
-      setReviewPayload((prevState) => ({
-        ...prevState,
-        comment: ""
-      }));
       toast({
         variant: "default",
         title: "Success",
