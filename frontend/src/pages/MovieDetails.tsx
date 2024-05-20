@@ -1,5 +1,5 @@
 import { getMovieById } from "@/api/movies";
-import { addReview } from "@/api/review";
+import { addReview, editReview } from "@/api/review";
 import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/assets/illustrations";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks";
@@ -13,6 +13,7 @@ export default function MovieDetails() {
   const [movie, setMovie] = useState<Movie>();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [userReview, setUserReview] = useState<Review>();
+  const [isEditingReview, setIsEditingReview] = useState<boolean>(false);
   const [reviewPayload, setReviewPayload] = useState<ReviewPayload>({
     movieId: "",
     rating: 4, // hard coded for now, will change if fully implement rating
@@ -32,7 +33,7 @@ export default function MovieDetails() {
       setReviewPayload((prevState) => ({
         ...prevState,
         movieId: res.data.movie.id
-      }))
+      }));
     } catch (error: any) {
       console.error(error);
       const errorMessage = error.response?.data?.message ?
@@ -44,8 +45,6 @@ export default function MovieDetails() {
       });
     }
   }
-
-  console.log("USER REVIEW: ", userReview);
 
   useEffect(() => {
     if (!loadingAuth && isLoggedIn) {
@@ -67,13 +66,43 @@ export default function MovieDetails() {
     setReviewPayload((prevState) => ({
       ...prevState,
       comment: event.target.value
-    }))
+    }));
   }
 
   const handleAddReview = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       const res = await addReview(reviewPayload);
+      toast({
+        variant: "default",
+        title: "Success",
+        description: res.message
+      });
+    } catch (error: any) {
+      console.error(error);
+      const errorMessage = error.response?.data?.message ?
+        error.response.data.message : "There was a problem processing your request.";
+      toast({
+        variant: "destructive",
+        title: "An error occured",
+        description: errorMessage
+      });
+    }
+  }
+
+  const handleEditReview = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const res = await editReview(reviewPayload);
+      setIsEditingReview(false);
+      // checking just in case but I believe userReview will not be undefined since you can only edit if your review has been found and set
+      if (userReview) {
+        setUserReview({
+          ...userReview,
+          edited: true,
+          comment: reviewPayload.comment
+        });
+      }
       toast({
         variant: "default",
         title: "Success",
@@ -159,29 +188,51 @@ export default function MovieDetails() {
                         {getTimeAgo(userReview.createdAt)}
                       </p>
                     </div>
-                    <p className="font-light">
-                      {userReview.comment}
-                    </p>
                     {
-                      userReview.edited &&
-                      <p className="text-xs italic">
-                        Edited
-                      </p>
+                      isEditingReview ?
+                        <form onSubmit={handleEditReview} className="flex flex-col gap-3">
+                          <textarea
+                            placeholder="Share your thoughts here"
+                            required={true}
+                            id="reviewComment"
+                            name="reviewComment"
+                            value={reviewPayload.comment}
+                            onChange={handleInputChange}
+                            rows={3}
+                            className="bg-white/5 font-light text-sm py-2 px-3 rounded-sm scrollbar" />
+                          <button
+                            type="submit"
+                            className="place-self-end text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                          >
+                            Save
+                          </button>
+                        </form>
+                        : <>
+                          <p className="font-light">
+                            {userReview.comment}
+                          </p>
+                          <div className="flex flex-row gap-4 justify-end">
+                            <button
+                              className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                              onClick={() => {
+                                setReviewPayload((prevState) => ({
+                                  ...prevState,
+                                  comment: userReview.comment
+                                }));
+                                setIsEditingReview(true);
+                              }}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                              onClick={() => console.log("Delete")}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </>
                     }
-                    <div className="flex flex-row gap-4 justify-end">
-                      <button
-                        className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
-                        onClick={() => console.log("Edit")}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
-                        onClick={() => console.log("Delete")}
-                      >
-                        Delete
-                      </button>
-                    </div>
                   </div>
                 </div>
                 : <div className="z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] w-min text-nowrap rounded-md bg-black/25 shadow-black/10 shadow-2xl hover:bg-black/25 hover:shadow-black/0">
