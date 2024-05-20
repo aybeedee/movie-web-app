@@ -6,7 +6,7 @@ import {
 	MovieTypeData,
 } from "../utils/validations";
 import { validate } from "class-validator";
-import { Movie } from "../models";
+import { Movie, Review } from "../models";
 import { getRandomTrailerUrl } from "../utils/getRandomTrailerUrl";
 import { Op } from "sequelize";
 
@@ -304,11 +304,48 @@ export const getMovieById = async (req: Request, res: Response) => {
 			});
 		}
 
+		// compute rank
+
+		// - get all movies sorted by review count (desc)
+		const movies = await Movie.findAll({
+			attributes: {
+				exclude: ["createdAt", "userId"],
+			},
+			order: [["reviewCount", "DESC"]],
+			where: {
+				id: {
+					[Op.ne]: movieIdData.movieId,
+				},
+			},
+		});
+
+		// - iterate through movies, incrementing rank with each review count group passed
+		let rank: number = 0;
+		let currentCount: number = -1;
+		for (let i = 0; i < movies.length; i++) {
+			if (movies[i].reviewCount !== currentCount) {
+				rank++;
+			}
+			if (movies[i].reviewCount <= movie.reviewCount) {
+				break;
+			}
+			currentCount = movies[i].reviewCount;
+		}
+
+		// find all reviews of the movie
+		const reviews = await Review.findAll({
+			where: {
+				movieId: movieIdData.movieId,
+			},
+		});
+
 		return res.status(200).json({
 			error: false,
 			message: "Movie successfully fetched",
 			data: {
 				movie: movie,
+				rank: 2,
+				reviews: reviews,
 			},
 		});
 	} catch (error) {
