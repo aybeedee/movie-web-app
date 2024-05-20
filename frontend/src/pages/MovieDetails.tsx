@@ -8,15 +8,17 @@ import { getTimeAgo } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+// this page can use a lot of refactoring and componentization, for both better structure and reducing renders
 export default function MovieDetails() {
   const [movie, setMovie] = useState<Movie>();
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [userReview, setUserReview] = useState<Review>();
   const [reviewPayload, setReviewPayload] = useState<ReviewPayload>({
     movieId: "",
     rating: 4, // hard coded for now, will change if fully implement rating
     comment: ""
   });
-  const { isLoggedIn, loadingAuth } = useAuth();
+  const { authInfo, isLoggedIn, loadingAuth } = useAuth();
   const location = useLocation();
   const { toast } = useToast();
 
@@ -24,7 +26,6 @@ export default function MovieDetails() {
     const movieId = location.pathname.split("/")[1];
     try {
       const res = await getMovieById(movieId);
-      console.log(res.data);
       setMovie(res.data.movie);
       setReviews(res.data.reviews);
       // set the movie id in the review payload for potentially adding reviews
@@ -44,6 +45,20 @@ export default function MovieDetails() {
     }
   }
 
+  console.log("USER REVIEW: ", userReview);
+
+  useEffect(() => {
+    if (!loadingAuth && isLoggedIn) {
+      const findUserReview = reviews.find((review) => review.userId === authInfo.user?.id);
+      if (findUserReview) {
+        setReviews(
+          reviews.filter((review) => review.userId !== authInfo.user?.id)
+        );
+        setUserReview(findUserReview);
+      }
+    }
+  }, [loadingAuth, isLoggedIn, authInfo, reviews]);
+
   useEffect(() => {
     fetchMovie();
   }, []);
@@ -58,9 +73,7 @@ export default function MovieDetails() {
   const handleAddReview = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      console.log(reviewPayload);
       const res = await addReview(reviewPayload);
-      console.log(res);
       toast({
         variant: "default",
         title: "Success",
@@ -134,52 +147,90 @@ export default function MovieDetails() {
             <h1 className="text-3xl font-semibold py-2 border-b border-[#3abab4]">
               Reviews
             </h1>
-            <div className="z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] w-min text-nowrap rounded-md bg-black/25 shadow-black/10 shadow-2xl hover:bg-black/25 hover:shadow-black/0">
-              <h2 className="font-light">
-                Write a Review for <span className="font-semibold text-[#3abab4]">{movie?.title}</span>
-              </h2>
-              {
-                (!loadingAuth && isLoggedIn) ?
-                  <form onSubmit={handleAddReview} className="flex flex-col gap-3">
-                    <textarea
-                      placeholder="Share your thoughts here"
-                      required={true}
-                      id="reviewComment"
-                      name="reviewComment"
-                      value={reviewPayload.comment}
-                      onChange={handleInputChange}
-                      rows={3}
-                      className="bg-white/5 font-light text-sm py-2 px-3 rounded-sm scrollbar" />
-                    <button
-                      type="submit"
-                      className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
-                    >
-                      Add
-                    </button>
-                  </form>
-                  : <div className="flex flex-row justify-center pt-2 py-4 gap-3 text-sm items-center">
-                    <Link
-                      to="/login"
-                      className="bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
-                    >
-                      Login
-                    </Link>
-                    <Link
-                      to="/signup"
-                      className="bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
-                    >
-                      Signup
-                    </Link>
+            {
+              userReview ?
+                <div className="flex w-full">
+                  <div className="text-sm z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] rounded-md border border-[#3abab4] bg-[#3abab4]/10 shadow-black/10 shadow-2xl hover:bg-black/25 hover:shadow-black/0">
+                    <div className="flex flex-row justify-between">
+                      <h2 className="text-[#3abab4]">
+                        You
+                      </h2>
+                      <p className="text-xs font-light">
+                        {getTimeAgo(userReview.createdAt)}
+                      </p>
+                    </div>
+                    <p className="font-light">
+                      {userReview.comment}
+                    </p>
+                    {
+                      userReview.edited &&
+                      <p className="text-xs italic">
+                        Edited
+                      </p>
+                    }
+                    <div className="flex flex-row gap-4 justify-end">
+                      <button
+                        className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                        onClick={() => console.log("Edit")}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                        onClick={() => console.log("Delete")}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
-              }
-            </div>
+                </div>
+                : <div className="z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] w-min text-nowrap rounded-md bg-black/25 shadow-black/10 shadow-2xl hover:bg-black/25 hover:shadow-black/0">
+                  <h2 className="font-light">
+                    Write a Review for <span className="font-semibold text-[#3abab4]">{movie?.title}</span>
+                  </h2>
+                  {
+                    (!loadingAuth && isLoggedIn) ?
+                      <form onSubmit={handleAddReview} className="flex flex-col gap-3">
+                        <textarea
+                          placeholder="Share your thoughts here"
+                          required={true}
+                          id="reviewComment"
+                          name="reviewComment"
+                          value={reviewPayload.comment}
+                          onChange={handleInputChange}
+                          rows={3}
+                          className="bg-white/5 font-light text-sm py-2 px-3 rounded-sm scrollbar" />
+                        <button
+                          type="submit"
+                          className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                        >
+                          Add
+                        </button>
+                      </form>
+                      : <div className="flex flex-row justify-center pt-2 py-4 gap-3 text-sm items-center">
+                        <Link
+                          to="/login"
+                          className="bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                        >
+                          Login
+                        </Link>
+                        <Link
+                          to="/signup"
+                          className="bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                        >
+                          Signup
+                        </Link>
+                      </div>
+                  }
+                </div>
+            }
             <div className="flex flex-col gap-6">
               {
                 reviews.map((review) => (
                   <div className="flex w-full" key={`${review.movieId}-${review.userId}`}>
                     <div className="text-sm z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] rounded-md bg-black/25 shadow-black/10 shadow-2xl hover:bg-black/25 hover:shadow-black/0">
                       <div className="flex flex-row justify-between">
-                        <h2 className="font-semibold">
+                        <h2 className="text-[#3abab4]">
                           {review.user.firstName}{" "}{review.user.lastName}
                         </h2>
                         <p className="text-xs font-light">
