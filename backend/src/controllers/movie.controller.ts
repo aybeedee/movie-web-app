@@ -6,7 +6,7 @@ import {
 	MovieTypeData,
 } from "../utils/validations";
 import { validate } from "class-validator";
-import { Movie, Review } from "../models";
+import { Movie, Review, User } from "../models";
 import { getRandomTrailerUrl } from "../utils/getRandomTrailerUrl";
 import { Op } from "sequelize";
 
@@ -336,6 +336,10 @@ export const getMovieById = async (req: Request, res: Response) => {
 		const reviews = await Review.findAll({
 			where: {
 				movieId: movieIdData.movieId,
+			},
+			include: {
+				model: User,
+				as: "user",
 			},
 		});
 
