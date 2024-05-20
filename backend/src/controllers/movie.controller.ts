@@ -344,7 +344,7 @@ export const getMovieById = async (req: Request, res: Response) => {
 			message: "Movie successfully fetched",
 			data: {
 				movie: movie,
-				rank: 2,
+				rank: rank,
 				reviews: reviews,
 			},
 		});
