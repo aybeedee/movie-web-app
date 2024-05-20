@@ -166,7 +166,7 @@ export const deleteReview = async (req: Request, res: Response) => {
 		if (errors.length > 0) {
 			return res.status(400).json({
 				error: true,
-				message: "Invalid input",
+				message: "Invalid movie",
 				data: errors,
 			});
 		}
@@ -197,6 +197,7 @@ export const deleteReview = async (req: Request, res: Response) => {
 		// decrement the review count of related movie
 		// Note: I believe this is a race-free transaction
 		// but if race occurs, need to check for reviewCount >= 0
+		// update: db is checking that through constraint anyway, no?
 		await movie.decrement("reviewCount");
 
 		return res.status(200).json({

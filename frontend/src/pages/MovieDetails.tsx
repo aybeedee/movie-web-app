@@ -1,5 +1,5 @@
 import { getMovieById } from "@/api/movies";
-import { addReview, editReview } from "@/api/review";
+import { addReview, deleteReview, editReview } from "@/api/review";
 import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/assets/illustrations";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks";
@@ -103,6 +103,35 @@ export default function MovieDetails() {
           comment: reviewPayload.comment
         });
       }
+      toast({
+        variant: "default",
+        title: "Success",
+        description: res.message
+      });
+    } catch (error: any) {
+      console.error(error);
+      const errorMessage = error.response?.data?.message ?
+        error.response.data.message : "There was a problem processing your request.";
+      toast({
+        variant: "destructive",
+        title: "An error occured",
+        description: errorMessage
+      });
+    }
+  }
+
+  const handleDeleteReview = async () => {
+    try {
+      // checking just in case but I believe userReview will not be undefined since you can only delete if your review has been found and set
+      let res;
+      if (userReview) {
+        res = await deleteReview(userReview?.movieId);
+      }
+      setUserReview(undefined);
+      setReviewPayload((prevState) => ({
+        ...prevState,
+        comment: ""
+      }));
       toast({
         variant: "default",
         title: "Success",
@@ -226,7 +255,7 @@ export default function MovieDetails() {
                             </button>
                             <button
                               className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
-                              onClick={() => console.log("Delete")}
+                              onClick={handleDeleteReview}
                             >
                               Delete
                             </button>
