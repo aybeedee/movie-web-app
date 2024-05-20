@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { Home, Login, Signup, MyMovies, AddMovie, Movie, Search } from "@/pages";
+import { Home, Login, Signup, MyMovies, AddMovie, MovieDetails, Search } from "@/pages";
 import { CheckLogin, RequireAuth } from "@/components/core";
 import { AuthProvider } from "@/context/AuthContext";
 import { NavbarLayout } from "@/layout";
@@ -16,7 +16,7 @@ export default function App() {
         <Route element={<NavbarLayout />} >
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/:movieTitle" element={<Movie />} />
+          <Route path="/:movieTitle" element={<MovieDetails />} />
           <Route element={<RequireAuth />}>
             <Route path="/my-movies" element={<MyMovies />} />
             <Route path="/add-movie" element={<AddMovie />} />

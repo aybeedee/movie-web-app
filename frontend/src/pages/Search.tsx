@@ -13,8 +13,6 @@ export default function Search() {
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
 
-  console.log("search query: ", searchQuery);
-
   // when search params are updated, page re renders and this use effect sets the new query again
   useEffect(() => {
     const searchQueryFromParams = searchParams.get("query");

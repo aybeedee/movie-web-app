@@ -290,7 +290,7 @@ export const getMovieById = async (req: Request, res: Response) => {
 		if (errors.length > 0) {
 			return res.status(400).json({
 				error: true,
-				message: "Invalid input",
+				message: "Invalid movie",
 				data: errors,
 			});
 		}

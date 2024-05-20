@@ -1,5 +1,10 @@
 import { apiClient } from "./client";
 
+export const getMovieById = async (movieId: string) => {
+	const res = await apiClient.get(`/api/movie/${movieId}`);
+	return res.data;
+};
+
 export const getFeaturedMovies = async () => {
 	const res = await apiClient.get("/api/movie?type=featured");
 	return res.data;
