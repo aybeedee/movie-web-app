@@ -33,14 +33,6 @@ export default function MovieCard({ movie }: { movie: Movie }) {
           </span>
         </p>
       </div>
-      {/* <div className="rounded-md border border-secondaryGrey p-1 mb-2">
-        <img src={image} className="object-cover h-28 xl:h-32 2xl:h-44 w-full rounded-sm" />
-      </div>
-      <p className="text-sm text-tertiaryGrey font-bold">{title}</p>
-      <p className="text-xs">
-        By <span className="font-semibold">{brand}</span>
-      </p>
-      <p className="text-base font-bold text-primaryBlue mb-3">£{price}</p> */}
     </div>
   );
 };

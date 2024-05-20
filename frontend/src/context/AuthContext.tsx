@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const res = await getUser();
       console.log(res);
       localStorage.setItem("user", JSON.stringify(res.data));
-      setAuthInfo(prevState => ({
+      setAuthInfo((prevState) => ({
         ...prevState,
         user: res.data
       }));
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("user", JSON.stringify(authInfo.user));
     localStorage.setItem("jwtToken", JSON.stringify(authInfo.token));
     // if don't update state, then local storage does not get set before handle signup navigates to "/" ?
-    setAuthInfo(prevState => ({
+    setAuthInfo((prevState) => ({
       ...prevState,
       user: authInfo.user,
       token: authInfo.token
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const removeSession = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("jwtToken");
-    setAuthInfo(prevState => ({
+    setAuthInfo((prevState) => ({
       ...prevState,
       user: null,
       token: null

@@ -18,14 +18,14 @@ export interface User {
 	email: string;
 }
 
-export interface SignupData {
+export interface SignupPayload {
 	firstName: string;
 	lastName: string;
 	email: string;
 	password: string;
 }
 
-export interface LoginData {
+export interface LoginPayload {
 	email: string;
 	password: string;
 }
@@ -40,4 +40,10 @@ export interface Movie {
 	reviewCount: number;
 	posterUrl: string;
 	trailerUrl: string;
+}
+
+export interface ReviewPayload {
+	movieId: string;
+	comment: string;
+	rating: number;
 }

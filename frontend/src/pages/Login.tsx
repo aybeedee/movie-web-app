@@ -2,13 +2,13 @@ import { login } from "@/api/auth";
 import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/assets/illustrations";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks";
-import { LoginData } from "@/lib/types";
+import { LoginPayload } from "@/lib/types";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const { saveUser } = useAuth();
-  const [loginData, setLoginData] = useState<LoginData>({
+  const [loginPayload, setLoginPayload] = useState<LoginPayload>({
     email: "",
     password: ""
   });
@@ -18,7 +18,7 @@ export default function Login() {
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const res = await login(loginData);
+      const res = await login(loginPayload);
       console.log(res);
       saveUser(res.data);
       toast({
@@ -40,7 +40,7 @@ export default function Login() {
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLoginData((prevState) => ({
+    setLoginPayload((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value
     }))
@@ -91,7 +91,7 @@ export default function Login() {
                 className="px-2 py-1 text-black"
                 id="email"
                 name="email"
-                value={loginData.email}
+                value={loginPayload.email}
                 onChange={handleInputChange}
               />
             </div>
@@ -104,7 +104,7 @@ export default function Login() {
                 className="px-2 py-1 text-black"
                 id="password"
                 name="password"
-                value={loginData.password}
+                value={loginPayload.password}
                 onChange={handleInputChange}
               />
             </div>

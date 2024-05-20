@@ -1,6 +1,6 @@
 import { signup } from "@/api/auth";
 import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/assets/illustrations";
-import { SignupData } from "@/lib/types";
+import { SignupPayload } from "@/lib/types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -9,7 +9,7 @@ import { useAuth } from "@/hooks";
 
 export default function Signup() {
   const { saveUser } = useAuth();
-  const [signupData, setSignupData] = useState<SignupData>({
+  const [signupPayload, setSignupPayload] = useState<SignupPayload>({
     firstName: "",
     lastName: "",
     email: "",
@@ -21,7 +21,7 @@ export default function Signup() {
   const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const res = await signup(signupData);
+      const res = await signup(signupPayload);
       console.log(res);
       saveUser(res.data);
       toast({
@@ -43,7 +43,7 @@ export default function Signup() {
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSignupData((prevState) => ({
+    setSignupPayload((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value
     }))
@@ -88,7 +88,7 @@ export default function Signup() {
               className="px-2 py-1 text-black"
               id="firstName"
               name="firstName"
-              value={signupData.firstName}
+              value={signupPayload.firstName}
               onChange={handleInputChange}
             />
           </div>
@@ -101,7 +101,7 @@ export default function Signup() {
               className="px-2 py-1 text-black"
               id="lastName"
               name="lastName"
-              value={signupData.lastName}
+              value={signupPayload.lastName}
               onChange={handleInputChange}
             />
           </div>
@@ -114,7 +114,7 @@ export default function Signup() {
               className="px-2 py-1 text-black"
               id="email"
               name="email"
-              value={signupData.email}
+              value={signupPayload.email}
               onChange={handleInputChange}
             />
           </div>
@@ -127,7 +127,7 @@ export default function Signup() {
               className="px-2 py-1 text-black"
               id="password"
               name="password"
-              value={signupData.password}
+              value={signupPayload.password}
               onChange={handleInputChange}
             />
           </div>

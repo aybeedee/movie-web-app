@@ -1,12 +1,20 @@
 import { getMovieById } from "@/api/movies";
+import { addReview } from "@/api/review";
 import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/assets/illustrations";
 import { useToast } from "@/components/ui/use-toast";
-import { Movie } from "@/lib/types";
+import { useAuth } from "@/hooks";
+import { Movie, ReviewPayload } from "@/lib/types";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function MovieDetails() {
   const [movie, setMovie] = useState<Movie>();
+  const [reviewPayload, setReviewPayload] = useState<ReviewPayload>({
+    movieId: "",
+    rating: 4,
+    comment: ""
+  });
+  const { isLoggedIn, loadingAuth } = useAuth();
   const location = useLocation();
   const { toast } = useToast();
 
@@ -15,6 +23,10 @@ export default function MovieDetails() {
     try {
       const res = await getMovieById(movieId);
       setMovie(res.data.movie);
+      setReviewPayload((prevState) => ({
+        ...prevState,
+        movieId: res.data.movie.id
+      }))
     } catch (error: any) {
       console.error(error);
       const errorMessage = error.response?.data?.message ?
@@ -31,10 +43,39 @@ export default function MovieDetails() {
     fetchMovie();
   }, []);
 
-  // this is the third time writing the same bg jsx, can just abstract this into a component and pass pages through its outlet
-  return (
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setReviewPayload((prevState) => ({
+      ...prevState,
+      comment: event.target.value
+    }))
+  }
 
+  const handleAddReview = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      console.log(reviewPayload);
+      const res = await addReview(reviewPayload);
+      console.log(res);
+      toast({
+        variant: "default",
+        title: "Success",
+        description: res.message
+      });
+    } catch (error: any) {
+      console.error(error);
+      const errorMessage = error.response?.data?.message ?
+        error.response.data.message : "There was a problem processing your request.";
+      toast({
+        variant: "destructive",
+        title: "An error occured",
+        description: errorMessage
+      });
+    }
+  }
+
+  return (
     <div className="w-full h-full flex flex-row bg-[#18181a] text-white overflow-x-hidden scrollbar">
+      {/* this is the third time writing the same bg jsx, can just abstract this into a component and pass pages through its outlet */}
       <div className="w-full relative">
         <div className="absolute top-0 right-0 opacity-60 translate-x-1/2">
           <BackgroundIllustrationTop />
@@ -51,7 +92,7 @@ export default function MovieDetails() {
                 src={movie?.trailerUrl}
                 allow="autoplay; encrypted-media"
                 allowFullScreen
-                allowTransparency
+                className="rounded-md"
               />
             </div>
             <div className="flex flex-col gap-6 w-1/2">
@@ -76,7 +117,7 @@ export default function MovieDetails() {
                   <img src={movie?.posterUrl} className="object-cover min-w-44 h-64 rounded-sm" />
                 </div>
               </div>
-              <div className="flex flex-row gap-2 bg-[#3abab4]/50 w-min text-nowrap py-1 px-3 rounded-full items-baseline">
+              <div className="flex flex-row gap-2 bg-[#3abab4]/50 w-min text-nowrap py-2 px-4 rounded-full items-baseline">
                 <h1>
                   CMDb Rank #<span className="font-bold">{"45"}</span>
                 </h1>
@@ -84,14 +125,54 @@ export default function MovieDetails() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-4">
             <h1 className="text-3xl font-semibold py-2 border-b border-[#3abab4]">
               Reviews
             </h1>
+            <div className="z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] w-min text-nowrap rounded-md bg-black/25 shadow-black/75 shadow-2xl hover:bg-black/25 hover:shadow-black/5">
+              <h2 className="font-light">
+                Write a Review for <span className="font-semibold text-[#3abab4]">{movie?.title}</span>
+              </h2>
+              {
+                (!loadingAuth && isLoggedIn) ?
+                  <form onSubmit={handleAddReview} className="flex flex-col gap-3">
+                    <textarea
+                      placeholder="Share your thoughts here"
+                      required={true}
+                      id="reviewComment"
+                      name="reviewComment"
+                      value={reviewPayload.comment}
+                      onChange={handleInputChange}
+                      rows={3}
+                      className="bg-white/5 font-light text-sm py-2 px-3 rounded-sm scrollbar" />
+                    <button
+                      type="submit"
+                      className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                    >
+                      Add
+                    </button>
+                  </form>
+                  : <div className="flex flex-row justify-center pt-2 py-4 gap-3 text-sm items-center">
+                    <Link
+                      to="/login"
+                      className="bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/signup"
+                      className="bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                    >
+                      Signup
+                    </Link>
+                  </div>
+              }
+            </div>
             <div>
               {
                 // some array . map all the reviwe
               }
+              all other reviews
             </div>
           </div>
         </div>

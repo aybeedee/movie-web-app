@@ -1,12 +1,12 @@
-import { LoginData, SignupData } from "@/lib/types";
+import { LoginPayload, SignupPayload } from "@/lib/types";
 import { apiClient } from "./client";
 
-export const signup = async (data: SignupData) => {
+export const signup = async (data: SignupPayload) => {
 	const res = await apiClient.post("/api/auth/signup", data);
 	return res.data;
 };
 
-export const login = async (data: LoginData) => {
+export const login = async (data: LoginPayload) => {
 	const res = await apiClient.post("/api/auth/login", data);
 	return res.data;
 };
