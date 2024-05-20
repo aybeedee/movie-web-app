@@ -11,6 +11,7 @@ import { Link, useLocation } from "react-router-dom";
 // this page can use a lot of refactoring and componentization, for both better structure and reducing renders
 export default function MovieDetails() {
   const [movie, setMovie] = useState<Movie>();
+  const [rank, setRank] = useState<number>();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [userReview, setUserReview] = useState<Review>();
   const [isEditingReview, setIsEditingReview] = useState<boolean>(false);
@@ -28,6 +29,7 @@ export default function MovieDetails() {
     try {
       const res = await getMovieById(movieId);
       setMovie(res.data.movie);
+      setRank(res.data.rank);
       setReviews(res.data.reviews);
       // set the movie id in the review payload for potentially adding reviews
       setReviewPayload((prevState) => ({
@@ -209,9 +211,19 @@ export default function MovieDetails() {
               </div>
               <div className="flex flex-row gap-2 bg-[#3abab4]/50 w-min text-nowrap py-2 px-4 rounded-full items-baseline">
                 <h1>
-                  CMDb Rank #<span className="font-bold">{"45"}</span>
+                  CMDb Rank #
+                  <span className="font-bold">
+                    {rank}
+                  </span>
                 </h1>
-                <p className="text-base">{"(With "}{"2"}{" reviews)"}</p>
+                <p className="text-base">
+                  {"(With "}
+                  {
+                    movie?.reviewCount === 1 ?
+                      `${movie?.reviewCount} review)`
+                      : `${movie?.reviewCount} reviews)`
+                  }
+                </p>
               </div>
             </div>
           </div>
