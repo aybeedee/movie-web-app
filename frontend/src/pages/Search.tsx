@@ -60,7 +60,7 @@ export default function Search() {
           <h1 className="font-semibold text-lg mb-6">{resultsDescription}</h1>
           <div className="flex flex-row flex-wrap gap-4 z-10">
             {
-              searchResults.map(movie => (
+              searchResults.map((movie) => (
                 <MovieCard key={movie.id} movie={movie} />
               ))
             }

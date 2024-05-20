@@ -47,3 +47,15 @@ export interface ReviewPayload {
 	comment: string;
 	rating: number;
 }
+
+export interface Review {
+	movieId: string;
+	comment: string;
+	rating: number;
+	edited: boolean;
+	createdAt: string;
+	userId: string;
+	firstName: string;
+	lastName: string;
+	user: User;
+}

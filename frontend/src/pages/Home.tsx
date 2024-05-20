@@ -95,7 +95,7 @@ export default function Home() {
               >
                 <CarouselContent className="pt-2 pb-16 pl-8 mr-8">
                   {
-                    allRankedMovies.map(rankedMovie => (
+                    allRankedMovies.map((rankedMovie) => (
                       <CarouselItem key={rankedMovie.id} className="max-w-min">
                         <MovieCard movie={rankedMovie} />
                       </CarouselItem>
@@ -118,7 +118,7 @@ export default function Home() {
             </div>
             <div className="flex flex-row flex-wrap gap-4 z-10">
               {
-                featuredMovies.map(featuredMovie => (
+                featuredMovies.map((featuredMovie) => (
                   <MovieCard key={featuredMovie.id} movie={featuredMovie} />
                 ))
               }
@@ -135,7 +135,7 @@ export default function Home() {
             </div>
             <div className="flex flex-row flex-wrap gap-4 z-10">
               {
-                newMovies.map(newMovie => (
+                newMovies.map((newMovie) => (
                   <MovieCard key={newMovie.id} movie={newMovie} />
                 ))
               }

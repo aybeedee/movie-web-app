@@ -3,15 +3,17 @@ import { addReview } from "@/api/review";
 import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/assets/illustrations";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks";
-import { Movie, ReviewPayload } from "@/lib/types";
+import { Movie, Review, ReviewPayload } from "@/lib/types";
+import { getTimeAgo } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 export default function MovieDetails() {
   const [movie, setMovie] = useState<Movie>();
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [reviewPayload, setReviewPayload] = useState<ReviewPayload>({
     movieId: "",
-    rating: 4,
+    rating: 4, // hard coded for now, will change if fully implement rating
     comment: ""
   });
   const { isLoggedIn, loadingAuth } = useAuth();
@@ -22,7 +24,10 @@ export default function MovieDetails() {
     const movieId = location.pathname.split("/")[1];
     try {
       const res = await getMovieById(movieId);
+      console.log(res.data);
       setMovie(res.data.movie);
+      setReviews(res.data.reviews);
+      // set the movie id in the review payload for potentially adding reviews
       setReviewPayload((prevState) => ({
         ...prevState,
         movieId: res.data.movie.id
@@ -125,11 +130,11 @@ export default function MovieDetails() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-6">
             <h1 className="text-3xl font-semibold py-2 border-b border-[#3abab4]">
               Reviews
             </h1>
-            <div className="z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] w-min text-nowrap rounded-md bg-black/25 shadow-black/75 shadow-2xl hover:bg-black/25 hover:shadow-black/5">
+            <div className="z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] w-min text-nowrap rounded-md bg-black/25 shadow-black/10 shadow-2xl hover:bg-black/25 hover:shadow-black/0">
               <h2 className="font-light">
                 Write a Review for <span className="font-semibold text-[#3abab4]">{movie?.title}</span>
               </h2>
@@ -168,11 +173,32 @@ export default function MovieDetails() {
                   </div>
               }
             </div>
-            <div>
+            <div className="flex flex-col gap-6">
               {
-                // some array . map all the reviwe
+                reviews.map((review) => (
+                  <div className="flex w-full" key={`${review.movieId}-${review.userId}`}>
+                    <div className="text-sm z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] rounded-md bg-black/25 shadow-black/10 shadow-2xl hover:bg-black/25 hover:shadow-black/0">
+                      <div className="flex flex-row justify-between">
+                        <h2 className="font-semibold">
+                          {review.user.firstName}{" "}{review.user.lastName}
+                        </h2>
+                        <p className="text-xs font-light">
+                          {getTimeAgo(review.createdAt)}
+                        </p>
+                      </div>
+                      <p className="font-light">
+                        {review.comment}
+                      </p>
+                      {
+                        review.edited &&
+                        <p className="text-xs italic">
+                          Edited
+                        </p>
+                      }
+                    </div>
+                  </div>
+                ))
               }
-              all other reviews
             </div>
           </div>
         </div>
