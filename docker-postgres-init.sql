@@ -1,6 +1,3 @@
-CREATE DATABASE movie_web_app;
-\c movie_web_app;
-
 CREATE TABLE users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   first_name VARCHAR(50) NOT NULL,
