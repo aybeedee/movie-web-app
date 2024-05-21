@@ -17,7 +17,6 @@ import { Op } from "sequelize";
  */
 export const addReview = async (req: Request, res: Response) => {
 	try {
-		console.log(req.body);
 		const reviewData: ReviewData = new ReviewData();
 		reviewData.movieId = req.body.movieId;
 		reviewData.comment = req.body.comment;
@@ -81,7 +80,6 @@ export const addReview = async (req: Request, res: Response) => {
  */
 export const editReview = async (req: Request, res: Response) => {
 	try {
-		console.log(req.body);
 		const editReviewData: ReviewData = new ReviewData();
 		editReviewData.movieId = req.body.movieId;
 		editReviewData.comment = req.body.comment;
@@ -156,8 +154,6 @@ export const editReview = async (req: Request, res: Response) => {
  */
 export const deleteReview = async (req: Request, res: Response) => {
 	try {
-		console.log(req.params.movieId);
-
 		const movieIdData: MovieIdData = new MovieIdData();
 		movieIdData.movieId = req.params.movieId;
 

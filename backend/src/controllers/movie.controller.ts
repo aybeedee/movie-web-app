@@ -19,7 +19,6 @@ import { Op } from "sequelize";
  */
 export const addMovie = async (req: Request, res: Response) => {
 	try {
-		console.log(req.body);
 		const movieData: MovieData = new MovieData();
 		movieData.title = req.body.title;
 		movieData.description = req.body.description;
@@ -98,8 +97,6 @@ export const addMovie = async (req: Request, res: Response) => {
  */
 export const deleteMovie = async (req: Request, res: Response) => {
 	try {
-		console.log(req.params.movieId);
-
 		const movieIdData: MovieIdData = new MovieIdData();
 		movieIdData.movieId = req.params.movieId;
 
@@ -156,10 +153,6 @@ export const deleteMovie = async (req: Request, res: Response) => {
  */
 export const getMovies = async (req: Request, res: Response) => {
 	try {
-		console.log("req.params: ", req.params);
-		console.log("req.query: ", req.query);
-		console.log("req.query.type: ", req.query.type);
-
 		// if query string available, validate input, return records according to type
 		if (Object.keys(req.query).length) {
 			const movieTypeData: MovieTypeData = new MovieTypeData();
@@ -278,8 +271,6 @@ export const getMovies = async (req: Request, res: Response) => {
 
 export const getMovieById = async (req: Request, res: Response) => {
 	try {
-		console.log("req.params: ", req.params);
-
 		const movieIdData: MovieIdData = new MovieIdData();
 		movieIdData.movieId = req.params.movieId;
 
@@ -361,9 +352,6 @@ export const getMovieById = async (req: Request, res: Response) => {
 
 export const searchMovies = async (req: Request, res: Response) => {
 	try {
-		console.log("req.query: ", req.query);
-		console.log("req.query.type: ", req.query.query);
-
 		const movieQueryData: MovieQueryData = new MovieQueryData();
 		movieQueryData.query = req.query.query as string;
 

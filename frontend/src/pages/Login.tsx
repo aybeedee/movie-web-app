@@ -19,7 +19,6 @@ export default function Login() {
     event.preventDefault();
     try {
       const res = await login(loginPayload);
-      console.log(res);
       saveUser(res.data);
       toast({
         variant: "default",

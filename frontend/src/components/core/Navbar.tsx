@@ -11,11 +11,6 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log("Navbar: ", {
-    authInfo: authInfo,
-    isLoggedIn: isLoggedIn
-  });
-
   const signout = () => {
     removeSession();
     navigate("/login");
@@ -55,8 +50,6 @@ export default function Navbar() {
               className="relative w-1/3"
               onSubmit={(event) => {
                 event.preventDefault();
-                console.log(searchInput);
-                console.log(location);
                 // if already on search results page, simply udpate url param with new query
                 if (location.pathname === "/search") {
                   const newSearchParams = new URLSearchParams(searchParams);

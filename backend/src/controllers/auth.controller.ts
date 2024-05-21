@@ -16,7 +16,6 @@ export class AuthController {
 	 */
 	static signUp = async (req: Request, res: Response) => {
 		try {
-			console.log(req.body);
 			const signupData: SignupData = new SignupData();
 			signupData.firstName = req.body.firstName;
 			signupData.lastName = req.body.lastName;
@@ -76,7 +75,6 @@ export class AuthController {
 	 */
 	static login = async (req: Request, res: Response) => {
 		try {
-			console.log(req.body);
 			const loginData: LoginData = new LoginData();
 			loginData.email = req.body.email;
 			loginData.password = req.body.password;

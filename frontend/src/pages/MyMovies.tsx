@@ -27,7 +27,6 @@ export default function MyMovies() {
   const fetchUserMovies = async () => {
     try {
       const res = await getMoviesByUser();
-      console.log(res);
       setUserMovies(res.data.movies);
     } catch (error: any) {
       console.error(error);
@@ -68,7 +67,6 @@ export default function MyMovies() {
     event.preventDefault();
     try {
       const res = await addMovie(moviePayload);
-      console.log(res);
       setIsAddingMovie(false);
       setUserMovies((prevState) => [
         res.data.movie,

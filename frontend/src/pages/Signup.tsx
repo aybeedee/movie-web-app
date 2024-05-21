@@ -22,7 +22,6 @@ export default function Signup() {
     event.preventDefault();
     try {
       const res = await signup(signupPayload);
-      console.log(res);
       saveUser(res.data);
       toast({
         variant: "default",

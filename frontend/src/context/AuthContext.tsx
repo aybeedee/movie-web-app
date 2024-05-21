@@ -14,12 +14,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loadingAuth, setLoadingAuth] = useState<boolean>(true);
 
-  console.log("AuthProvider: ", {
-    authInfo: authInfo,
-    isLoggedIn: isLoggedIn,
-    loadingAuth: loadingAuth
-  });
-
   useEffect(() => {
     verifyUser();
   }, []);
@@ -28,7 +22,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const verifyUser = async () => {
     try {
       const res = await getUser();
-      console.log(res);
       localStorage.setItem("user", JSON.stringify(res.data));
       setAuthInfo((prevState) => ({
         ...prevState,
