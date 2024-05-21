@@ -24,3 +24,8 @@ export const getSearchResults = async (searchQuery: string) => {
 	const res = await apiClient.get(`/api/movie/search?query=${searchQuery}`);
 	return res.data;
 };
+
+export const getMoviesByUser = async () => {
+	const res = await apiClient.get("/api/movie/user");
+	return res.data;
+};

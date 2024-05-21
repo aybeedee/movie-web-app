@@ -7,7 +7,6 @@ export default function MovieCard({ movie }: { movie: Movie }) {
   return (
     <div
       onClick={() => {
-        console.log("hello");
         navigate(`/${movie.id}`);
       }}
       className="flex flex-col w-44 max-w-44 rounded-md shadow-black/75 shadow-2xl hover:bg-black/25 hover:shadow-black/5 active:bg-black/65 active:shadow-black active:shadow-inner active:border-black/25 cursor-pointer"

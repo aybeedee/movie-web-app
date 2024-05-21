@@ -405,3 +405,31 @@ export const searchMovies = async (req: Request, res: Response) => {
 		});
 	}
 };
+
+export const getMoviesByUser = async (req: Request, res: Response) => {
+	try {
+		const movies = await Movie.findAll({
+			attributes: {
+				exclude: ["createdAt", "userId"],
+			},
+			where: {
+				userId: req.body.userId,
+			},
+			order: [["createdAt", "DESC"]],
+		});
+
+		return res.status(200).json({
+			error: false,
+			message: "User's movies successfully fetched",
+			data: {
+				movies: movies,
+			},
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({
+			error: true,
+			message: "Internal server error",
+		});
+	}
+};
