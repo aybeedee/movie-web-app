@@ -56,17 +56,17 @@ CREATE TABLE reviews (
 );
 
 INSERT INTO users (id, first_name, last_name, email, password) VALUES
-  ('ad6631ea-9b0d-4e33-bd5f-940b6f0dd6c2', 'Abdullah', 'Umer', 'abdullah@gmail.com', 'abdullahumer123'),
-  ('e5b09172-3baf-4f3a-bd2e-cf51436dfad5', 'John', 'Doe', 'john@gmail.com', 'johndoe123');
+  ('ad6631ea-9b0d-4e33-bd5f-940b6f0dd6c2', 'Abdullah', 'Umer', 'abdullah@gmail.com', '$2a$10$ZBN3l1gIVMiVN8KxCGev6.5fJcMNmfBdOpeh2oRBpOZABytcbPaLy'),
+  ('e5b09172-3baf-4f3a-bd2e-cf51436dfad5', 'John', 'Doe', 'john@gmail.com', '$2a$10$2Mbpq4I4Q68cBGm5pakm.eHeIWZ/XyNZzpb0U/fBk98ESNIjUth3O');
 
-INSERT INTO movies (id, title, description, release_year, duration_hours, duration_minutes, user_id) VALUES
-  ('64ffb1ed-4db7-44b1-a4b8-efb3462e1b57', 'Inception', 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.', 2010, 2, 28, 'e5b09172-3baf-4f3a-bd2e-cf51436dfad5'),
-  ('c11e0d63-8508-4b0a-b080-abbcd57d1e33', 'Interstellar', 'A team of explorers travel through a wormhole in space in an attempt to ensure humanity''s survival.', 2014, 2, 49, 0, 'e5b09172-3baf-4f3a-bd2e-cf51436dfad5'),
-  ('f5d942e5-5e4c-409e-99ec-3b0244d7e67c', 'The Matrix', 'A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.', 1999, 2, 16, 0, 'ad6631ea-9b0d-4e33-bd5f-940b6f0dd6c2'),
-  ('91c22b61-3c38-4a78-a6b0-167d1a111b29', 'The Matrix Reloaded', 'Neo and his allies race against time before the machines discover the city of Zion and destroy it.', 2003, 2, 18, 0, 'ad6631ea-9b0d-4e33-bd5f-940b6f0dd6c2');
+INSERT INTO movies (id, title, description, release_year, duration_hours, duration_minutes, review_count, poster_url, trailer_url, created_at, user_id) VALUES
+  ('64ffb1ed-4db7-44b1-a4b8-efb3462e1b57', 'Inception', 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.', 2010, 2, 28, 2, 'https://picsum.photos/seed/Inception/500/750', 'https://www.youtube.com/embed/B-yhF7IScUE', NOW(), 'e5b09172-3baf-4f3a-bd2e-cf51436dfad5'),
+  ('c11e0d63-8508-4b0a-b080-abbcd57d1e33', 'Interstellar', 'A team of explorers travel through a wormhole in space in an attempt to ensure humanity''s survival.', 2014, 2, 49, 1, 'https://picsum.photos/seed/Interstellar/500/750', 'https://www.youtube.com/embed/8rbJkmz1n8E', NOW(), 'e5b09172-3baf-4f3a-bd2e-cf51436dfad5'),
+  ('f5d942e5-5e4c-409e-99ec-3b0244d7e67c', 'The Matrix', 'A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.', 1999, 2, 16, 0, 'https://picsum.photos/seed/TheMatrix/500/750', 'https://www.youtube.com/embed/MjQG-a7d41Q', NOW(), 'ad6631ea-9b0d-4e33-bd5f-940b6f0dd6c2'),
+  ('91c22b61-3c38-4a78-a6b0-167d1a111b29', 'The Matrix Reloaded', 'Neo and his allies race against time before the machines discover the city of Zion and destroy it.', 2003, 2, 18, 1, 'https://picsum.photos/seed/TheMatrixReloaded/500/750', 'https://www.youtube.com/embed/BXfxLIuNJvw', NOW(), 'ad6631ea-9b0d-4e33-bd5f-940b6f0dd6c2');
 
-INSERT INTO reviews (user_id, movie_id, comment, rating) VALUES
-  ('e5b09172-3baf-4f3a-bd2e-cf51436dfad5', '64ffb1ed-4db7-44b1-a4b8-efb3462e1b57', 'Amazing movie with a mind-bending plot!', 4),
-  ('e5b09172-3baf-4f3a-bd2e-cf51436dfad5', 'c11e0d63-8508-4b0a-b080-abbcd57d1e33', 'A stunning depiction of space and time.', 4),
-  ('ad6631ea-9b0d-4e33-bd5f-940b6f0dd6c2', 'f5d942e5-5e4c-409e-99ec-3b0244d7e67c', 'A revolutionary sci-fi classic.', 4),
-  ('ad6631ea-9b0d-4e33-bd5f-940b6f0dd6c2', '91c22b61-3c38-4a78-a6b0-167d1a111b29', 'Great sequel with intense action scenes.', 4);
+INSERT INTO reviews (user_id, movie_id, comment, rating, created_at) VALUES
+  ('e5b09172-3baf-4f3a-bd2e-cf51436dfad5', '64ffb1ed-4db7-44b1-a4b8-efb3462e1b57', 'I was truly captivated by this movie; its mind-bending plot left me in awe!', 4, NOW()),
+  ('e5b09172-3baf-4f3a-bd2e-cf51436dfad5', 'c11e0d63-8508-4b0a-b080-abbcd57d1e33', 'The portrayal of space and time in this film is nothing short of stunning; it''s a visual masterpiece.', 4, NOW()),
+  ('ad6631ea-9b0d-4e33-bd5f-940b6f0dd6c2', '64ffb1ed-4db7-44b1-a4b8-efb3462e1b57', 'This sci-fi classic is truly revolutionary in its storytelling and themes; it''s a must-watch for any enthusiast of the genre.', 4, NOW()),
+  ('ad6631ea-9b0d-4e33-bd5f-940b6f0dd6c2', '91c22b61-3c38-4a78-a6b0-167d1a111b29', 'The sequel manages to surpass its predecessor with its intense action scenes, keeping me on the edge of my seat throughout.', 4, NOW());
