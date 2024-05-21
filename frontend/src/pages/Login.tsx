@@ -84,7 +84,7 @@ export default function Login() {
             <h1 className="text-3xl font-semibold w-full text-center">
               Sign In
             </h1>
-            <form onSubmit={handleLogin} className="flex flex-col gap-4">
+            <form onSubmit={handleLogin} className="flex flex-col gap-4 w-1/3">
               <div className="flex flex-col gap-2">
                 <label className="font-light">Email</label>
                 <input
@@ -130,7 +130,6 @@ export default function Login() {
               Browse anyway
             </Link>
           </div>
-
         </div>
       </div>
     </div>
