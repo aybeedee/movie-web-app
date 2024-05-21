@@ -1,0 +1,40 @@
+version: "0.1"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      POSTGRES_DATABASE: movie_web_app
+      POSTGRES_USERNAME: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      JWT_SECRET: secret
+      JWT_EXPIRES_IN: 1h
+      PORT: 3000
+
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: movie_web_app
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./docker-postgres-init.sql:/docker-entrypoint-initdb.d/docker-postgres-init.sql
