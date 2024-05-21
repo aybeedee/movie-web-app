@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { signUpService } from "../services/auth.service";
+import { AuthService } from "../services/auth.service";
 import { User } from "../models";
 import bcrypt from "bcryptjs";
 import { generateJwtToken } from "../utils/generateJwtToken";
@@ -32,7 +32,8 @@ export class AuthController {
 				});
 			}
 
-			const user = await User.findOne({ where: { email: signupData.email } });
+			const user = await AuthService.getUserByEmail(signupData.email);
+
 			if (user) {
 				return res.status(400).json({
 					error: true,
@@ -40,17 +41,9 @@ export class AuthController {
 				});
 			}
 
-			const salt = await bcrypt.genSalt(10);
-			const encryptedPassword = await bcrypt.hash(signupData.password, salt);
+			const newUser = await AuthService.createUser(signupData);
 
-			const newUser = await User.create({
-				firstName: signupData.firstName,
-				lastName: signupData.lastName,
-				email: signupData.email,
-				password: encryptedPassword,
-			});
-
-			const jwtToken = generateJwtToken(newUser.id);
+			const jwtToken = AuthService.getToken(newUser.id);
 
 			return res.status(201).json({
 				error: false,
@@ -97,9 +90,7 @@ export class AuthController {
 				});
 			}
 
-			const user = await User.scope("withPassword").findOne({
-				where: { email: loginData.email },
-			});
+			const user = await AuthService.getUserByEmail(loginData.email, true);
 
 			if (!user) {
 				return res.status(400).json({
@@ -108,19 +99,19 @@ export class AuthController {
 				});
 			}
 
-			const passwordVerified = await bcrypt.compare(
+			const isPasswordVerified = await AuthService.verifyPassword(
 				loginData.password,
 				user.password
 			);
 
-			if (!passwordVerified) {
+			if (!isPasswordVerified) {
 				return res.status(400).json({
 					error: true,
 					message: "Incorrect password",
 				});
 			}
 
-			const jwtToken = generateJwtToken(user.id);
+			const jwtToken = AuthService.getToken(user.id);
 
 			return res.status(200).json({
 				error: false,
@@ -146,7 +137,7 @@ export class AuthController {
 
 	static getUser = async (req: Request, res: Response) => {
 		try {
-			const user = await User.findByPk(req.body.userId);
+			const user = await AuthService.getUserById(req.body.userId);
 			if (user) {
 				return res.status(200).json({
 					error: false,
