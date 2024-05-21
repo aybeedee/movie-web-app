@@ -79,8 +79,6 @@ export const addMovie = async (req: Request, res: Response) => {
 					reviewCount: newMovie.reviewCount,
 					posterUrl: newMovie.posterUrl,
 					trailerUrl: newMovie.trailerUrl,
-					createdAt: newMovie.createdAt,
-					userId: newMovie.userId,
 				},
 			},
 		});

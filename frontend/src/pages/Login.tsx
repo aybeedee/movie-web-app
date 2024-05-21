@@ -43,7 +43,7 @@ export default function Login() {
     setLoginPayload((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value
-    }))
+    }));
   }
 
   return (

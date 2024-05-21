@@ -1,4 +1,10 @@
+import { MoviePayload } from "@/lib/types";
 import { apiClient } from "./client";
+
+export const addMovie = async (data: MoviePayload) => {
+	const res = await apiClient.post("/api/movie", data);
+	return res.data;
+};
 
 export const getMovieById = async (movieId: string) => {
 	const res = await apiClient.get(`/api/movie/${movieId}`);

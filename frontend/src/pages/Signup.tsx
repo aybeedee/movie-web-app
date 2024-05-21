@@ -46,7 +46,7 @@ export default function Signup() {
     setSignupPayload((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value
-    }))
+    }));
   }
 
   return (
