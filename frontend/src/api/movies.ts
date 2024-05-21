@@ -29,3 +29,8 @@ export const getMoviesByUser = async () => {
 	const res = await apiClient.get("/api/movie/user");
 	return res.data;
 };
+
+export const deleteMovie = async (movieId: string) => {
+	const res = await apiClient.delete(`/api/movie/${movieId}`);
+	return res.data;
+};

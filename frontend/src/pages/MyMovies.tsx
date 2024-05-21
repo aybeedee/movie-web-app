@@ -1,4 +1,4 @@
-import { getMoviesByUser } from "@/api/movies";
+import { deleteMovie, getMoviesByUser } from "@/api/movies";
 import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/assets/illustrations";
 import { MovieCard } from "@/components/core";
 import { useToast } from "@/components/ui/use-toast";
@@ -28,6 +28,27 @@ export default function MyMovies() {
   useEffect(() => {
     fetchUserMovies();
   }, []);
+
+  const handleDeleteMovie = async (movieId: string) => {
+    try {
+      const res = await deleteMovie(movieId);
+      setUserMovies(userMovies.filter((movie) => movie.id !== movieId));
+      toast({
+        variant: "default",
+        title: "Success",
+        description: res.message
+      });
+    } catch (error: any) {
+      console.error(error);
+      const errorMessage = error.response?.data?.message ?
+        error.response.data.message : "There was a problem processing your request.";
+      toast({
+        variant: "destructive",
+        title: "An error occured",
+        description: errorMessage
+      });
+    }
+  }
 
   return (
     <div className="w-full h-full flex flex-row bg-[#18181a] text-white overflow-x-hidden scrollbar">
@@ -63,12 +84,12 @@ export default function MyMovies() {
                       >
                         View
                       </Link>
-                      <Link
-                        to={`/${movie.id}`}
+                      <button
+                        onClick={() => handleDeleteMovie(movie.id)}
                         className="text-center w-full text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white px-4 py-1 rounded-sm"
                       >
                         Delete
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 ))
