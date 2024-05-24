@@ -85,7 +85,7 @@ export default function Login() {
             </h1>
             <form onSubmit={handleLogin} className="flex flex-col gap-4 w-1/3">
               <div className="flex flex-col gap-2">
-                <label className="font-light">Email</label>
+                <label className="font-light" htmlFor="email">Email</label>
                 <input
                   type="email"
                   placeholder="username@email.com"
@@ -98,7 +98,7 @@ export default function Login() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-light">Password</label>
+                <label className="font-light" htmlFor="password">Password</label>
                 <input
                   type="password"
                   placeholder="********"
