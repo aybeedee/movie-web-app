@@ -2,7 +2,7 @@
 <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://github.com/aybeedee/movie-web-app/assets/75930195/ac94eb22-cd16-447a-88fd-677c418eeb03">
 </p>
 <h1 align="center">CMDb - Movie Database Web App</h1>
-<h3 align="center">Preview live at <a href="google.com">google.com</a></h1>
+<h3 align="center">Preview live at <a href="https://cmdb-movies.netlify.app/">cmdb-movies.netlify.app</a></h1>
 
 <p align="center">
 View a large collection of movies and reviews. Sign up to add your own.
@@ -23,8 +23,8 @@ View a large collection of movies and reviews. Sign up to add your own.
 
 - navigate to root `cd movie-web-app`
 - build and run with compose `docker-compose up --build`
-  > [!NOTE]
-  > Run `docker-compose down --volumes` after stopping - may help avoid postgres seed/init issues
+>[!NOTE]
+Run `docker-compose down --volumes` after stopping -potentially helps avoid postgres seed/init issues
 
 ### Without Docker
 
