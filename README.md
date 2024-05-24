@@ -9,7 +9,7 @@ View a large collection of movies and reviews. Sign up to add your own.
 </p>
 
 <p align="center">
-  <a href="#localsetup"><strong>Local Setup</strong></a> ·
+  <a href="#local-setup"><strong>Local Setup</strong></a> ·
   <a href="#tech"><strong>Tech</strong></a> ·
   <a href="#containerization"><strong>Containerization</strong></a> ·
   <a href="#deployment"><strong>Deployment</strong></a> ·
@@ -86,7 +86,7 @@ View a large collection of movies and reviews. Sign up to add your own.
 
 - [x] Frontend init, boilerplate, structure
 - [x] Backend init, boilerplate, structure
-- [x] Frotend routing
+- [x] Frontend routing
 - [x] Postgres schema
 - [x] DB Integration
 - [x] ORM Setup, Model generation
@@ -95,7 +95,7 @@ View a large collection of movies and reviews. Sign up to add your own.
 - [x] Movie module
 - [x] Review module
 - [x] Integration
-- [ ] (WIP) Test cases
-- [x] (WIP) Dockerization
-- [ ] (WIP) Refactoring, Styling Improvements, Bugs
+- [x] Dockerization
 - [x] Deployment
+- [ ] (WIP) Test cases
+- [ ] (WIP) Refactoring, Styling Improvements, Bugs
