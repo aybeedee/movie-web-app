@@ -5,9 +5,6 @@ import { signup } from "@/api/auth";
 import { useAuth } from "@/hooks";
 import { useToast } from "@/components/ui/use-toast";
 
-jest.mock("@/lib/constants", () => ({
-  BACKEND_URL: "http://localhost:3000",
-}));
 jest.mock("@/api/auth");
 jest.mock("@/hooks");
 jest.mock("@/components/ui/use-toast");
