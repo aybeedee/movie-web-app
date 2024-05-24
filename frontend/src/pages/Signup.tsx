@@ -88,7 +88,7 @@ export default function Signup() {
             </h1>
             <form onSubmit={handleSignup} className="flex flex-col gap-4 w-1/3">
               <div className="flex flex-col gap-2">
-                <label className="font-light">First Name</label>
+                <label className="font-light" htmlFor="firstName">First Name</label>
                 <input
                   type="text"
                   placeholder="Abdullah"
@@ -101,7 +101,7 @@ export default function Signup() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-light">Last Name</label>
+                <label className="font-light" htmlFor="lastName">Last Name</label>
                 <input
                   type="text"
                   placeholder="Umer"
@@ -114,7 +114,7 @@ export default function Signup() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-light">Email</label>
+                <label className="font-light" htmlFor="email">Email</label>
                 <input
                   type="email"
                   placeholder="username@email.com"
@@ -127,7 +127,7 @@ export default function Signup() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-light">Password</label>
+                <label className="font-light" htmlFor="password">Password</label>
                 <input
                   type="password"
                   placeholder="********"
