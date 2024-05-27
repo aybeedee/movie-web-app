@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import { MovieIdData, ReviewData } from "../utils/validations";
 import { validate } from "class-validator";
-import { Movie, Review } from "../models";
-import { Op } from "sequelize";
 import { MovieService } from "../services/movie.service";
 import { ReviewService } from "../services/review.service";
 
