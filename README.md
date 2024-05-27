@@ -10,6 +10,7 @@ View a large collection of movies and reviews. Sign up to add your own.
 
 <p align="center">
   <a href="#local-setup"><strong>Local Setup</strong></a> ·
+  <a href="#testing"><strong>Testing</strong></a> ·
   <a href="#tech"><strong>Tech</strong></a> ·
   <a href="#containerization"><strong>Containerization</strong></a> ·
   <a href="#deployment"><strong>Deployment</strong></a> ·
@@ -51,6 +52,21 @@ Run `docker-compose down --volumes` after stopping -potentially helps avoid post
     - JWT_SECRET=yoursecret
     - JWT_EXPIRES_IN=1h
     - PORT=backendport
+
+## Testing
+
+- Frontend:
+  - command:
+    `npm test`
+  - tools:
+    - jest, jest-dom, ts-jest
+    - react testing library
+
+- Backend:
+  - command:
+    `npm test`
+  - tools:
+    - jest, ts-jest
 
 ## Tech
 
