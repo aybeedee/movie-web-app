@@ -284,7 +284,11 @@ export const getMovieById = async (req: Request, res: Response) => {
 			});
 		}
 
-		const movie = await Movie.findByPk(movieIdData.movieId);
+		const movie = await Movie.findByPk(movieIdData.movieId, {
+			attributes: {
+				exclude: ["createdAt", "userId"],
+			},
+		});
 
 		if (!movie) {
 			return res.status(400).json({
