@@ -1,8 +1,5 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
-import { User } from "../models";
-import bcrypt from "bcryptjs";
-import { generateJwtToken } from "../utils/generateJwtToken";
 import { validate } from "class-validator";
 import { LoginData, SignupData } from "../utils/validations";
 
