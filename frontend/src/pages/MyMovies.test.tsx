@@ -30,7 +30,7 @@ describe("MyMovies Component", () => {
       data: {
         movies: [
           {
-            id: 1,
+            id: "1",
             title: "Inception",
             description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
             releaseYear: 2010,
@@ -41,7 +41,7 @@ describe("MyMovies Component", () => {
             trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
           },
           {
-            id: 2,
+            id: "2",
             title: "The Lion King",
             description: "Disney's live-action adaptation of the classic animated film, retelling the story of Simba, a young lion prince who flees his kingdom after the murder of his father, only to learn the true meaning of responsibility and bravery. Set against the majestic African savanna, this timeless tale explores themes of family, friendship, and destiny.",
             releaseYear: 2019,
@@ -84,7 +84,7 @@ describe("MyMovies Component", () => {
       message: "Movie successfully added",
       data: {
         movie: {
-          id: 1,
+          id: "1",
           title: "Titanic",
           description: "Another masterpiece from James Cameron, 'Titanic' is a romantic epic that tells the tragic story of the ill-fated maiden voyage of the RMS Titanic. The film centers on the forbidden love between Jack, a poor artist, and Rose, a wealthy young woman, as they navigate the class struggles aboard the ship. Their love story is set against the backdrop of one of the greatest maritime disasters in history.",
           releaseYear: 1997,
@@ -138,7 +138,7 @@ describe("MyMovies Component", () => {
       data: {
         movies: [
           {
-            id: 1,
+            id: "1",
             title: "Inception",
             description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
             releaseYear: 2010,
@@ -173,7 +173,7 @@ describe("MyMovies Component", () => {
     fireEvent.click(screen.getByText(/Delete/i));
 
     await waitFor(() => {
-      expect(mockDeleteMovie).toHaveBeenCalledWith(1);
+      expect(mockDeleteMovie).toHaveBeenCalledWith("1");
     });
 
     expect(screen.queryByText(/Inception/i)).not.toBeInTheDocument();
@@ -263,7 +263,7 @@ describe("MyMovies Component", () => {
       data: {
         movies: [
           {
-            id: 1,
+            id: "1",
             title: "Inception",
             description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
             releaseYear: 2010,
@@ -299,7 +299,7 @@ describe("MyMovies Component", () => {
     fireEvent.click(screen.getByText(/Delete/i));
 
     await waitFor(() => {
-      expect(mockDeleteMovie).toHaveBeenCalledWith(1);
+      expect(mockDeleteMovie).toHaveBeenCalledWith("1");
     });
 
     expect(toast).toHaveBeenCalledWith({

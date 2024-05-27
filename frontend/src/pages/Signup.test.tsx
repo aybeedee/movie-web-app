@@ -69,7 +69,7 @@ describe("Signup Component", () => {
       message: "Signup successful",
       data: {
         user: {
-          id: 1,
+          id: "1",
           firstName: "John",
           lastName: "Doe",
           email: "john.doe@example.com",
@@ -106,7 +106,7 @@ describe("Signup Component", () => {
       });
       expect(saveUser).toHaveBeenCalledWith({
         user: {
-          id: 1,
+          id: "1",
           firstName: "John",
           lastName: "Doe",
           email: "john.doe@example.com",

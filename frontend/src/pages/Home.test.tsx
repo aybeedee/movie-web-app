@@ -36,7 +36,7 @@ describe("Home Component", () => {
       message: "New movies successfully fetched",
       data: {
         movies: [{
-          id: 1,
+          id: "1",
           title: "Inception",
           description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
           releaseYear: 2010,
@@ -53,7 +53,7 @@ describe("Home Component", () => {
       message: "New movies successfully fetched",
       data: {
         movies: [{
-          id: 1,
+          id: "1",
           title: "Pulp Fiction",
           description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
           releaseYear: 2010,
@@ -70,7 +70,7 @@ describe("Home Component", () => {
       message: "All movies successfully fetched",
       data: {
         movies: [{
-          id: 1,
+          id: "1",
           title: "The Godfather",
           description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
           releaseYear: 2010,
