@@ -1,31 +1,33 @@
 import { Op } from "sequelize";
-import { Movie, Review, User } from "../models";
-import { generatePosterUrl } from "../utils/generatePosterUrl";
-import { getRandomTrailerUrl } from "../utils/getRandomTrailerUrl";
-import { MovieData, MovieIdData, MovieQueryData } from "../utils/validations";
-import { MovieAttributes } from "../models/movie";
+import { Review } from "../models";
+import { ReviewData } from "../utils/validations";
 
 export class ReviewService {
-	static createMovie = async (movieData: MovieData, userId: string) => {
-		const posterUrl = generatePosterUrl(movieData.title);
-		const trailerUrl = getRandomTrailerUrl();
-
-		return await Movie.create({
-			title: movieData.title,
-			description: movieData.description,
-			releaseYear: movieData.releaseYear,
-			durationHours: movieData.durationHours,
-			durationMinutes: movieData.durationMinutes,
-			posterUrl: posterUrl,
-			trailerUrl: trailerUrl,
+	static createReview = async (reviewData: ReviewData, userId: string) => {
+		return await Review.create({
 			userId: userId,
+			movieId: reviewData.movieId,
+			comment: reviewData.comment,
+			rating: reviewData.rating,
 		});
 	};
 
-	static getMovieById = async (movieId: string) => {
-		return await Movie.findByPk(movieId, {
-			attributes: {
-				exclude: ["createdAt", "userId"],
+	static getReviewById = async (userId: string, movieId: string) => {
+		return await Review.findOne({
+			where: {
+				[Op.and]: {
+					userId: userId,
+					movieId: movieId,
+				},
+			},
+		});
+	};
+
+	static deleteReview = async (userId: string, movieId: string) => {
+		return await Review.destroy({
+			where: {
+				userId: userId,
+				movieId: movieId,
 			},
 		});
 	};

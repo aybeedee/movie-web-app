@@ -3,6 +3,8 @@ import { MovieIdData, ReviewData } from "../utils/validations";
 import { validate } from "class-validator";
 import { Movie, Review } from "../models";
 import { Op } from "sequelize";
+import { MovieService } from "../services/movie.service";
+import { ReviewService } from "../services/review.service";
 
 // some edge cases for later:
 //  - movie does not exist | update: dealt with while implementing review count increment/decrement
@@ -32,7 +34,7 @@ export class ReviewController {
 				});
 			}
 
-			const movie = await Movie.findByPk(reviewData.movieId);
+			const movie = await MovieService.getMovieById(reviewData.movieId);
 
 			if (!movie) {
 				return res.status(400).json({
@@ -41,12 +43,10 @@ export class ReviewController {
 				});
 			}
 
-			const newReview = await Review.create({
-				userId: req.body.userId,
-				movieId: reviewData.movieId,
-				comment: reviewData.comment,
-				rating: reviewData.rating,
-			});
+			const newReview = await ReviewService.createReview(
+				reviewData,
+				req.body.userId
+			);
 
 			// increment the review count of related movie
 			await movie.increment("reviewCount");
@@ -95,14 +95,10 @@ export class ReviewController {
 				});
 			}
 
-			const review = await Review.findOne({
-				where: {
-					[Op.and]: {
-						userId: req.body.userId,
-						movieId: editReviewData.movieId,
-					},
-				},
-			});
+			const review = await ReviewService.getReviewById(
+				req.body.userId,
+				editReviewData.movieId
+			);
 
 			if (!review) {
 				return res.status(400).json({
@@ -168,7 +164,7 @@ export class ReviewController {
 				});
 			}
 
-			const movie = await Movie.findByPk(movieIdData.movieId);
+			const movie = await MovieService.getMovieById(movieIdData.movieId);
 
 			if (!movie) {
 				return res.status(400).json({
@@ -177,12 +173,10 @@ export class ReviewController {
 				});
 			}
 
-			const deleteCount = await Review.destroy({
-				where: {
-					movieId: movieIdData.movieId,
-					userId: req.body.userId,
-				},
-			});
+			const deleteCount = await ReviewService.deleteReview(
+				req.body.userId,
+				movieIdData.movieId
+			);
 
 			if (deleteCount === 0) {
 				return res.status(400).json({
