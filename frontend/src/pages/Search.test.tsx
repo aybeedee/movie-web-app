@@ -99,8 +99,12 @@ describe("Search Component", () => {
 
   test("handles errors when fetching search results", async () => {
     mockGetSearchResults.mockRejectedValue({
-      error: true,
-      message: "Internal server error",
+      response: {
+        data: {
+          error: true,
+          message: "Internal server error",
+        }
+      }
     });
 
     render(
