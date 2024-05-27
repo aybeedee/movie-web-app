@@ -95,7 +95,7 @@ export class MovieController {
 			}
 
 			const deleteCount = await MovieService.deleteMovie(
-				movieIdData,
+				movieIdData.movieId,
 				req.body.userId
 			);
 
@@ -224,7 +224,7 @@ export class MovieController {
 				});
 			}
 
-			const movie = await MovieService.getMovieById(movieIdData);
+			const movie = await MovieService.getMovieById(movieIdData.movieId);
 
 			if (!movie) {
 				return res.status(400).json({
@@ -235,7 +235,7 @@ export class MovieController {
 
 			const rank = await MovieService.getMovieRank(movie);
 
-			const reviews = await MovieService.getMovieReviews(movieIdData);
+			const reviews = await MovieService.getMovieReviews(movieIdData.movieId);
 
 			return res.status(200).json({
 				error: false,

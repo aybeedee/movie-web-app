@@ -22,8 +22,8 @@ export class MovieService {
 		});
 	};
 
-	static getMovieById = async (movieIdData: MovieIdData) => {
-		return await Movie.findByPk(movieIdData.movieId, {
+	static getMovieById = async (movieId: string) => {
+		return await Movie.findByPk(movieId, {
 			attributes: {
 				exclude: ["createdAt", "userId"],
 			},
@@ -65,10 +65,10 @@ export class MovieService {
 		return rank;
 	};
 
-	static getMovieReviews = async (movieIdData: MovieIdData) => {
+	static getMovieReviews = async (movieId: string) => {
 		return await Review.findAll({
 			where: {
-				movieId: movieIdData.movieId,
+				movieId: movieId,
 			},
 			include: {
 				model: User,
@@ -77,10 +77,10 @@ export class MovieService {
 		});
 	};
 
-	static deleteMovie = async (movieIdData: MovieIdData, userId: string) => {
+	static deleteMovie = async (movieId: string, userId: string) => {
 		return await Movie.destroy({
 			where: {
-				id: movieIdData.movieId,
+				id: movieId,
 				// ensures that the requesting user is the owner
 				userId: userId,
 			},
