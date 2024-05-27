@@ -123,7 +123,7 @@ export default function MyMovies() {
                   <h1 className="text-lg">Add a Movie</h1>
                   <form onSubmit={handleAddMovie} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
-                      <label className="font-light">Title</label>
+                      <label className="font-light" htmlFor="title">Title</label>
                       <input
                         type="text"
                         placeholder="Movie title"
@@ -141,7 +141,7 @@ export default function MyMovies() {
                       />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="font-light">Description</label>
+                      <label className="font-light" htmlFor="description">Description</label>
                       <textarea
                         placeholder="Describe the movie"
                         required={true}
@@ -159,7 +159,7 @@ export default function MyMovies() {
                       />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="font-light">Release Year</label>
+                      <label className="font-light" htmlFor="releaseYear">Release Year</label>
                       <input
                         type="number"
                         required={true}
@@ -183,6 +183,7 @@ export default function MyMovies() {
                       <div className="flex flex-row w-full gap-4">
                         <div className="flex flex-row w-full items-center gap-2">
                           <p className="text-sm">Hours:</p>
+                          <label className="hidden" htmlFor="durationHours">Hours</label>
                           <input
                             type="number"
                             required={true}
@@ -203,6 +204,7 @@ export default function MyMovies() {
                         </div>
                         <div className="flex flex-row w-full items-center gap-2">
                           <p className="text-sm">Minutes:</p>
+                          <label className="hidden" htmlFor="durationMinutes">Minutes</label>
                           <input
                             type="number"
                             required={true}
@@ -224,6 +226,7 @@ export default function MyMovies() {
                       </div>
                     </div>
                     <button
+                      data-testid="add-movie-button"
                       type="submit"
                       className="mt-2 text-center place-self-end w-full text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white px-4 py-2 rounded-sm"
                     >
