@@ -97,5 +97,6 @@ Run `docker-compose down --volumes` after stopping -potentially helps avoid post
 - [x] Integration
 - [x] Dockerization
 - [x] Deployment
-- [ ] (WIP) Test cases
+- [x] Testing - Frontend
+- [ ] (WIP) Testing - Backend
 - [ ] (WIP) Refactoring, Styling Improvements, Bugs
