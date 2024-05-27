@@ -190,7 +190,10 @@ export default function MovieDetails() {
             <div className="flex flex-col gap-6 w-1/2">
               <div className="flex flex-row gap-6">
                 <div className="flex flex-col gap-2">
-                  <h1 className="font-semibold text-3xl">
+                  <h1
+                    data-testid="movie-title-heading"
+                    className="font-semibold text-3xl"
+                  >
                     {movie?.title}
                   </h1>
                   <div className="flex flex-row gap-2 items-baseline">
@@ -212,7 +215,7 @@ export default function MovieDetails() {
               <div className="flex flex-row gap-2 bg-[#3abab4]/50 w-min text-nowrap py-2 px-4 rounded-full items-baseline">
                 <h1>
                   CMDb Rank #
-                  <span className="font-bold">
+                  <span data-testid="rank-span" className="font-bold">
                     {rank}
                   </span>
                 </h1>
@@ -257,6 +260,7 @@ export default function MovieDetails() {
                             className="bg-white/5 font-light text-sm py-2 px-3 rounded-sm scrollbar"
                           />
                           <button
+                            data-testid="save-review-button"
                             type="submit"
                             className="place-self-end text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
                           >
@@ -269,6 +273,7 @@ export default function MovieDetails() {
                           </p>
                           <div className="flex flex-row gap-4 justify-end">
                             <button
+                              data-testid="edit-review-button"
                               className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
                               onClick={() => {
                                 setReviewPayload((prevState) => ({
@@ -281,6 +286,7 @@ export default function MovieDetails() {
                               Edit
                             </button>
                             <button
+                              data-testid="delete-review-button"
                               className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
                               onClick={handleDeleteReview}
                             >
@@ -309,6 +315,7 @@ export default function MovieDetails() {
                           className="bg-white/5 font-light text-sm py-2 px-3 rounded-sm scrollbar"
                         />
                         <button
+                          data-testid="add-review-button"
                           type="submit"
                           className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
                         >
