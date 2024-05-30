@@ -55,6 +55,9 @@ export default function MovieDetails() {
         setReviews(
           reviews.filter((review) => review.userId !== authInfo.user?.id)
         );
+        
+        let reviewTimeInCustomFormat = getTimeAgo(findUserReview.createdAt);
+        findUserReview.createdAt = reviewTimeInCustomFormat;
         setUserReview(findUserReview);
       }
     }
@@ -80,7 +83,7 @@ export default function MovieDetails() {
         setUserReview({
           ...reviewPayload,
           edited: false,
-          createdAt: "",
+          createdAt: getTimeAgo(new Date().toISOString()),
           userId: authInfo.user.id,
           user: authInfo.user
         });
@@ -243,7 +246,7 @@ export default function MovieDetails() {
                         You
                       </h2>
                       <p className="text-xs font-light">
-                        {getTimeAgo(userReview.createdAt)}
+                        {userReview.createdAt}
                       </p>
                     </div>
                     {
