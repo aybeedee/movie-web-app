@@ -56,6 +56,7 @@ export default function MovieDetails() {
           reviews.filter((review) => review.userId !== authInfo.user?.id)
         );
         
+        
         let reviewTimeInCustomFormat = getTimeAgo(findUserReview.createdAt);
         findUserReview.createdAt = reviewTimeInCustomFormat;
         setUserReview(findUserReview);
