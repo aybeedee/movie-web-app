@@ -80,7 +80,7 @@ export default function MovieDetails() {
         setUserReview({
           ...reviewPayload,
           edited: false,
-          createdAt: "",
+          createdAt: new Date().toISOString(),
           userId: authInfo.user.id,
           user: authInfo.user
         });
@@ -243,7 +243,7 @@ export default function MovieDetails() {
                         You
                       </h2>
                       <p className="text-xs font-light">
-                        {getTimeAgo(userReview.createdAt)}
+                      {getTimeAgo(userReview.createdAt)}
                       </p>
                     </div>
                     {
