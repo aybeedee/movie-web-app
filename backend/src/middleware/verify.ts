@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import dotenv from "dotenv";
-
-dotenv.config();
+import envConfig from "../config/envConfig";
 
 export const verify = (req: Request, res: Response, next: NextFunction) => {
 	let jwtToken = "";
@@ -21,7 +19,7 @@ export const verify = (req: Request, res: Response, next: NextFunction) => {
 	}
 
 	try {
-		jwt.verify(jwtToken, process.env.JWT_SECRET!, (error, result) => {
+		jwt.verify(jwtToken, envConfig.JWT_SECRET!, (error, result) => {
 			if (error) {
 				return res.status(401).json({
 					error: true,
