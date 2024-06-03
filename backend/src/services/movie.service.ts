@@ -8,7 +8,9 @@ import { MovieAttributes } from "../models/movie";
 export class MovieService {
 	static createMovie = async (movieData: MovieData, userId: string) => {
 		const posterUrl = generatePosterUrl(movieData.title);
-		const trailerUrl = getRandomTrailerUrl();
+		const trailerUrl = movieData.trailerUrl
+			? movieData.trailerUrl
+			: getRandomTrailerUrl();
 
 		return await Movie.create({
 			title: movieData.title,

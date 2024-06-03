@@ -36,6 +36,7 @@ export interface AddMoviePayload {
 	releaseYear: number;
 	durationHours: number;
 	durationMinutes: number;
+	trailerUrl: string | undefined;
 }
 
 export interface EditMoviePayload extends AddMoviePayload {

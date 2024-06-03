@@ -20,7 +20,8 @@ export default function MyMovies() {
     description: "",
     releaseYear: 2024,
     durationHours: 0,
-    durationMinutes: 0
+    durationMinutes: 0,
+    trailerUrl: ""
   });
   const [editMoviePayload, setEditMoviePayload] = useState<EditMoviePayload>({
     id: "",
@@ -28,7 +29,8 @@ export default function MyMovies() {
     description: "",
     releaseYear: 2024,
     durationHours: 0,
-    durationMinutes: 0
+    durationMinutes: 0,
+    trailerUrl: ""
   });
   const { toast } = useToast();
 
@@ -74,7 +76,11 @@ export default function MyMovies() {
   const handleAddMovie = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const res = await addMovie(addMoviePayload);
+      const res = await addMovie({
+        ...addMoviePayload,
+        // optional validation on the backend requires null/undefined to not check url constraint, can potentially be managed better on both sides
+        trailerUrl: addMoviePayload.trailerUrl === "" ? undefined : addMoviePayload.trailerUrl
+      });
       setIsAddingMovie(false);
       setUserMovies((prevState) => [
         res.data.movie,
@@ -100,7 +106,11 @@ export default function MyMovies() {
   const handleEditMovie = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const res = await editMovie(editMoviePayload);
+      const res = await editMovie({
+        ...editMoviePayload,
+        // optional validation on the backend requires null/undefined to not check url constraint, can potentially be managed better on both sides
+        trailerUrl: editMoviePayload.trailerUrl === "" ? undefined : editMoviePayload.trailerUrl
+      });
       setIsEditingMovie(false);
       setUserMovies(
         (prevState) => prevState.map(
@@ -112,7 +122,8 @@ export default function MyMovies() {
                 description: res.data.movie.description,
                 releaseYear: res.data.movie.releaseYear,
                 durationHours: res.data.movie.durationHours,
-                durationMinutes: res.data.movie.durationMinutes
+                durationMinutes: res.data.movie.durationMinutes,
+                trailerUrl: res.data.movie.trailerUrl
               };
             }
             return movie;
@@ -156,7 +167,7 @@ export default function MyMovies() {
               <h1 className="text-lg">Edit a Movie</h1>
               <form onSubmit={handleEditMovie} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
-                  <label className="font-light" htmlFor="title">Title</label>
+                  <label className="font-light" htmlFor="title">Title *</label>
                   <input
                     type="text"
                     placeholder="Movie title"
@@ -174,7 +185,7 @@ export default function MyMovies() {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="font-light" htmlFor="description">Description</label>
+                  <label className="font-light" htmlFor="description">Description *</label>
                   <textarea
                     placeholder="Describe the movie"
                     required={true}
@@ -192,7 +203,25 @@ export default function MyMovies() {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="font-light" htmlFor="releaseYear">Release Year</label>
+                  <label className="font-light" htmlFor="title">Trailer URL *</label>
+                  <input
+                    type="url"
+                    placeholder="https://www.youtube.com/embed/2w_K3CB8PuE"
+                    required={true}
+                    id="trailerUrl"
+                    name="trailerUrl"
+                    value={editMoviePayload.trailerUrl}
+                    onChange={(event) => {
+                      setEditMoviePayload((prevState) => ({
+                        ...prevState,
+                        trailerUrl: event.target.value
+                      }));
+                    }}
+                    className="bg-white/5 font-light text-sm py-2 px-3 rounded-sm"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="font-light" htmlFor="releaseYear">Release Year *</label>
                   <input
                     type="number"
                     required={true}
@@ -212,11 +241,10 @@ export default function MyMovies() {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="font-light">{"Duration"}</label>
+                  <p className="font-light">Duration *</p>
                   <div className="flex flex-row w-full gap-4">
                     <div className="flex flex-row w-full items-center gap-2">
-                      <p className="text-sm">Hours:</p>
-                      <label className="hidden" htmlFor="durationHours">Hours</label>
+                      <label className="text-sm" htmlFor="durationHours">Hours:</label>
                       <input
                         type="number"
                         required={true}
@@ -236,8 +264,7 @@ export default function MyMovies() {
                       />
                     </div>
                     <div className="flex flex-row w-full items-center gap-2">
-                      <p className="text-sm">Minutes:</p>
-                      <label className="hidden" htmlFor="durationMinutes">Minutes</label>
+                      <label className="text-sm" htmlFor="durationMinutes">Minutes:</label>
                       <input
                         type="number"
                         required={true}
@@ -291,7 +318,7 @@ export default function MyMovies() {
                   <h1 className="text-lg">Add a Movie</h1>
                   <form onSubmit={handleAddMovie} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
-                      <label className="font-light" htmlFor="title">Title</label>
+                      <label className="font-light" htmlFor="title">Title *</label>
                       <input
                         type="text"
                         placeholder="Movie title"
@@ -309,7 +336,7 @@ export default function MyMovies() {
                       />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="font-light" htmlFor="description">Description</label>
+                      <label className="font-light" htmlFor="description">Description *</label>
                       <textarea
                         placeholder="Describe the movie"
                         required={true}
@@ -327,7 +354,25 @@ export default function MyMovies() {
                       />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="font-light" htmlFor="releaseYear">Release Year</label>
+                      <label className="font-light" htmlFor="title">Trailer URL</label>
+                      <input
+                        type="url"
+                        placeholder="https://www.youtube.com/embed/2w_K3CB8PuE"
+                        required={false}
+                        id="trailerUrl"
+                        name="trailerUrl"
+                        value={addMoviePayload.trailerUrl}
+                        onChange={(event) => {
+                          setAddMoviePayload((prevState) => ({
+                            ...prevState,
+                            trailerUrl: event.target.value
+                          }));
+                        }}
+                        className="bg-white/5 font-light text-sm py-2 px-3 rounded-sm"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="font-light" htmlFor="releaseYear">Release Year *</label>
                       <input
                         type="number"
                         required={true}
@@ -347,11 +392,10 @@ export default function MyMovies() {
                       />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="font-light">{"Duration"}</label>
+                      <p className="font-light">Duration *</p>
                       <div className="flex flex-row w-full gap-4">
                         <div className="flex flex-row w-full items-center gap-2">
-                          <p className="text-sm">Hours:</p>
-                          <label className="hidden" htmlFor="durationHours">Hours</label>
+                          <label className="text-sm" htmlFor="durationHours">Hours:</label>
                           <input
                             type="number"
                             required={true}
@@ -371,8 +415,7 @@ export default function MyMovies() {
                           />
                         </div>
                         <div className="flex flex-row w-full items-center gap-2">
-                          <p className="text-sm">Minutes:</p>
-                          <label className="hidden" htmlFor="durationMinutes">Minutes</label>
+                          <label className="text-sm" htmlFor="durationMinutes">Minutes:</label>
                           <input
                             type="number"
                             required={true}
@@ -420,7 +463,8 @@ export default function MyMovies() {
                             description: movie.description,
                             durationHours: movie.durationHours,
                             durationMinutes: movie.durationMinutes,
-                            releaseYear: movie.releaseYear
+                            releaseYear: movie.releaseYear,
+                            trailerUrl: movie.trailerUrl
                           }));
                           setIsEditingMovie(true);
                         }}

@@ -25,6 +25,7 @@ export class MovieController {
 			movieData.releaseYear = req.body.releaseYear;
 			movieData.durationHours = req.body.durationHours;
 			movieData.durationMinutes = req.body.durationMinutes;
+			movieData.trailerUrl = req.body.trailerUrl;
 
 			const errors = await validate(movieData);
 			if (errors.length > 0) {
@@ -90,6 +91,7 @@ export class MovieController {
 			editMovieData.releaseYear = req.body.releaseYear;
 			editMovieData.durationHours = req.body.durationHours;
 			editMovieData.durationMinutes = req.body.durationMinutes;
+			editMovieData.trailerUrl = req.body.trailerUrl;
 
 			const errors = await validate(editMovieData);
 			if (errors.length > 0) {
@@ -122,6 +124,7 @@ export class MovieController {
 				releaseYear: editMovieData.releaseYear,
 				durationHours: editMovieData.durationHours,
 				durationMinutes: editMovieData.durationMinutes,
+				trailerUrl: editMovieData.trailerUrl,
 			});
 
 			await movie.save();
@@ -137,6 +140,7 @@ export class MovieController {
 						releaseYear: movie.releaseYear,
 						durationHours: movie.durationHours,
 						durationMinutes: movie.durationMinutes,
+						trailerUrl: movie.trailerUrl,
 					},
 				},
 			});
