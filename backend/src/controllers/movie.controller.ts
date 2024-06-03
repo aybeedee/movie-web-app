@@ -78,6 +78,7 @@ export class MovieController {
 	/**
 	 * validate inputs, err if invalid |
 	 * find movie by movieId, err if doesn't exist |
+	 * check if the user making the request is the owner, err if isn't |
 	 * update movie, return movie |
 	 */
 	static editMovie = async (req: Request, res: Response) => {
@@ -105,6 +106,13 @@ export class MovieController {
 				return res.status(400).json({
 					error: true,
 					message: "Movie does not exist",
+				});
+			}
+
+			if (movie.userId !== req.body.userId) {
+				return res.status(401).json({
+					error: true,
+					message: "Unauthorized to edit this movie",
 				});
 			}
 
