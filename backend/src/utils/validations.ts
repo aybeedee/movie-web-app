@@ -66,7 +66,7 @@ export class MovieData {
 export class EditMovieData extends MovieData {
 	@IsNotEmpty()
 	@IsUUID()
-	movieId!: string;
+	id!: string;
 }
 
 export class ReviewData {

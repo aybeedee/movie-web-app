@@ -84,7 +84,7 @@ export class MovieController {
 	static editMovie = async (req: Request, res: Response) => {
 		try {
 			const editMovieData: EditMovieData = new EditMovieData();
-			editMovieData.movieId = req.body.movieId;
+			editMovieData.id = req.body.id;
 			editMovieData.title = req.body.title;
 			editMovieData.description = req.body.description;
 			editMovieData.releaseYear = req.body.releaseYear;
@@ -100,7 +100,7 @@ export class MovieController {
 				});
 			}
 
-			const movie = await MovieService.getMovieById(editMovieData.movieId);
+			const movie = await MovieService.getMovieById(editMovieData.id);
 
 			if (!movie) {
 				return res.status(400).json({
