@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import {
+	EditMovieData,
 	MovieData,
 	MovieIdData,
 	MovieQueryData,
@@ -62,6 +63,72 @@ export class MovieController {
 						reviewCount: newMovie.reviewCount,
 						posterUrl: newMovie.posterUrl,
 						trailerUrl: newMovie.trailerUrl,
+					},
+				},
+			});
+		} catch (error) {
+			console.error(error);
+			return res.status(500).json({
+				error: true,
+				message: "Internal server error",
+			});
+		}
+	};
+
+	/**
+	 * validate inputs, err if invalid |
+	 * find movie by movieId, err if doesn't exist |
+	 * update movie, return movie |
+	 */
+	static editMovie = async (req: Request, res: Response) => {
+		try {
+			const editMovieData: EditMovieData = new EditMovieData();
+			editMovieData.movieId = req.body.movieId;
+			editMovieData.title = req.body.title;
+			editMovieData.description = req.body.description;
+			editMovieData.releaseYear = req.body.releaseYear;
+			editMovieData.durationHours = req.body.durationHours;
+			editMovieData.durationMinutes = req.body.durationMinutes;
+
+			const errors = await validate(editMovieData);
+			if (errors.length > 0) {
+				return res.status(400).json({
+					error: true,
+					message: "Invalid input",
+					data: errors,
+				});
+			}
+
+			const movie = await MovieService.getMovieById(editMovieData.movieId);
+
+			if (!movie) {
+				return res.status(400).json({
+					error: true,
+					message: "Movie does not exist",
+				});
+			}
+
+			movie.set({
+				title: editMovieData.title,
+				description: editMovieData.description,
+				releaseYear: editMovieData.releaseYear,
+				durationHours: editMovieData.durationHours,
+				durationMinutes: editMovieData.durationMinutes,
+			});
+
+			await movie.save();
+
+			return res.status(200).json({
+				error: false,
+				message: "Movie successfully updated",
+				data: {
+					movie: {
+						id: movie.id,
+						title: movie.title,
+						description: movie.description,
+						releaseYear: movie.releaseYear,
+						durationHours: movie.durationHours,
+						durationMinutes: movie.durationMinutes,
 					},
 				},
 			});

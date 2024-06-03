@@ -63,6 +63,12 @@ export class MovieData {
 	durationMinutes!: number;
 }
 
+export class EditMovieData extends MovieData {
+	@IsNotEmpty()
+	@IsUUID()
+	movieId!: string;
+}
+
 export class ReviewData {
 	@IsNotEmpty()
 	@IsUUID()

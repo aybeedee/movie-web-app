@@ -2,7 +2,7 @@ import { Op } from "sequelize";
 import { Movie, Review, User } from "../models";
 import { generatePosterUrl } from "../utils/generatePosterUrl";
 import { getRandomTrailerUrl } from "../utils/getRandomTrailerUrl";
-import { MovieData, MovieIdData, MovieQueryData } from "../utils/validations";
+import { MovieData, MovieQueryData } from "../utils/validations";
 import { MovieAttributes } from "../models/movie";
 
 export class MovieService {
