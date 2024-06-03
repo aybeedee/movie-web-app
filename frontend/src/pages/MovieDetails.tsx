@@ -5,6 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks";
 import { Movie, Review, ReviewPayload } from "@/lib/types";
 import { getTimeAgo } from "@/lib/utils";
+import { Pencil, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -243,7 +244,7 @@ export default function MovieDetails() {
                         You
                       </h2>
                       <p className="text-xs font-light">
-                      {getTimeAgo(userReview.createdAt)}
+                        {getTimeAgo(userReview.createdAt)}
                       </p>
                     </div>
                     {
@@ -271,10 +272,10 @@ export default function MovieDetails() {
                           <p className="font-light">
                             {userReview.comment}
                           </p>
-                          <div className="flex flex-row gap-4 justify-end">
+                          <div className="flex flex-row gap-3 justify-end">
                             <button
                               data-testid="edit-review-button"
-                              className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                              className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-2 py-1 rounded-sm"
                               onClick={() => {
                                 setReviewPayload((prevState) => ({
                                   ...prevState,
@@ -283,14 +284,14 @@ export default function MovieDetails() {
                                 setIsEditingReview(true);
                               }}
                             >
-                              Edit
+                              <Pencil className="w-4" />
                             </button>
                             <button
                               data-testid="delete-review-button"
-                              className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                              className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-2 py-1 rounded-sm"
                               onClick={handleDeleteReview}
                             >
-                              Delete
+                              <Trash2 className="w-4" />
                             </button>
                           </div>
                         </>

@@ -3,7 +3,7 @@ import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/asset
 import { MovieCard } from "@/components/core";
 import { useToast } from "@/components/ui/use-toast";
 import { EditMoviePayload, Movie, AddMoviePayload } from "@/lib/types";
-import { Plus } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -468,15 +468,15 @@ export default function MyMovies() {
                           }));
                           setIsEditingMovie(true);
                         }}
-                        className="text-center w-full text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white px-4 py-1 rounded-sm"
+                        className="w-full flex flex-row justify-center bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white px-4 py-1 rounded-sm"
                       >
-                        Edit
+                        <Pencil className="w-5" />
                       </button>
                       <button
                         onClick={() => handleDeleteMovie(movie.id)}
-                        className="text-center w-full text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white px-4 py-1 rounded-sm"
+                        className="w-full flex flex-row justify-center bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white px-4 py-1 rounded-sm"
                       >
-                        Delete
+                        <Trash2 className="w-5" />
                       </button>
                     </div>
                   </div>
