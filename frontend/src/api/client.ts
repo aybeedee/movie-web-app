@@ -1,4 +1,4 @@
-import CONSTANTS from "@/lib/constants";
+import envConfig from "@/lib/envConfig";
 import axios from "axios";
 
 const getToken = () => {
@@ -15,7 +15,7 @@ const getToken = () => {
 };
 
 export const apiClient = axios.create({
-	baseURL: CONSTANTS.BACKEND_URL,
+	baseURL: envConfig.BACKEND_URL,
 	headers: {
 		Accept: "application/json",
 		"Content-Type": "application/json",
