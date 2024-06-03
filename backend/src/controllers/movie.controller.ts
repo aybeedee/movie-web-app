@@ -100,7 +100,7 @@ export class MovieController {
 				});
 			}
 
-			const movie = await MovieService.getMovieById(editMovieData.id);
+			const movie = await MovieService.getMovieById(editMovieData.id, true);
 
 			if (!movie) {
 				return res.status(400).json({
