@@ -30,12 +30,16 @@ export interface LoginPayload {
 	password: string;
 }
 
-export interface MoviePayload {
+export interface AddMoviePayload {
 	title: string;
 	description: string;
 	releaseYear: number;
 	durationHours: number;
 	durationMinutes: number;
+}
+
+export interface EditMoviePayload extends AddMoviePayload {
+	id: string;
 }
 
 export interface Movie {

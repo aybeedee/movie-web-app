@@ -1,8 +1,13 @@
-import { MoviePayload } from "@/lib/types";
+import { AddMoviePayload, EditMoviePayload } from "@/lib/types";
 import { apiClient } from "./client";
 
-export const addMovie = async (data: MoviePayload) => {
+export const addMovie = async (data: AddMoviePayload) => {
 	const res = await apiClient.post("/api/movie", data);
+	return res.data;
+};
+
+export const editMovie = async (data: EditMoviePayload) => {
+	const res = await apiClient.put("/api/movie", data);
 	return res.data;
 };
 
