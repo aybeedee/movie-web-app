@@ -2,13 +2,15 @@ import { Op } from "sequelize";
 import { Movie, Review, User } from "../models";
 import { generatePosterUrl } from "../utils/generatePosterUrl";
 import { getRandomTrailerUrl } from "../utils/getRandomTrailerUrl";
-import { MovieData, MovieIdData, MovieQueryData } from "../utils/validations";
+import { MovieData, MovieQueryData } from "../utils/validations";
 import { MovieAttributes } from "../models/movie";
 
 export class MovieService {
 	static createMovie = async (movieData: MovieData, userId: string) => {
 		const posterUrl = generatePosterUrl(movieData.title);
-		const trailerUrl = getRandomTrailerUrl();
+		const trailerUrl = movieData.trailerUrl
+			? movieData.trailerUrl
+			: getRandomTrailerUrl();
 
 		return await Movie.create({
 			title: movieData.title,
@@ -22,12 +24,11 @@ export class MovieService {
 		});
 	};
 
-	static getMovieById = async (movieId: string) => {
-		return await Movie.findByPk(movieId, {
-			attributes: {
-				exclude: ["createdAt", "userId"],
-			},
-		});
+	static getMovieById = async (movieId: string, withUserId = false) => {
+		if (withUserId) {
+			return await Movie.scope("withUserId").findByPk(movieId);
+		}
+		return await Movie.findByPk(movieId);
 	};
 
 	static getMovieByTitle = async (title: string) => {
@@ -38,9 +39,6 @@ export class MovieService {
 	static getMovieRank = async (movie: MovieAttributes) => {
 		// - get all movies sorted by review count (desc)
 		const movies = await Movie.findAll({
-			attributes: {
-				exclude: ["createdAt", "userId"],
-			},
 			order: [["reviewCount", "DESC"]],
 			where: {
 				id: {
@@ -88,11 +86,7 @@ export class MovieService {
 	};
 
 	static getAllMovies = async () => {
-		return await Movie.findAll({
-			attributes: {
-				exclude: ["createdAt", "userId"],
-			},
-		});
+		return await Movie.findAll();
 	};
 
 	// featured returns a random 5 movies for now
@@ -118,18 +112,12 @@ export class MovieService {
 
 	static getRankedMovies = async () => {
 		return await Movie.findAll({
-			attributes: {
-				exclude: ["createdAt", "userId"],
-			},
 			order: [["reviewCount", "DESC"]],
 		});
 	};
 
 	static getNewMovies = async () => {
 		return await Movie.findAll({
-			attributes: {
-				exclude: ["createdAt", "userId"],
-			},
 			order: [["createdAt", "DESC"]],
 			limit: 5,
 		});
@@ -137,9 +125,6 @@ export class MovieService {
 
 	static findMoviesByTitle = async (movieQueryData: MovieQueryData) => {
 		return await Movie.findAll({
-			attributes: {
-				exclude: ["createdAt", "userId"],
-			},
 			where: {
 				title: {
 					[Op.iLike]: `%${movieQueryData.query}%`,
@@ -150,9 +135,6 @@ export class MovieService {
 
 	static findMoviesByUser = async (userId: string) => {
 		return await Movie.findAll({
-			attributes: {
-				exclude: ["createdAt", "userId"],
-			},
 			where: {
 				userId: userId,
 			},

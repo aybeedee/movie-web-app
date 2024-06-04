@@ -7,6 +7,8 @@ import {
 	Max,
 	IsUUID,
 	IsIn,
+	IsOptional,
+	IsUrl,
 } from "class-validator";
 
 export class SignupData {
@@ -61,6 +63,16 @@ export class MovieData {
 	@Min(0)
 	@Max(59)
 	durationMinutes!: number;
+
+	@IsOptional()
+	@IsUrl()
+	trailerUrl?: string;
+}
+
+export class EditMovieData extends MovieData {
+	@IsNotEmpty()
+	@IsUUID()
+	id!: string;
 }
 
 export class ReviewData {

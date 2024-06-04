@@ -1,14 +1,12 @@
 import { Sequelize, Options } from "sequelize";
-import dotenv from "dotenv";
-
-dotenv.config();
+import envConfig from "./envConfig";
 
 const config: Options = {
-	database: process.env.POSTGRES_DATABASE,
-	username: process.env.POSTGRES_USERNAME,
-	password: process.env.POSTGRES_PASSWORD,
-	host: process.env.POSTGRES_HOST,
-	port: Number(process.env.POSTGRES_PORT),
+	database: envConfig.POSTGRES_DATABASE,
+	username: envConfig.POSTGRES_USERNAME,
+	password: envConfig.POSTGRES_PASSWORD,
+	host: envConfig.POSTGRES_HOST,
+	port: Number(envConfig.POSTGRES_PORT),
 	dialect: "postgres",
 };
 

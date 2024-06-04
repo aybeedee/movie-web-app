@@ -2,11 +2,9 @@ import express, { Application } from "express";
 import { routes } from "./routes";
 import { sequelize } from "./config/db";
 import cors from "cors";
-import dotenv from "dotenv";
+import envConfig from "./config/envConfig";
 
-dotenv.config();
-
-const PORT = process.env.PORT || 3000;
+const PORT = envConfig.PORT || 3000;
 const app: Application = express();
 
 app.use(express.json());

@@ -143,6 +143,14 @@ export class Movie
 				},
 			},
 			{
+				defaultScope: {
+					attributes: { exclude: ["createdAt", "userId"] },
+				},
+				scopes: {
+					withUserId: {
+						attributes: { exclude: ["createdAt"] },
+					},
+				},
 				tableName: "movies",
 				schema: "public",
 				timestamps: true,

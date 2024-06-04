@@ -1,3 +1,5 @@
+import { AxiosRequestConfig } from "axios";
+
 export interface AuthContextType {
 	authInfo: AuthInfo;
 	isLoggedIn: boolean;
@@ -30,12 +32,17 @@ export interface LoginPayload {
 	password: string;
 }
 
-export interface MoviePayload {
+export interface AddMoviePayload {
 	title: string;
 	description: string;
 	releaseYear: number;
 	durationHours: number;
 	durationMinutes: number;
+	trailerUrl: string | undefined;
+}
+
+export interface EditMoviePayload extends AddMoviePayload {
+	id: string;
 }
 
 export interface Movie {
@@ -64,4 +71,27 @@ export interface Review {
 	createdAt: string;
 	userId: string;
 	user: User;
+}
+
+export type GetParams = Record<string, string>;
+export type GetHeaders = Record<string, string>;
+
+export interface GetRequest {
+	url: string;
+	params?: GetParams;
+	headers?: AxiosRequestConfig["headers"];
+}
+
+export interface PostRequest<T> {
+	url: string;
+	data: T;
+}
+
+export interface DeleteRequest {
+	url: string;
+}
+
+export interface PutRequest<T> {
+	url: string;
+	data: T;
 }

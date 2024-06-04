@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import {
+	EditMovieData,
 	MovieData,
 	MovieIdData,
 	MovieQueryData,
@@ -24,6 +25,7 @@ export class MovieController {
 			movieData.releaseYear = req.body.releaseYear;
 			movieData.durationHours = req.body.durationHours;
 			movieData.durationMinutes = req.body.durationMinutes;
+			movieData.trailerUrl = req.body.trailerUrl;
 
 			const errors = await validate(movieData);
 			if (errors.length > 0) {
@@ -62,6 +64,85 @@ export class MovieController {
 						reviewCount: newMovie.reviewCount,
 						posterUrl: newMovie.posterUrl,
 						trailerUrl: newMovie.trailerUrl,
+					},
+				},
+			});
+		} catch (error) {
+			console.error(error);
+			return res.status(500).json({
+				error: true,
+				message: "Internal server error",
+			});
+		}
+	};
+
+	/**
+	 * validate inputs, err if invalid |
+	 * find movie by movieId, err if doesn't exist |
+	 * check if the user making the request is the owner, err if isn't |
+	 * update movie, return movie |
+	 */
+	static editMovie = async (req: Request, res: Response) => {
+		try {
+			const editMovieData: EditMovieData = new EditMovieData();
+			editMovieData.id = req.body.id;
+			editMovieData.title = req.body.title;
+			editMovieData.description = req.body.description;
+			editMovieData.releaseYear = req.body.releaseYear;
+			editMovieData.durationHours = req.body.durationHours;
+			editMovieData.durationMinutes = req.body.durationMinutes;
+			// since this is optional due to being an extension of add movie data validation,
+			// user could send an edit request with this null, which would violate db constraint ?
+			editMovieData.trailerUrl = req.body.trailerUrl;
+
+			const errors = await validate(editMovieData);
+			if (errors.length > 0) {
+				return res.status(400).json({
+					error: true,
+					message: "Invalid input",
+					data: errors,
+				});
+			}
+
+			const movie = await MovieService.getMovieById(editMovieData.id, true);
+
+			if (!movie) {
+				return res.status(400).json({
+					error: true,
+					message: "Movie does not exist",
+				});
+			}
+
+			if (movie.userId !== req.body.userId) {
+				return res.status(401).json({
+					error: true,
+					message: "Unauthorized to edit this movie",
+				});
+			}
+
+			movie.set({
+				title: editMovieData.title,
+				description: editMovieData.description,
+				releaseYear: editMovieData.releaseYear,
+				durationHours: editMovieData.durationHours,
+				durationMinutes: editMovieData.durationMinutes,
+				trailerUrl: editMovieData.trailerUrl,
+			});
+
+			await movie.save();
+
+			return res.status(200).json({
+				error: false,
+				message: "Movie successfully updated",
+				data: {
+					movie: {
+						id: movie.id,
+						title: movie.title,
+						description: movie.description,
+						releaseYear: movie.releaseYear,
+						durationHours: movie.durationHours,
+						durationMinutes: movie.durationMinutes,
+						trailerUrl: movie.trailerUrl,
 					},
 				},
 			});
