@@ -70,3 +70,10 @@ export interface Review {
 	userId: string;
 	user: User;
 }
+
+export type GetParams = Record<string, string>;
+
+export interface GetRequest {
+	url: string;
+	params?: GetParams;
+}
