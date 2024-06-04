@@ -16,13 +16,21 @@ export default function Home() {
   const [featuredMovies, setFeaturedMovies] = useState<Movie[]>([]);
   const [allRankedMovies, setAllRankedMovies] = useState<Movie[]>([]);
   const [newMovies, setNewMovies] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState({
+    featuredMovies: true,
+    allRankedMovies: true,
+    newMovies: true
+  });
   const { toast } = useToast();
-
 
   const fetchFeaturedMovies = async () => {
     try {
       const res = await getFeaturedMovies();
       setFeaturedMovies(res.data.movies);
+      setIsLoading((prevState) => ({
+        ...prevState,
+        featuredMovies: false
+      }));
     } catch (error) {
       console.error(error);
       toast({
@@ -37,6 +45,11 @@ export default function Home() {
     try {
       const res = await getAllRankedMovies();
       setAllRankedMovies(res.data.movies);
+      setFeaturedMovies(res.data.movies);
+      setIsLoading((prevState) => ({
+        ...prevState,
+        allRankedMovies: false
+      }));
     } catch (error) {
       console.error(error);
       toast({
@@ -51,6 +64,10 @@ export default function Home() {
     try {
       const res = await getNewMovies();
       setNewMovies(res.data.movies);
+      setIsLoading((prevState) => ({
+        ...prevState,
+        newMovies: false
+      }));
     } catch (error) {
       console.error(error);
       toast({
@@ -95,11 +112,19 @@ export default function Home() {
               >
                 <CarouselContent className="pt-2 pb-16 pl-8 mr-8">
                   {
-                    allRankedMovies.map((rankedMovie) => (
-                      <CarouselItem key={rankedMovie.id} className="max-w-min">
-                        <MovieCard movie={rankedMovie} />
-                      </CarouselItem>
-                    ))
+                    isLoading.allRankedMovies ?
+                      [...Array(5).keys()].map((element) => (
+                        <CarouselItem key={element} className="max-w-min">
+                          <div className="flex flex-col w-44 justify-center items-center h-[17.5rem] rounded-md shadow-black/75 shadow-2xl hover:bg-black/25 hover:shadow-black/5 active:bg-black/65 active:shadow-black active:shadow-inner active:border-black/25 cursor-pointer">
+                            <div className="w-10 h-10 rounded-full bg-transparent border-2 border-white/20 animate-ping" />
+                          </div>
+                        </CarouselItem>
+                      ))
+                      : allRankedMovies.map((rankedMovie) => (
+                        <CarouselItem key={rankedMovie.id} className="max-w-min">
+                          <MovieCard movie={rankedMovie} />
+                        </CarouselItem>
+                      ))
                   }
                 </CarouselContent>
                 <CarouselPrevious className="text-white bg-[#3abab4] border border-[#3abab4] hover:border-white" />
@@ -118,9 +143,15 @@ export default function Home() {
             </div>
             <div className="flex flex-row flex-wrap gap-4 z-10">
               {
-                featuredMovies.map((featuredMovie) => (
-                  <MovieCard key={featuredMovie.id} movie={featuredMovie} />
-                ))
+                isLoading.featuredMovies ?
+                  [...Array(5).keys()].map((element) => (
+                    <div key={element} className="flex flex-col w-44 justify-center items-center h-[17.5rem] rounded-md shadow-black/75 shadow-2xl hover:bg-black/25 hover:shadow-black/5 active:bg-black/65 active:shadow-black active:shadow-inner active:border-black/25 cursor-pointer">
+                      <div className="w-10 h-10 rounded-full bg-transparent border-2 border-white/20 animate-ping" />
+                    </div>
+                  ))
+                  : featuredMovies.map((featuredMovie) => (
+                    <MovieCard key={featuredMovie.id} movie={featuredMovie} />
+                  ))
               }
             </div>
           </div>
@@ -135,9 +166,15 @@ export default function Home() {
             </div>
             <div className="flex flex-row flex-wrap gap-4 z-10">
               {
-                newMovies.map((newMovie) => (
-                  <MovieCard key={newMovie.id} movie={newMovie} />
-                ))
+                isLoading.newMovies ?
+                  [...Array(5).keys()].map((element) => (
+                    <div key={element} className="flex flex-col w-44 justify-center items-center h-[17.5rem] rounded-md shadow-black/75 shadow-2xl hover:bg-black/25 hover:shadow-black/5 active:bg-black/65 active:shadow-black active:shadow-inner active:border-black/25 cursor-pointer">
+                      <div className="w-10 h-10 rounded-full bg-transparent border-2 border-white/20 animate-ping" />
+                    </div>
+                  ))
+                  : newMovies.map((newMovie) => (
+                    <MovieCard key={newMovie.id} movie={newMovie} />
+                  ))
               }
             </div>
           </div>

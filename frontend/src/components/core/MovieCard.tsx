@@ -1,7 +1,10 @@
 import { Movie } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function MovieCard({ movie }: { movie: Movie }) {
+  const [imgLoading, setImgLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
   return (
@@ -11,7 +14,29 @@ export default function MovieCard({ movie }: { movie: Movie }) {
       }}
       className="flex flex-col w-44 max-w-44 rounded-md shadow-black/75 shadow-2xl hover:bg-black/25 hover:shadow-black/5 active:bg-black/65 active:shadow-black active:shadow-inner active:border-black/25 cursor-pointer"
     >
-      <img src={movie.posterUrl} className="object-cover h-52 rounded-sm" />
+      <div
+        className={
+          cn(
+            "h-52 rounded-sm animate-pulse bg-white/20",
+            {
+              "hidden": !imgLoading
+            }
+          )
+        }
+      />
+      <img
+        src={movie.posterUrl}
+        className={
+          cn(
+            "object-cover h-52 rounded-sm",
+            {
+              "hidden": imgLoading
+            }
+          )
+        }
+        onLoad={() => setImgLoading(false)}
+      />
+
       <div className="flex flex-col p-2">
         <div className="flex flex-row justify-between items-baseline">
           <h1 className="font-semibold text-xs max-w-[70%] text-nowrap overflow-hidden text-ellipsis">
