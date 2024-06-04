@@ -1,6 +1,5 @@
 import { AddMoviePayload, EditMoviePayload } from "@/lib/types";
-import { apiClient } from "./client";
-import { DELETE, GET, POST } from "./methods";
+import { GET, POST, PUT, DELETE } from "./methods";
 
 export const addMovie = async (data: AddMoviePayload) => {
 	return await POST({
@@ -10,8 +9,10 @@ export const addMovie = async (data: AddMoviePayload) => {
 };
 
 export const editMovie = async (data: EditMoviePayload) => {
-	const res = await apiClient.put("/api/movie", data);
-	return res.data;
+	return await PUT({
+		url: "/api/movie",
+		data,
+	});
 };
 
 export const getMovieById = async (movieId: string) => {

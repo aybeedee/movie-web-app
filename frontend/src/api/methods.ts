@@ -1,4 +1,9 @@
-import { GetRequest, PostRequest, DeleteRequest } from "@/lib/types";
+import {
+	GetRequest,
+	PostRequest,
+	DeleteRequest,
+	PutRequest,
+} from "@/lib/types";
 import { apiClient } from "./client";
 
 export const GET = async (request: GetRequest) => {
@@ -16,5 +21,11 @@ export const POST = async <T>(request: PostRequest<T>) => {
 export const DELETE = async (request: DeleteRequest) => {
 	const { url } = request;
 	const response = await apiClient.delete(url);
+	return response.data;
+};
+
+export const PUT = async <T>(request: PutRequest<T>) => {
+	const { url, data } = request;
+	const response = await apiClient.put(url, data);
 	return response.data;
 };
