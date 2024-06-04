@@ -170,7 +170,7 @@ describe("MyMovies Component", () => {
       expect(mockGetMoviesByUser).toHaveBeenCalled();
     });
 
-    fireEvent.click(screen.getByText(/Delete/i));
+    fireEvent.click(screen.getByTestId(/delete-movie-button/i));
 
     await waitFor(() => {
       expect(mockDeleteMovie).toHaveBeenCalledWith("1");
@@ -296,7 +296,7 @@ describe("MyMovies Component", () => {
       expect(mockGetMoviesByUser).toHaveBeenCalled();
     });
 
-    fireEvent.click(screen.getByText(/Delete/i));
+    fireEvent.click(screen.getByTestId(/delete-movie-button/i));
 
     await waitFor(() => {
       expect(mockDeleteMovie).toHaveBeenCalledWith("1");
