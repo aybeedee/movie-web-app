@@ -79,6 +79,10 @@ export interface GetRequest {
 }
 
 export interface PostRequest<T> {
-  url: string;
-  data: T;
+	url: string;
+	data: T;
+}
+
+export interface DeleteRequest {
+	url: string;
 }

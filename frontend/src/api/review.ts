@@ -1,6 +1,6 @@
 import { ReviewPayload } from "@/lib/types";
 import { apiClient } from "./client";
-import { POST } from "./methods";
+import { DELETE, POST } from "./methods";
 
 export const addReview = async (data: ReviewPayload) => {
 	return await POST({
@@ -15,6 +15,7 @@ export const editReview = async (data: ReviewPayload) => {
 };
 
 export const deleteReview = async (movieId: string) => {
-	const res = await apiClient.delete(`/api/review/${movieId}`);
-	return res.data;
+	return await DELETE({
+		url: `/api/review/${movieId}`,
+	});
 };
