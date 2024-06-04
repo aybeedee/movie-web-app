@@ -77,3 +77,8 @@ export interface GetRequest {
 	url: string;
 	params?: GetParams;
 }
+
+export interface PostRequest<T> {
+  url: string;
+  data: T;
+}

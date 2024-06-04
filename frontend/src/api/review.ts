@@ -1,9 +1,12 @@
 import { ReviewPayload } from "@/lib/types";
 import { apiClient } from "./client";
+import { POST } from "./methods";
 
 export const addReview = async (data: ReviewPayload) => {
-	const res = await apiClient.post("/api/review", data);
-	return res.data;
+	return await POST({
+		url: "/api/review",
+		data,
+	});
 };
 
 export const editReview = async (data: ReviewPayload) => {
