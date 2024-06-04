@@ -1,4 +1,4 @@
-import { getSearchResults } from "@/api/movies";
+import { getSearchResults, getAllRankedMovies } from "@/api/movies";
 import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/assets/illustrations";
 import { Movie } from "@/lib/types";
 import { useEffect, useState } from "react";
@@ -43,10 +43,35 @@ export default function Search() {
     }
   }
 
+  const fetchAllRankedMovies = async () => {
+    try {
+      const res = await getAllRankedMovies();
+      setSearchResults(res.data.movies);
+      const resultsCount = res.data.movies.length;
+      setResultsDescription(
+        resultsCount === 0 ? "No results found"
+          : resultsCount === 1 ? "1 result found"
+            : `${resultsCount} results found`
+      );
+      setResultsLoading(false);
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "An error occured",
+        description: "There was a problem fetching results."
+      });
+    }
+  }
+
   useEffect(() => {
     if (searchQuery !== "") {
       setResultsLoading(true);
       fetchSearchResults();
+    } else {
+      // if query is empty, fetch all ranked
+      setResultsLoading(true);
+      fetchAllRankedMovies();
     }
   }, [searchQuery]);
 
