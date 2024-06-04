@@ -91,6 +91,8 @@ export class MovieController {
 			editMovieData.releaseYear = req.body.releaseYear;
 			editMovieData.durationHours = req.body.durationHours;
 			editMovieData.durationMinutes = req.body.durationMinutes;
+			// since this is optional due to being an extension of add movie data validation,
+			// user could send an edit request with this null, which would violate db constraint ?
 			editMovieData.trailerUrl = req.body.trailerUrl;
 
 			const errors = await validate(editMovieData);
