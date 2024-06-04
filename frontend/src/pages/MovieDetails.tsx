@@ -4,7 +4,7 @@ import { BackgroundIllustrationBottom, BackgroundIllustrationTop } from "@/asset
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks";
 import { Movie, Review, ReviewPayload } from "@/lib/types";
-import { getTimeAgo } from "@/lib/utils";
+import { cn, getTimeAgo } from "@/lib/utils";
 import { Pencil, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -21,6 +21,11 @@ export default function MovieDetails() {
     rating: 4, // hard coded for now, will change if fully implement rating
     comment: ""
   });
+  const [isLoading, setIsLoading] = useState({
+    movieData: true,
+    movieImg: true,
+    movieVideo: true
+  });
   const { authInfo, isLoggedIn, loadingAuth } = useAuth();
   const location = useLocation();
   const { toast } = useToast();
@@ -36,6 +41,10 @@ export default function MovieDetails() {
       setReviewPayload((prevState) => ({
         ...prevState,
         movieId: res.data.movie.id
+      }));
+      setIsLoading((prevState) => ({
+        ...prevState,
+        movieData: false
       }));
     } catch (error: any) {
       console.error(error);
@@ -179,56 +188,125 @@ export default function MovieDetails() {
         <div className="flex flex-col py-9 px-8 gap-8">
           <div className="flex flex-row gap-8">
             <div className="aspect-video w-1/2">
+              <div
+                className={
+                  cn(
+                    "h-full w-full rounded-md animate-pulse bg-white/20",
+                    {
+                      "hidden": !isLoading.movieVideo
+                    }
+                  )
+                }
+              />
               <iframe
                 width={"100%"}
                 height={"100%"}
                 src={movie?.trailerUrl}
                 allow="autoplay; encrypted-media"
                 allowFullScreen
-                className="rounded-md"
+                className={
+                  cn(
+                    "rounded-md",
+                    {
+                      "hidden": isLoading.movieVideo
+                    }
+                  )
+                }
+                onLoad={() => {
+                  setIsLoading((prevState) => ({
+                    ...prevState,
+                    movieVideo: false
+                  }));
+                }}
               />
             </div>
             <div className="flex flex-col gap-6 w-1/2">
               <div className="flex flex-row gap-6">
                 <div className="flex flex-col gap-2">
-                  <h1
-                    data-testid="movie-title-heading"
-                    className="font-semibold text-3xl"
-                  >
-                    {movie?.title}
-                  </h1>
+                  {
+                    isLoading.movieData ?
+                      <div className="h-10 w-1/2 rounded-md animate-pulse bg-white/20" />
+                      : <h1
+                        data-testid="movie-title-heading"
+                        className="font-semibold text-3xl"
+                      >
+                        {movie?.title}
+                      </h1>
+                  }
                   <div className="flex flex-row gap-2 items-baseline">
-                    <h3>
-                      {movie?.releaseYear}
-                    </h3>
-                    <p className="font-light italic border-l border-white pl-2">
-                      {movie?.durationHours}h {movie?.durationMinutes}m
-                    </p>
+                    {
+                      isLoading.movieData ?
+                        <div className="h-6 w-16 rounded-md animate-pulse bg-white/20" />
+                        : <h3>
+                          {movie?.releaseYear}
+                        </h3>
+                    }
+                    {
+                      isLoading.movieData ?
+                        <div className="h-6 w-16 rounded-md animate-pulse bg-white/20" />
+                        : <p className="font-light italic border-l border-white pl-2">
+                          {movie?.durationHours}h {movie?.durationMinutes}m
+                        </p>
+                    }
                   </div>
-                  <p className="font-light">
-                    {movie?.description}
-                  </p>
+                  {
+                    isLoading.movieData ?
+                      <div className="h-full w-80 rounded-md animate-pulse bg-white/20" />
+                      : <p className="font-light">
+                        {movie?.description}
+                      </p>
+                  }
                 </div>
                 <div className="z-10">
-                  <img src={movie?.posterUrl} className="object-cover min-w-44 h-64 rounded-sm" />
+                  <div
+                    className={
+                      cn(
+                        "h-64 w-44 rounded-sm animate-pulse bg-white/20",
+                        {
+                          "hidden": !isLoading.movieImg
+                        }
+                      )
+                    }
+                  />
+                  <img
+                    src={movie?.posterUrl}
+                    className={
+                      cn(
+                        "object-cover min-w-44 h-64 rounded-sm",
+                        {
+                          "hidden": isLoading.movieImg
+                        }
+                      )
+                    }
+                    onLoad={() => {
+                      setIsLoading((prevState) => ({
+                        ...prevState,
+                        movieImg: false
+                      }));
+                    }}
+                  />
                 </div>
               </div>
-              <div className="flex flex-row gap-2 bg-[#3abab4]/50 w-min text-nowrap py-2 px-4 rounded-full items-baseline">
-                <h1>
-                  CMDb Rank #
-                  <span data-testid="rank-span" className="font-bold">
-                    {rank}
-                  </span>
-                </h1>
-                <p className="text-base">
-                  {"(With "}
-                  {
-                    movie?.reviewCount === 1 ?
-                      `${movie?.reviewCount} review)`
-                      : `${movie?.reviewCount} reviews)`
-                  }
-                </p>
-              </div>
+              {
+                isLoading.movieData ?
+                  <div className="h-full w-1/2 py-5 rounded-full animate-pulse bg-[#3abab4]/50" />
+                  : <div className="flex flex-row gap-2 bg-[#3abab4]/50 w-min text-nowrap py-2 px-4 rounded-full items-baseline">
+                    <h1>
+                      CMDb Rank #
+                      <span data-testid="rank-span" className="font-bold">
+                        {rank}
+                      </span>
+                    </h1>
+                    <p className="text-base">
+                      {"(With "}
+                      {
+                        movie?.reviewCount === 1 ?
+                          `${movie?.reviewCount} review)`
+                          : `${movie?.reviewCount} reviews)`
+                      }
+                    </p>
+                  </div>
+              }
             </div>
           </div>
           <div className="flex flex-col gap-6">
@@ -236,20 +314,79 @@ export default function MovieDetails() {
               Reviews
             </h1>
             {
-              userReview ?
-                <div className="flex w-full">
-                  <div className="text-sm z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] rounded-md border border-[#3abab4] bg-[#3abab4]/10 shadow-black/10 shadow-2xl hover:bg-black/25 hover:shadow-black/0">
-                    <div className="flex flex-row justify-between">
-                      <h2 className="text-[#3abab4]">
-                        You
-                      </h2>
-                      <p className="text-xs font-light">
-                        {getTimeAgo(userReview.createdAt)}
-                      </p>
+              isLoading.movieData ?
+                <div className="flex justify-center items-center w-full h-full py-10">
+                  <div className="w-16 h-16 rounded-full bg-transparent border-2 border-white/20 animate-ping" />
+                </div>
+                : userReview ?
+                  <div className="flex w-full">
+                    <div className="text-sm z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] rounded-md border border-[#3abab4] bg-[#3abab4]/10 shadow-black/10 shadow-2xl hover:bg-black/25 hover:shadow-black/0">
+                      <div className="flex flex-row justify-between">
+                        <h2 className="text-[#3abab4]">
+                          You
+                        </h2>
+                        <p className="text-xs font-light">
+                          {getTimeAgo(userReview.createdAt)}
+                        </p>
+                      </div>
+                      {
+                        isEditingReview ?
+                          <form onSubmit={handleEditReview} className="flex flex-col gap-3">
+                            <textarea
+                              placeholder="Share your thoughts here"
+                              required={true}
+                              id="reviewComment"
+                              name="reviewComment"
+                              value={reviewPayload.comment}
+                              onChange={handleInputChange}
+                              rows={3}
+                              className="bg-white/5 font-light text-sm py-2 px-3 rounded-sm scrollbar"
+                            />
+                            <button
+                              data-testid="save-review-button"
+                              type="submit"
+                              className="place-self-end text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                            >
+                              Save
+                            </button>
+                          </form>
+                          : <>
+                            <p className="font-light">
+                              {userReview.comment}
+                            </p>
+                            <div className="flex flex-row gap-3 justify-end">
+                              <button
+                                data-testid="edit-review-button"
+                                className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-2 py-1 rounded-sm"
+                                onClick={() => {
+                                  setReviewPayload((prevState) => ({
+                                    ...prevState,
+                                    comment: userReview.comment
+                                  }));
+                                  setIsEditingReview(true);
+                                }}
+                              >
+                                <Pencil className="w-4" />
+                              </button>
+                              <button
+                                data-testid="delete-review-button"
+                                className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-2 py-1 rounded-sm"
+                                onClick={handleDeleteReview}
+                              >
+                                <Trash2 className="w-4" />
+                              </button>
+                            </div>
+                          </>
+                      }
                     </div>
+                  </div>
+                  : <div className="z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] w-min text-nowrap rounded-md bg-black/25 shadow-black/10 shadow-2xl hover:bg-black/25 hover:shadow-black/0">
+                    <h2 className="font-light">
+                      Write a Review for <span className="font-semibold text-[#3abab4]">{movie?.title}</span>
+                    </h2>
                     {
-                      isEditingReview ?
-                        <form onSubmit={handleEditReview} className="flex flex-col gap-3">
+                      (!loadingAuth && isLoggedIn) ?
+                        <form onSubmit={handleAddReview} className="flex flex-col gap-3">
                           <textarea
                             placeholder="Share your thoughts here"
                             required={true}
@@ -261,86 +398,40 @@ export default function MovieDetails() {
                             className="bg-white/5 font-light text-sm py-2 px-3 rounded-sm scrollbar"
                           />
                           <button
-                            data-testid="save-review-button"
+                            data-testid="add-review-button"
                             type="submit"
-                            className="place-self-end text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                            className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
                           >
-                            Save
+                            Add
                           </button>
                         </form>
-                        : <>
-                          <p className="font-light">
-                            {userReview.comment}
-                          </p>
-                          <div className="flex flex-row gap-3 justify-end">
-                            <button
-                              data-testid="edit-review-button"
-                              className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-2 py-1 rounded-sm"
-                              onClick={() => {
-                                setReviewPayload((prevState) => ({
-                                  ...prevState,
-                                  comment: userReview.comment
-                                }));
-                                setIsEditingReview(true);
-                              }}
-                            >
-                              <Pencil className="w-4" />
-                            </button>
-                            <button
-                              data-testid="delete-review-button"
-                              className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-2 py-1 rounded-sm"
-                              onClick={handleDeleteReview}
-                            >
-                              <Trash2 className="w-4" />
-                            </button>
-                          </div>
-                        </>
+                        : <div className="flex flex-row justify-center pt-2 py-4 gap-3 text-sm items-center">
+                          <Link
+                            to="/login"
+                            className="bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                          >
+                            Login
+                          </Link>
+                          <Link
+                            to="/signup"
+                            className="bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
+                          >
+                            Signup
+                          </Link>
+                        </div>
                     }
                   </div>
-                </div>
-                : <div className="z-10 flex flex-col py-4 px-5 gap-4 min-w-[50%] w-min text-nowrap rounded-md bg-black/25 shadow-black/10 shadow-2xl hover:bg-black/25 hover:shadow-black/0">
-                  <h2 className="font-light">
-                    Write a Review for <span className="font-semibold text-[#3abab4]">{movie?.title}</span>
-                  </h2>
-                  {
-                    (!loadingAuth && isLoggedIn) ?
-                      <form onSubmit={handleAddReview} className="flex flex-col gap-3">
-                        <textarea
-                          placeholder="Share your thoughts here"
-                          required={true}
-                          id="reviewComment"
-                          name="reviewComment"
-                          value={reviewPayload.comment}
-                          onChange={handleInputChange}
-                          rows={3}
-                          className="bg-white/5 font-light text-sm py-2 px-3 rounded-sm scrollbar"
-                        />
-                        <button
-                          data-testid="add-review-button"
-                          type="submit"
-                          className="text-sm bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
-                        >
-                          Add
-                        </button>
-                      </form>
-                      : <div className="flex flex-row justify-center pt-2 py-4 gap-3 text-sm items-center">
-                        <Link
-                          to="/login"
-                          className="bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
-                        >
-                          Login
-                        </Link>
-                        <Link
-                          to="/signup"
-                          className="bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white w-fit px-4 py-1 rounded-sm"
-                        >
-                          Signup
-                        </Link>
-                      </div>
-                  }
-                </div>
             }
-            <div className="flex flex-col gap-6">
+            <div
+              className={
+                cn(
+                  "flex flex-col gap-6",
+                  {
+                    "hidden": isLoading.movieData
+                  }
+                )
+              }
+            >
               {
                 reviews.map((review) => (
                   <div className="flex w-full" key={`${review.movieId}-${review.userId}`}>
