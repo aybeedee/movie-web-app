@@ -3,6 +3,7 @@ import { BrowserRouter, useSearchParams } from "react-router-dom";
 import Search from "./Search";
 import { getSearchResults } from "@/api/movies";
 import { useToast } from "@/components/ui/use-toast";
+import { moviesData } from "@/fixtures/movies";
 
 jest.mock("@/api/movies");
 jest.mock("@/components/ui/use-toast");
@@ -33,30 +34,7 @@ describe("Search Component", () => {
       error: false,
       message: "New movies successfully fetched",
       data: {
-        movies: [
-          {
-            id: "1",
-            title: "Inception",
-            description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-            releaseYear: 2010,
-            durationHours: 2,
-            durationMinutes: 28,
-            reviewCount: 1,
-            posterUrl: "https://picsum.photos/seed/Inception/500/750",
-            trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-          },
-          {
-            id: "2",
-            title: "The Lion King",
-            description: "Disney's live-action adaptation of the classic animated film, retelling the story of Simba, a young lion prince who flees his kingdom after the murder of his father, only to learn the true meaning of responsibility and bravery. Set against the majestic African savanna, this timeless tale explores themes of family, friendship, and destiny.",
-            releaseYear: 2019,
-            durationHours: 1,
-            durationMinutes: 58,
-            reviewCount: 0,
-            posterUrl: "https://picsum.photos/seed/TheLionKing/500/750",
-            trailerUrl: "https://www.youtube.com/embed/oyRxxpD3yNw"
-          },
-        ],
+        movies: moviesData,
       },
     });
 
@@ -70,9 +48,12 @@ describe("Search Component", () => {
       expect(mockGetSearchResults).toHaveBeenCalledWith("test query");
     });
 
-    expect(screen.getByText(/2 results found/i)).toBeInTheDocument();
-    expect(screen.getByText(/Inception/i)).toBeInTheDocument();
-    expect(screen.getByText(/The Lion King/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(new RegExp(`${moviesData.length} results found`, "i"))).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(moviesData[0].title, "i"))).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(moviesData[1].title, "i"))).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(moviesData[2].title, "i"))).toBeInTheDocument();
+    });
   });
 
   test("handles no search results", async () => {
@@ -94,7 +75,9 @@ describe("Search Component", () => {
       expect(mockGetSearchResults).toHaveBeenCalledWith("test query");
     });
 
-    expect(screen.getByText(/No results found/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/No results found/i)).toBeInTheDocument();
+    });
   });
 
   test("handles errors when fetching search results", async () => {
