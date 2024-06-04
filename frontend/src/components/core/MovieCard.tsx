@@ -1,6 +1,6 @@
 import { Movie } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { SyntheticEvent, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function MovieCard({ movie }: { movie: Movie }) {

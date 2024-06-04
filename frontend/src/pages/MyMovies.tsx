@@ -32,12 +32,14 @@ export default function MyMovies() {
     durationMinutes: 0,
     trailerUrl: ""
   });
+  const [moviesLoading, setMoviesLoading] = useState<boolean>(true);
   const { toast } = useToast();
 
   const fetchUserMovies = async () => {
     try {
       const res = await getMoviesByUser();
       setUserMovies(res.data.movies);
+      setMoviesLoading(false);
     } catch (error: any) {
       console.error(error);
       toast({
@@ -447,40 +449,65 @@ export default function MyMovies() {
                 </DialogContent>
               </Dialog>
               {
-                userMovies.map((movie) => (
-                  <div
-                    key={movie.id}
-                    className="flex flex-col"
-                  >
-                    <MovieCard movie={movie} />
-                    <div className="flex flex-row w-full gap-2 mt-2">
-                      <button
-                        onClick={() => {
-                          setEditMoviePayload((prevState) => ({
-                            ...prevState,
-                            id: movie.id,
-                            title: movie.title,
-                            description: movie.description,
-                            durationHours: movie.durationHours,
-                            durationMinutes: movie.durationMinutes,
-                            releaseYear: movie.releaseYear,
-                            trailerUrl: movie.trailerUrl
-                          }));
-                          setIsEditingMovie(true);
-                        }}
-                        className="w-full flex flex-row justify-center bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white px-4 py-1 rounded-sm"
-                      >
-                        <Pencil className="w-5" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteMovie(movie.id)}
-                        className="w-full flex flex-row justify-center bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white px-4 py-1 rounded-sm"
-                      >
-                        <Trash2 className="w-5" />
-                      </button>
+                moviesLoading ?
+                  [...Array(4).keys()].map((element) => (
+                    <div
+                      key={element}
+                      className="flex flex-col"
+                    >
+                      <div className="flex flex-col w-44 justify-center items-center h-[17.5rem] rounded-md shadow-black/75 shadow-2xl hover:bg-black/25 hover:shadow-black/5 active:bg-black/65 active:shadow-black active:shadow-inner active:border-black/25 cursor-pointer">
+                        <div className="w-10 h-10 rounded-full bg-transparent border-2 border-white/20 animate-ping" />
+                      </div>
+                      <div className="flex flex-row w-full gap-2 mt-2">
+                        <button
+                          disabled={true}
+                          className="cursor-not-allowed opacity-45 w-full flex flex-row justify-center bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 text-white px-4 py-1 rounded-sm"
+                        >
+                          <Pencil className="w-5" />
+                        </button>
+                        <button
+                          disabled={true}
+                          className="cursor-not-allowed opacity-45 w-full flex flex-row justify-center bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 text-white px-4 py-1 rounded-sm"
+                        >
+                          <Trash2 className="w-5" />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))
+                  ))
+                  : userMovies.map((movie) => (
+                    <div
+                      key={movie.id}
+                      className="flex flex-col"
+                    >
+                      <MovieCard movie={movie} />
+                      <div className="flex flex-row w-full gap-2 mt-2">
+                        <button
+                          onClick={() => {
+                            setEditMoviePayload((prevState) => ({
+                              ...prevState,
+                              id: movie.id,
+                              title: movie.title,
+                              description: movie.description,
+                              durationHours: movie.durationHours,
+                              durationMinutes: movie.durationMinutes,
+                              releaseYear: movie.releaseYear,
+                              trailerUrl: movie.trailerUrl
+                            }));
+                            setIsEditingMovie(true);
+                          }}
+                          className="w-full flex flex-row justify-center bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white px-4 py-1 rounded-sm"
+                        >
+                          <Pencil className="w-5" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteMovie(movie.id)}
+                          className="w-full flex flex-row justify-center bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white px-4 py-1 rounded-sm"
+                        >
+                          <Trash2 className="w-5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))
               }
             </div>
           </div>
