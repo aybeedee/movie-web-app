@@ -1,3 +1,5 @@
+import { AxiosRequestConfig } from "axios";
+
 export interface AuthContextType {
 	authInfo: AuthInfo;
 	isLoggedIn: boolean;
@@ -72,10 +74,12 @@ export interface Review {
 }
 
 export type GetParams = Record<string, string>;
+export type GetHeaders = Record<string, string>;
 
 export interface GetRequest {
 	url: string;
 	params?: GetParams;
+	headers?: AxiosRequestConfig["headers"];
 }
 
 export interface PostRequest<T> {

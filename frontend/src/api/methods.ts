@@ -7,8 +7,8 @@ import {
 import { apiClient } from "./client";
 
 export const GET = async (request: GetRequest) => {
-	const { url, params } = request;
-	const response = await apiClient.get(url, { params });
+	const { url, params, headers } = request;
+	const response = await apiClient.get(url, { params, headers });
 	return response.data;
 };
 

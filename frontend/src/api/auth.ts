@@ -1,6 +1,5 @@
 import { LoginPayload, SignupPayload } from "@/lib/types";
-import { apiClient } from "./client";
-import { POST } from "./methods";
+import { GET, POST } from "./methods";
 
 export const signup = async (data: SignupPayload) => {
 	return await POST({
@@ -17,7 +16,8 @@ export const login = async (data: LoginPayload) => {
 };
 
 export const getUser = async () => {
-	const res = await apiClient.get("/api/auth/user", {
+	return await GET({
+		url: "/api/auth/user",
 		// disabling cache for this verification request as the
 		// request was being cached and allowing user to be authenticated
 		// magically (+ localStorage being regenerated after removal) upon
@@ -28,5 +28,4 @@ export const getUser = async () => {
 			Expires: "0",
 		},
 	});
-	return res.data;
 };
