@@ -48,12 +48,10 @@ describe("Search Component", () => {
       expect(mockGetSearchResults).toHaveBeenCalledWith("test query");
     });
 
-    await waitFor(() => {
-      expect(screen.getByText(new RegExp(`${moviesData.length} results found`, "i"))).toBeInTheDocument();
-      expect(screen.getByText(new RegExp(moviesData[0].title, "i"))).toBeInTheDocument();
-      expect(screen.getByText(new RegExp(moviesData[1].title, "i"))).toBeInTheDocument();
-      expect(screen.getByText(new RegExp(moviesData[2].title, "i"))).toBeInTheDocument();
-    });
+    expect(screen.getByText(new RegExp(`${moviesData.length} results found`, "i"))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(moviesData[0].title, "i"))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(moviesData[1].title, "i"))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(moviesData[2].title, "i"))).toBeInTheDocument();
   });
 
   test("handles no search results", async () => {
@@ -75,9 +73,7 @@ describe("Search Component", () => {
       expect(mockGetSearchResults).toHaveBeenCalledWith("test query");
     });
 
-    await waitFor(() => {
-      expect(screen.getByText(/No results found/i)).toBeInTheDocument();
-    });
+    expect(screen.getByText(/No results found/i)).toBeInTheDocument();
   });
 
   test("handles errors when fetching search results", async () => {

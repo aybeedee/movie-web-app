@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import MyMovies from "./MyMovies";
 import { getMoviesByUser, addMovie, deleteMovie } from "@/api/movies";
 import { useToast } from "@/components/ui/use-toast";
+import { moviesData } from "@/fixtures/movies";
 
 jest.mock("@/api/movies");
 jest.mock("@/components/ui/use-toast");
@@ -28,30 +29,7 @@ describe("MyMovies Component", () => {
       error: false,
       message: "User's movies successfully fetched",
       data: {
-        movies: [
-          {
-            id: "1",
-            title: "Inception",
-            description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-            releaseYear: 2010,
-            durationHours: 2,
-            durationMinutes: 28,
-            reviewCount: 1,
-            posterUrl: "https://picsum.photos/seed/Inception/500/750",
-            trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-          },
-          {
-            id: "2",
-            title: "The Lion King",
-            description: "Disney's live-action adaptation of the classic animated film, retelling the story of Simba, a young lion prince who flees his kingdom after the murder of his father, only to learn the true meaning of responsibility and bravery. Set against the majestic African savanna, this timeless tale explores themes of family, friendship, and destiny.",
-            releaseYear: 2019,
-            durationHours: 1,
-            durationMinutes: 58,
-            reviewCount: 0,
-            posterUrl: "https://picsum.photos/seed/TheLionKing/500/750",
-            trailerUrl: "https://www.youtube.com/embed/oyRxxpD3yNw"
-          },
-        ],
+        movies: moviesData,
       },
     });
 
@@ -61,13 +39,15 @@ describe("MyMovies Component", () => {
       </BrowserRouter>
     );
 
+    expect(screen.getByText(/Your Movies/i)).toBeInTheDocument();
+
     await waitFor(() => {
       expect(mockGetMoviesByUser).toHaveBeenCalled();
     });
 
-    expect(screen.getByText(/Your Movies/i)).toBeInTheDocument();
-    expect(screen.getByText(/Inception/i)).toBeInTheDocument();
-    expect(screen.getByText(/The Lion King/i)).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(moviesData[0].title, "i"))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(moviesData[1].title, "i"))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(moviesData[2].title, "i"))).toBeInTheDocument();
   });
 
   test("handles adding a movie", async () => {
@@ -83,17 +63,7 @@ describe("MyMovies Component", () => {
       error: false,
       message: "Movie successfully added",
       data: {
-        movie: {
-          id: "1",
-          title: "Titanic",
-          description: "Another masterpiece from James Cameron, 'Titanic' is a romantic epic that tells the tragic story of the ill-fated maiden voyage of the RMS Titanic. The film centers on the forbidden love between Jack, a poor artist, and Rose, a wealthy young woman, as they navigate the class struggles aboard the ship. Their love story is set against the backdrop of one of the greatest maritime disasters in history.",
-          releaseYear: 1997,
-          durationHours: 3,
-          durationMinutes: 15,
-          reviewCount: 0,
-          posterUrl: "https://picsum.photos/seed/Titanic/500/750",
-          trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo",
-        },
+        movie: moviesData[0],
       },
     });
 
@@ -105,29 +75,28 @@ describe("MyMovies Component", () => {
 
     fireEvent.click(screen.getByText(/Add a Movie/i));
 
-    fireEvent.change(screen.getByLabelText(/Title/i), { target: { value: "Titanic" } });
-    fireEvent.change(screen.getByLabelText(/Description/i), { target: { value: "Another masterpiece from James Cameron, 'Titanic' is a romantic epic that tells the tragic story of the ill-fated maiden voyage of the RMS Titanic. The film centers on the forbidden love between Jack, a poor artist, and Rose, a wealthy young woman, as they navigate the class struggles aboard the ship. Their love story is set against the backdrop of one of the greatest maritime disasters in history." } });
-    fireEvent.change(screen.getByLabelText(/Release Year/i), { target: { value: 1997 } });
-    fireEvent.change(screen.getByLabelText(/Hours/i), { target: { value: 3 } });
-    fireEvent.change(screen.getByLabelText(/Minutes/i), { target: { value: 15 } });
+    fireEvent.change(screen.getByLabelText(/Title/i), { target: { value: moviesData[0].title } });
+    fireEvent.change(screen.getByLabelText(/Description/i), { target: { value: moviesData[0].description } });
+    fireEvent.change(screen.getByLabelText(/Release Year/i), { target: { value: moviesData[0].releaseYear } });
+    fireEvent.change(screen.getByLabelText(/Hours/i), { target: { value: moviesData[0].durationHours } });
+    fireEvent.change(screen.getByLabelText(/Minutes/i), { target: { value: moviesData[0].durationMinutes } });
 
     fireEvent.click(screen.getByTestId(/add-movie-button/i));
 
+    const { id, reviewCount, posterUrl, trailerUrl, ...addMoviePayload } = moviesData[0];
+
     await waitFor(() => {
-      expect(mockAddMovie).toHaveBeenCalledWith({
-        title: "Titanic",
-        description: "Another masterpiece from James Cameron, 'Titanic' is a romantic epic that tells the tragic story of the ill-fated maiden voyage of the RMS Titanic. The film centers on the forbidden love between Jack, a poor artist, and Rose, a wealthy young woman, as they navigate the class struggles aboard the ship. Their love story is set against the backdrop of one of the greatest maritime disasters in history.",
-        releaseYear: 1997,
-        durationHours: 3,
-        durationMinutes: 15,
-      });
+      expect(mockAddMovie).toHaveBeenCalledWith(addMoviePayload);
     });
 
-    expect(screen.getByText(/Titanic/i)).toBeInTheDocument();
-    expect(toast).toHaveBeenCalledWith({
-      variant: "default",
-      title: "Success",
-      description: "Movie successfully added",
+    expect(screen.getByText(new RegExp(moviesData[0].title, "i"))).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(toast).toHaveBeenCalledWith({
+        variant: "default",
+        title: "Success",
+        description: "Movie successfully added",
+      });
     });
   });
 
@@ -136,19 +105,7 @@ describe("MyMovies Component", () => {
       error: false,
       message: "User's movies successfully fetched",
       data: {
-        movies: [
-          {
-            id: "1",
-            title: "Inception",
-            description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-            releaseYear: 2010,
-            durationHours: 2,
-            durationMinutes: 28,
-            reviewCount: 1,
-            posterUrl: "https://picsum.photos/seed/Inception/500/750",
-            trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-          },
-        ],
+        movies: [moviesData[0]],
       },
     });
 
@@ -173,14 +130,17 @@ describe("MyMovies Component", () => {
     fireEvent.click(screen.getByTestId(/delete-movie-button/i));
 
     await waitFor(() => {
-      expect(mockDeleteMovie).toHaveBeenCalledWith("1");
+      expect(mockDeleteMovie).toHaveBeenCalledWith(moviesData[0].id);
     });
 
-    expect(screen.queryByText(/Inception/i)).not.toBeInTheDocument();
-    expect(toast).toHaveBeenCalledWith({
-      variant: "default",
-      title: "Success",
-      description: "Movie successfully deleted",
+    expect(screen.queryByText(new RegExp(moviesData[0].title, "i"))).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(toast).toHaveBeenCalledWith({
+        variant: "default",
+        title: "Success",
+        description: "Movie successfully deleted",
+      });
     });
   });
 
@@ -204,10 +164,12 @@ describe("MyMovies Component", () => {
       expect(mockGetMoviesByUser).toHaveBeenCalled();
     });
 
-    expect(toast).toHaveBeenCalledWith({
-      variant: "destructive",
-      title: "An error occured",
-      description: "There was a problem fetching your movies",
+    await waitFor(() => {
+      expect(toast).toHaveBeenCalledWith({
+        variant: "destructive",
+        title: "An error occured",
+        description: "There was a problem fetching your movies",
+      });
     });
   });
 
@@ -216,7 +178,7 @@ describe("MyMovies Component", () => {
       error: false,
       message: "User's movies successfully fetched",
       data: {
-        movies: [],
+        movies: [moviesData[0]],
       },
     });
 
@@ -237,11 +199,11 @@ describe("MyMovies Component", () => {
 
     fireEvent.click(screen.getByText(/Add a Movie/i));
 
-    fireEvent.change(screen.getByLabelText(/Title/i), { target: { value: "Titanic" } });
-    fireEvent.change(screen.getByLabelText(/Description/i), { target: { value: "Another masterpiece from James Cameron, 'Titanic' is a romantic epic that tells the tragic story of the ill-fated maiden voyage of the RMS Titanic. The film centers on the forbidden love between Jack, a poor artist, and Rose, a wealthy young woman, as they navigate the class struggles aboard the ship. Their love story is set against the backdrop of one of the greatest maritime disasters in history." } });
-    fireEvent.change(screen.getByLabelText(/Release Year/i), { target: { value: 1997 } });
-    fireEvent.change(screen.getByLabelText(/Hours/i), { target: { value: 3 } });
-    fireEvent.change(screen.getByLabelText(/Minutes/i), { target: { value: 15 } });
+    fireEvent.change(screen.getByLabelText(/Title/i), { target: { value: moviesData[0].title } });
+    fireEvent.change(screen.getByLabelText(/Description/i), { target: { value: moviesData[0].description } });
+    fireEvent.change(screen.getByLabelText(/Release Year/i), { target: { value: moviesData[0].releaseYear } });
+    fireEvent.change(screen.getByLabelText(/Hours/i), { target: { value: moviesData[0].durationHours } });
+    fireEvent.change(screen.getByLabelText(/Minutes/i), { target: { value: moviesData[0].durationMinutes } });
 
     fireEvent.click(screen.getByTestId(/add-movie-button/i));
 
@@ -249,10 +211,12 @@ describe("MyMovies Component", () => {
       expect(mockAddMovie).toHaveBeenCalled();
     });
 
-    expect(toast).toHaveBeenCalledWith({
-      variant: "destructive",
-      title: "An error occured",
-      description: "A movie with this title already exists",
+    await waitFor(() => {
+      expect(toast).toHaveBeenCalledWith({
+        variant: "destructive",
+        title: "An error occured",
+        description: "A movie with this title already exists",
+      });
     });
   });
 
@@ -261,19 +225,7 @@ describe("MyMovies Component", () => {
       error: false,
       message: "User's movies successfully fetched",
       data: {
-        movies: [
-          {
-            id: "1",
-            title: "Inception",
-            description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-            releaseYear: 2010,
-            durationHours: 2,
-            durationMinutes: 28,
-            reviewCount: 1,
-            posterUrl: "https://picsum.photos/seed/Inception/500/750",
-            trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-          },
-        ],
+        movies: [moviesData[0]],
       },
     });
 
@@ -299,13 +251,16 @@ describe("MyMovies Component", () => {
     fireEvent.click(screen.getByTestId(/delete-movie-button/i));
 
     await waitFor(() => {
-      expect(mockDeleteMovie).toHaveBeenCalledWith("1");
+      // doesn't actually make sense to call with id of your movie and then have it err with movie does not exist.
+      expect(mockDeleteMovie).toHaveBeenCalledWith(moviesData[0].id);
     });
 
-    expect(toast).toHaveBeenCalledWith({
-      variant: "destructive",
-      title: "An error occured",
-      description: "Movie does not exist",
-    });
+    await waitFor(() => {
+      expect(toast).toHaveBeenCalledWith({
+        variant: "destructive",
+        title: "An error occured",
+        description: "Movie does not exist",
+      });
+    })
   });
 });

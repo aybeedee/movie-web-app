@@ -60,21 +60,19 @@ describe("Home Component", () => {
       </BrowserRouter>
     );
 
+    expect(screen.getByText(/Top Ranked/i)).toBeInTheDocument();
+    expect(screen.getByText(/Featured Today/i)).toBeInTheDocument();
+    expect(screen.getByText(/Newly Added/i)).toBeInTheDocument();
+
     await waitFor(() => {
       expect(mockGetAllRankedMovies).toHaveBeenCalled();
       expect(mockGetFeaturedMovies).toHaveBeenCalled();
       expect(mockGetNewMovies).toHaveBeenCalled();
     });
 
-    expect(screen.getByText(/Top Ranked/i)).toBeInTheDocument();
-    expect(screen.getByText(/Featured Today/i)).toBeInTheDocument();
-    expect(screen.getByText(/Newly Added/i)).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(screen.getByText(new RegExp(moviesData[0].title, "i"))).toBeInTheDocument();
-      expect(screen.getByText(new RegExp(moviesData[1].title, "i"))).toBeInTheDocument();
-      expect(screen.getByText(new RegExp(moviesData[2].title, "i"))).toBeInTheDocument();
-    });
+    expect(screen.getByText(new RegExp(moviesData[0].title, "i"))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(moviesData[1].title, "i"))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(moviesData[2].title, "i"))).toBeInTheDocument();
   });
 
   test("handles errors when fetching movies", async () => {
