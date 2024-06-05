@@ -5,6 +5,8 @@ import { getMovieById } from "@/api/movies";
 import { addReview, editReview, deleteReview } from "@/api/review";
 import { useAuth } from "@/hooks";
 import { useToast } from "@/components/ui/use-toast";
+import { moviesDetailsData } from "@/fixtures/movies";
+import { userData } from "@/fixtures/users";
 
 jest.mock("@/api/movies");
 jest.mock("@/api/review");
@@ -24,15 +26,7 @@ describe("MovieDetails Component", () => {
   beforeEach(() => {
     mockUseToast.mockReturnValue({ toast });
     mockUseAuth.mockReturnValue({
-      authInfo: {
-        user: {
-          id: "1",
-          firstName: "Abdullah",
-          lastName: "Umer",
-          email: "abd@gmail.com",
-        },
-        token: "eyJhbGciOiJIUzI1NiJ9eyJpZCI6MX0JAWUkAU2mWhxcd6MS8r9pd44yBIfkEBmpr3WLeqIccM",
-      },
+      authInfo: userData,
       isLoggedIn: true,
       loadingAuth: false,
     });
@@ -80,17 +74,7 @@ describe("MovieDetails Component", () => {
   test("handles adding a review", async () => {
     mockGetMovieById.mockResolvedValue({
       data: {
-        movie: {
-          id: "1",
-          title: "Inception",
-          description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-          releaseYear: 2010,
-          durationHours: 2,
-          durationMinutes: 28,
-          reviewCount: 1,
-          posterUrl: "https://picsum.photos/seed/Inception/500/750",
-          trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-        },
+        movie: moviesDetailsData.movie,
         rank: 1,
         reviews: [],
       },
@@ -101,8 +85,8 @@ describe("MovieDetails Component", () => {
       message: "Review successfully added",
       data: {
         review: {
-          userId: "1",
-          movieId: "1",
+          userId: userData.user.id,
+          movieId: moviesDetailsData.movie.id,
           comment: "Great movie!",
           rating: 4,
         },
@@ -123,11 +107,15 @@ describe("MovieDetails Component", () => {
       target: { value: "Great movie!" },
     });
 
+    await waitFor(() => {
+      expect(screen.getByTestId(/add-review-button/i)).toBeInTheDocument();
+    });
+
     fireEvent.click(screen.getByTestId(/add-review-button/i));
 
     await waitFor(() => {
       expect(mockAddReview).toHaveBeenCalledWith({
-        movieId: "1",
+        movieId: moviesDetailsData.movie.id,
         rating: 4,
         comment: "Great movie!",
       });
@@ -142,36 +130,7 @@ describe("MovieDetails Component", () => {
 
   test("handles editing a review", async () => {
     mockGetMovieById.mockResolvedValue({
-      data: {
-        movie: {
-          id: "1",
-          title: "Inception",
-          description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-          releaseYear: 2010,
-          durationHours: 2,
-          durationMinutes: 28,
-          reviewCount: 1,
-          posterUrl: "https://picsum.photos/seed/Inception/500/750",
-          trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-        },
-        rank: 1,
-        reviews: [
-          {
-            movieId: "1",
-            userId: "1",
-            comment: "Great movie!",
-            createdAt: "2024-05-20T14:42:15.850Z",
-            edited: false,
-            rating: 4,
-            user: {
-              email: "abd@gmail.com",
-              firstName: "Abdullah",
-              lastName: "Umer",
-              id: "1",
-            }
-          },
-        ],
-      },
+      data: moviesDetailsData,
     });
 
     mockEditReview.mockResolvedValue({
@@ -179,8 +138,8 @@ describe("MovieDetails Component", () => {
       message: "Review successfully updated",
       data: {
         review: {
-          userId: "1",
-          movieId: "1",
+          userId: userData.user.id,
+          movieId: moviesDetailsData.movie.id,
           comment: "Updated review!!",
           rating: 4,
         },
@@ -207,11 +166,15 @@ describe("MovieDetails Component", () => {
       target: { value: "Updated review!!" },
     });
 
+    await waitFor(() => {
+      expect(screen.getByTestId(/save-review-button/i)).toBeInTheDocument();
+    });
+
     fireEvent.click(screen.getByTestId(/save-review-button/i));
 
     await waitFor(() => {
       expect(mockEditReview).toHaveBeenCalledWith({
-        movieId: "1",
+        movieId: moviesDetailsData.movie.id,
         rating: 4,
         comment: "Updated review!!",
       });
@@ -226,36 +189,7 @@ describe("MovieDetails Component", () => {
 
   test("handles deleting a review", async () => {
     mockGetMovieById.mockResolvedValue({
-      data: {
-        movie: {
-          id: "1",
-          title: "Inception",
-          description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-          releaseYear: 2010,
-          durationHours: 2,
-          durationMinutes: 28,
-          reviewCount: 1,
-          posterUrl: "https://picsum.photos/seed/Inception/500/750",
-          trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-        },
-        rank: 1,
-        reviews: [
-          {
-            movieId: "1",
-            userId: "1",
-            comment: "Great movie!",
-            createdAt: "2024-05-20T14:42:15.850Z",
-            edited: false,
-            rating: 4,
-            user: {
-              email: "abd@gmail.com",
-              firstName: "Abdullah",
-              lastName: "Umer",
-              id: "1",
-            }
-          },
-        ],
-      },
+      data: moviesDetailsData,
     });
 
     mockDeleteReview.mockResolvedValue({
@@ -283,7 +217,7 @@ describe("MovieDetails Component", () => {
     fireEvent.click(screen.getByTestId(/delete-review-button/i));
 
     await waitFor(() => {
-      expect(mockDeleteReview).toHaveBeenCalledWith("1");
+      expect(mockDeleteReview).toHaveBeenCalledWith(moviesDetailsData.movie.id);
     });
 
     expect(toast).toHaveBeenCalledWith({
@@ -323,17 +257,7 @@ describe("MovieDetails Component", () => {
   test("handles errors during adding a review", async () => {
     mockGetMovieById.mockResolvedValue({
       data: {
-        movie: {
-          id: "1",
-          title: "Inception",
-          description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-          releaseYear: 2010,
-          durationHours: 2,
-          durationMinutes: 28,
-          reviewCount: 1,
-          posterUrl: "https://picsum.photos/seed/Inception/500/750",
-          trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-        },
+        movie: moviesDetailsData.movie,
         rank: 1,
         reviews: [],
       },
@@ -362,9 +286,14 @@ describe("MovieDetails Component", () => {
       target: { value: "Great movie!" },
     });
 
+    await waitFor(() => {
+      expect(screen.getByTestId(/add-review-button/i)).toBeInTheDocument();
+    });
+
     fireEvent.click(screen.getByTestId(/add-review-button/i));
 
     await waitFor(() => {
+      // does movie does not exist err make logical sense here ?
       expect(mockAddReview).toHaveBeenCalled();
     });
 
@@ -377,36 +306,7 @@ describe("MovieDetails Component", () => {
 
   test("handles errors during editing a review", async () => {
     mockGetMovieById.mockResolvedValue({
-      data: {
-        movie: {
-          id: "1",
-          title: "Inception",
-          description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-          releaseYear: 2010,
-          durationHours: 2,
-          durationMinutes: 28,
-          reviewCount: 1,
-          posterUrl: "https://picsum.photos/seed/Inception/500/750",
-          trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-        },
-        rank: 1,
-        reviews: [
-          {
-            movieId: "1",
-            userId: "1",
-            comment: "Great movie!",
-            createdAt: "2024-05-20T14:42:15.850Z",
-            edited: false,
-            rating: 4,
-            user: {
-              email: "abd@gmail.com",
-              firstName: "Abdullah",
-              lastName: "Umer",
-              id: "1",
-            }
-          },
-        ],
-      },
+      data: moviesDetailsData,
     });
 
     mockEditReview.mockRejectedValue({
@@ -438,9 +338,14 @@ describe("MovieDetails Component", () => {
       target: { value: "Updated review!" },
     });
 
+    await waitFor(() => {
+      expect(screen.getByTestId(/save-review-button/i)).toBeInTheDocument();
+    });
+
     fireEvent.click(screen.getByTestId(/save-review-button/i));
 
     await waitFor(() => {
+      // does review does not exist err make logical sense here ?
       expect(mockEditReview).toHaveBeenCalled();
     });
 
@@ -453,36 +358,7 @@ describe("MovieDetails Component", () => {
 
   test("handles errors during deleting a review", async () => {
     mockGetMovieById.mockResolvedValue({
-      data: {
-        movie: {
-          id: "1",
-          title: "Inception",
-          description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-          releaseYear: 2010,
-          durationHours: 2,
-          durationMinutes: 28,
-          reviewCount: 1,
-          posterUrl: "https://picsum.photos/seed/Inception/500/750",
-          trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-        },
-        rank: 1,
-        reviews: [
-          {
-            movieId: "1",
-            userId: "1",
-            comment: "Great movie!",
-            createdAt: "2024-05-20T14:42:15.850Z",
-            edited: false,
-            rating: 4,
-            user: {
-              email: "abd@gmail.com",
-              firstName: "Abdullah",
-              lastName: "Umer",
-              id: "1",
-            }
-          },
-        ],
-      },
+      data: moviesDetailsData,
     });
 
     mockDeleteReview.mockRejectedValue({
@@ -511,7 +387,8 @@ describe("MovieDetails Component", () => {
     fireEvent.click(screen.getByTestId(/delete-review-button/i));
 
     await waitFor(() => {
-      expect(mockDeleteReview).toHaveBeenCalledWith("1");
+      // does review does not exist err make logical sense here ?
+      expect(mockDeleteReview).toHaveBeenCalledWith(moviesDetailsData.movie.id);
     });
 
     expect(toast).toHaveBeenCalledWith({

@@ -96,12 +96,10 @@ describe("Search Component", () => {
       expect(mockGetSearchResults).toHaveBeenCalledWith("test query");
     });
 
-    await waitFor(() => {
-      expect(toast).toHaveBeenCalledWith({
-        variant: "destructive",
-        title: "An error occured",
-        description: "There was a problem fetching results.",
-      });
+    expect(toast).toHaveBeenCalledWith({
+      variant: "destructive",
+      title: "An error occured",
+      description: "There was a problem fetching results.",
     });
   });
 });

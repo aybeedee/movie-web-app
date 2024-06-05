@@ -91,12 +91,10 @@ describe("MyMovies Component", () => {
 
     expect(screen.getByText(new RegExp(moviesData[0].title, "i"))).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(toast).toHaveBeenCalledWith({
-        variant: "default",
-        title: "Success",
-        description: "Movie successfully added",
-      });
+    expect(toast).toHaveBeenCalledWith({
+      variant: "default",
+      title: "Success",
+      description: "Movie successfully added",
     });
   });
 
@@ -135,12 +133,10 @@ describe("MyMovies Component", () => {
 
     expect(screen.queryByText(new RegExp(moviesData[0].title, "i"))).not.toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(toast).toHaveBeenCalledWith({
-        variant: "default",
-        title: "Success",
-        description: "Movie successfully deleted",
-      });
+    expect(toast).toHaveBeenCalledWith({
+      variant: "default",
+      title: "Success",
+      description: "Movie successfully deleted",
     });
   });
 
@@ -164,12 +160,10 @@ describe("MyMovies Component", () => {
       expect(mockGetMoviesByUser).toHaveBeenCalled();
     });
 
-    await waitFor(() => {
-      expect(toast).toHaveBeenCalledWith({
-        variant: "destructive",
-        title: "An error occured",
-        description: "There was a problem fetching your movies",
-      });
+    expect(toast).toHaveBeenCalledWith({
+      variant: "destructive",
+      title: "An error occured",
+      description: "There was a problem fetching your movies",
     });
   });
 
@@ -211,12 +205,10 @@ describe("MyMovies Component", () => {
       expect(mockAddMovie).toHaveBeenCalled();
     });
 
-    await waitFor(() => {
-      expect(toast).toHaveBeenCalledWith({
-        variant: "destructive",
-        title: "An error occured",
-        description: "A movie with this title already exists",
-      });
+    expect(toast).toHaveBeenCalledWith({
+      variant: "destructive",
+      title: "An error occured",
+      description: "A movie with this title already exists",
     });
   });
 
@@ -255,12 +247,10 @@ describe("MyMovies Component", () => {
       expect(mockDeleteMovie).toHaveBeenCalledWith(moviesData[0].id);
     });
 
-    await waitFor(() => {
-      expect(toast).toHaveBeenCalledWith({
-        variant: "destructive",
-        title: "An error occured",
-        description: "Movie does not exist",
-      });
-    })
+    expect(toast).toHaveBeenCalledWith({
+      variant: "destructive",
+      title: "An error occured",
+      description: "Movie does not exist",
+    });
   });
 });

@@ -113,22 +113,20 @@ describe("Home Component", () => {
       expect(mockGetNewMovies).toHaveBeenCalled();
     });
 
-    await waitFor(() => {
-      expect(toast).toHaveBeenCalledWith({
-        variant: "destructive",
-        title: "An error occured",
-        description: "There was a problem fetching ranked movies.",
-      });
-      expect(toast).toHaveBeenCalledWith({
-        variant: "destructive",
-        title: "An error occured",
-        description: "There was a problem fetching featured movies.",
-      });
-      expect(toast).toHaveBeenCalledWith({
-        variant: "destructive",
-        title: "An error occured",
-        description: "There was a problem fetching new movies.",
-      });
+    expect(toast).toHaveBeenCalledWith({
+      variant: "destructive",
+      title: "An error occured",
+      description: "There was a problem fetching ranked movies.",
+    });
+    expect(toast).toHaveBeenCalledWith({
+      variant: "destructive",
+      title: "An error occured",
+      description: "There was a problem fetching featured movies.",
+    });
+    expect(toast).toHaveBeenCalledWith({
+      variant: "destructive",
+      title: "An error occured",
+      description: "There was a problem fetching new movies.",
     });
   });
 });
