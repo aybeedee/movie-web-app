@@ -4,6 +4,7 @@ import Signup from "./Signup";
 import { signup } from "@/api/auth";
 import { useAuth } from "@/hooks";
 import { useToast } from "@/components/ui/use-toast";
+import { userData } from "@/fixtures/users";
 
 jest.mock("@/api/auth");
 jest.mock("@/hooks");
@@ -52,14 +53,14 @@ describe("Signup Component", () => {
     const emailInput = screen.getByLabelText(/Email/i);
     const passwordInput = screen.getByLabelText(/Password/i);
 
-    fireEvent.change(firstNameInput, { target: { value: "John" } });
-    fireEvent.change(lastNameInput, { target: { value: "Doe" } });
-    fireEvent.change(emailInput, { target: { value: "john.doe@example.com" } });
+    fireEvent.change(firstNameInput, { target: { value: "Abdullah" } });
+    fireEvent.change(lastNameInput, { target: { value: "Umer" } });
+    fireEvent.change(emailInput, { target: { value: "abd@gmail.com" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
 
-    expect(firstNameInput).toHaveValue("John");
-    expect(lastNameInput).toHaveValue("Doe");
-    expect(emailInput).toHaveValue("john.doe@example.com");
+    expect(firstNameInput).toHaveValue("Abdullah");
+    expect(lastNameInput).toHaveValue("Umer");
+    expect(emailInput).toHaveValue("abd@gmail.com");
     expect(passwordInput).toHaveValue("password123");
   });
 
@@ -67,15 +68,7 @@ describe("Signup Component", () => {
     mockSignup.mockResolvedValue({
       error: false,
       message: "Signup successful",
-      data: {
-        user: {
-          id: "1",
-          firstName: "John",
-          lastName: "Doe",
-          email: "john.doe@example.com",
-        },
-        token: "eyJhbGciOiJIUzI1NiJ9eyJpZCI6MX0JAWUkAU2mWhxcd6MS8r9pd44yBIfkEBmpr3WLeqIccM",
-      },
+      data: userData,
     });
 
     render(
@@ -90,29 +83,21 @@ describe("Signup Component", () => {
     const passwordInput = screen.getByLabelText(/Password/i);
     const submitButton = screen.getByRole("button", { name: /Create Account/i });
 
-    fireEvent.change(firstNameInput, { target: { value: "John" } });
-    fireEvent.change(lastNameInput, { target: { value: "Doe" } });
-    fireEvent.change(emailInput, { target: { value: "john.doe@example.com" } });
+    fireEvent.change(firstNameInput, { target: { value: "Abdullah" } });
+    fireEvent.change(lastNameInput, { target: { value: "Umer" } });
+    fireEvent.change(emailInput, { target: { value: "abd@gmail.com" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
 
     fireEvent.click(submitButton);
 
     await waitFor(() => {
       expect(mockSignup).toHaveBeenCalledWith({
-        firstName: "John",
-        lastName: "Doe",
-        email: "john.doe@example.com",
+        firstName: "Abdullah",
+        lastName: "Umer",
+        email: "abd@gmail.com",
         password: "password123"
       });
-      expect(saveUser).toHaveBeenCalledWith({
-        user: {
-          id: "1",
-          firstName: "John",
-          lastName: "Doe",
-          email: "john.doe@example.com",
-        },
-        token: "eyJhbGciOiJIUzI1NiJ9eyJpZCI6MX0JAWUkAU2mWhxcd6MS8r9pd44yBIfkEBmpr3WLeqIccM",
-      });
+      expect(saveUser).toHaveBeenCalledWith(userData);
       expect(toast).toHaveBeenCalledWith({
         variant: "default",
         title: "Success",
@@ -143,18 +128,18 @@ describe("Signup Component", () => {
     const passwordInput = screen.getByLabelText(/Password/i);
     const submitButton = screen.getByRole("button", { name: /Create Account/i });
 
-    fireEvent.change(firstNameInput, { target: { value: "John" } });
-    fireEvent.change(lastNameInput, { target: { value: "Doe" } });
-    fireEvent.change(emailInput, { target: { value: "john.doe@example.com" } });
+    fireEvent.change(firstNameInput, { target: { value: "Abdullah" } });
+    fireEvent.change(lastNameInput, { target: { value: "Umer" } });
+    fireEvent.change(emailInput, { target: { value: "abd@gmail.com" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
 
     fireEvent.click(submitButton);
 
     await waitFor(() => {
       expect(mockSignup).toHaveBeenCalledWith({
-        firstName: "John",
-        lastName: "Doe",
-        email: "john.doe@example.com",
+        firstName: "Abdullah",
+        lastName: "Umer",
+        email: "abd@gmail.com",
         password: "password123"
       });
       expect(toast).toHaveBeenCalledWith({
