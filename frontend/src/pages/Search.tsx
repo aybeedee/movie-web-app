@@ -17,7 +17,7 @@ export default function Search() {
   // when search params are updated, page re renders and this use effect sets the new query again
   useEffect(() => {
     const searchQueryFromParams = searchParams.get("query");
-    if (searchQueryFromParams) {
+    if (searchQueryFromParams !== null) {
       setSearchQuery(searchQueryFromParams);
     }
   }, [searchParams.get("query")]);
