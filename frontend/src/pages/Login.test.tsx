@@ -4,6 +4,7 @@ import Login from "./Login";
 import { login } from "@/api/auth";
 import { useAuth } from "@/hooks";
 import { useToast } from "@/components/ui/use-toast";
+import { userData } from "@/fixtures/users";
 
 jest.mock("@/api/auth");
 jest.mock("@/hooks");
@@ -48,10 +49,10 @@ describe("Login Component", () => {
     const emailInput = screen.getByLabelText(/Email/i);
     const passwordInput = screen.getByLabelText(/Password/i);
 
-    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+    fireEvent.change(emailInput, { target: { value: "abd@gmail.com" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
 
-    expect(emailInput).toHaveValue("test@example.com");
+    expect(emailInput).toHaveValue("abd@gmail.com");
     expect(passwordInput).toHaveValue("password123");
   });
 
@@ -59,15 +60,7 @@ describe("Login Component", () => {
     mockLogin.mockResolvedValue({
       error: false,
       message: "Login successful",
-      data: {
-        user: {
-          id: "1",
-          firstName: "Test",
-          lastName: "User",
-          email: "test@example.com",
-        },
-        token: "eyJhbGciOiJIUzI1NiJ9eyJpZCI6MX0JAWUkAU2mWhxcd6MS8r9pd44yBIfkEBmpr3WLeqIccM",
-      },
+      data: userData,
     });
 
     render(
@@ -80,25 +73,17 @@ describe("Login Component", () => {
     const passwordInput = screen.getByLabelText(/Password/i);
     const submitButton = screen.getByRole("button", { name: /Login/i });
 
-    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+    fireEvent.change(emailInput, { target: { value: "abd@gmail.com" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
 
     fireEvent.click(submitButton);
 
     await waitFor(() => {
       expect(mockLogin).toHaveBeenCalledWith({
-        email: "test@example.com",
+        email: "abd@gmail.com",
         password: "password123"
       });
-      expect(saveUser).toHaveBeenCalledWith({
-        user: {
-          id: "1",
-          firstName: "Test",
-          lastName: "User",
-          email: "test@example.com",
-        },
-        token: "eyJhbGciOiJIUzI1NiJ9eyJpZCI6MX0JAWUkAU2mWhxcd6MS8r9pd44yBIfkEBmpr3WLeqIccM",
-      });
+      expect(saveUser).toHaveBeenCalledWith(userData);
       expect(toast).toHaveBeenCalledWith({
         variant: "default",
         title: "Success",
@@ -127,14 +112,14 @@ describe("Login Component", () => {
     const passwordInput = screen.getByLabelText(/Password/i);
     const submitButton = screen.getByRole("button", { name: /Login/i });
 
-    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+    fireEvent.change(emailInput, { target: { value: "abd@gmail.com" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
 
     fireEvent.click(submitButton);
 
     await waitFor(() => {
       expect(mockLogin).toHaveBeenCalledWith({
-        email: "test@example.com",
+        email: "abd@gmail.com",
         password: "password123"
       });
       expect(toast).toHaveBeenCalledWith({
