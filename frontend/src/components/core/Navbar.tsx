@@ -72,7 +72,7 @@ export default function Navbar() {
                 className="text-sm py-1 pl-10 text-black border border-slate-200 w-full rounded-sm focus:outline-none"
                 type="text"
                 placeholder="Search for a title"
-                required={true}
+                required={false}
                 value={searchInput}
                 onChange={handleInputChange}
               />

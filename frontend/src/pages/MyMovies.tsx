@@ -500,6 +500,7 @@ export default function MyMovies() {
                           <Pencil className="w-5" />
                         </button>
                         <button
+                          data-testid="delete-movie-button"
                           onClick={() => handleDeleteMovie(movie.id)}
                           className="w-full flex flex-row justify-center bg-[#3abab4] border border-[#3abab4]/50 shadow-[#3abab4]/15 shadow-lg hover:bg-[#3abab4]/75 hover:shadow-black/5 active:bg-[#3abab4]/50 active:shadow-black active:shadow-inner active:border-black/25 text-white px-4 py-1 rounded-sm"
                         >

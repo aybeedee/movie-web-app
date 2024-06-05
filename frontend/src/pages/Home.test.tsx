@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import Home from "./Home";
 import { getAllRankedMovies, getFeaturedMovies, getNewMovies } from "@/api/movies";
 import { useToast } from "@/components/ui/use-toast";
+import { moviesData } from "@/fixtures/movies";
 
 jest.mock("@/api/movies");
 jest.mock("@/components/ui/use-toast");
@@ -35,51 +36,21 @@ describe("Home Component", () => {
       error: false,
       message: "New movies successfully fetched",
       data: {
-        movies: [{
-          id: "1",
-          title: "Inception",
-          description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-          releaseYear: 2010,
-          durationHours: 2,
-          durationMinutes: 28,
-          reviewCount: 1,
-          posterUrl: "https://picsum.photos/seed/Inception/500/750",
-          trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-        }],
+        movies: [moviesData[0]],
       },
     });
     mockGetFeaturedMovies.mockResolvedValue({
       error: false,
       message: "New movies successfully fetched",
       data: {
-        movies: [{
-          id: "1",
-          title: "Pulp Fiction",
-          description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-          releaseYear: 2010,
-          durationHours: 2,
-          durationMinutes: 28,
-          reviewCount: 1,
-          posterUrl: "https://picsum.photos/seed/Inception/500/750",
-          trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-        }],
+        movies: [moviesData[1]],
       },
     });
     mockGetNewMovies.mockResolvedValue({
       error: false,
       message: "All movies successfully fetched",
       data: {
-        movies: [{
-          id: "1",
-          title: "The Godfather",
-          description: "Directed by Christopher Nolan, 'Inception' is a mind-bending heist film set in a world where technology exists to enter the human mind through dreams. Dom Cobb, a skilled thief, is tasked with the seemingly impossible mission of planting an idea into the mind of a CEO. As he delves deeper into the layers of the subconscious, Cobb must confront his own demons and question the nature of reality.",
-          releaseYear: 2010,
-          durationHours: 2,
-          durationMinutes: 28,
-          reviewCount: 1,
-          posterUrl: "https://picsum.photos/seed/Inception/500/750",
-          trailerUrl: "https://www.youtube.com/embed/ycoY201RTRo"
-        }],
+        movies: [moviesData[2]],
       },
     });
 
@@ -89,21 +60,19 @@ describe("Home Component", () => {
       </BrowserRouter>
     );
 
+    expect(screen.getByText(/Top Ranked/i)).toBeInTheDocument();
+    expect(screen.getByText(/Featured Today/i)).toBeInTheDocument();
+    expect(screen.getByText(/Newly Added/i)).toBeInTheDocument();
+
     await waitFor(() => {
       expect(mockGetAllRankedMovies).toHaveBeenCalled();
       expect(mockGetFeaturedMovies).toHaveBeenCalled();
       expect(mockGetNewMovies).toHaveBeenCalled();
     });
 
-    expect(screen.getByText(/Top Ranked/i)).toBeInTheDocument();
-    expect(screen.getByText(/Featured Today/i)).toBeInTheDocument();
-    expect(screen.getByText(/Newly Added/i)).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(screen.getByText(/Inception/i)).toBeInTheDocument();
-      expect(screen.getByText(/Pulp Fiction/i)).toBeInTheDocument();
-      expect(screen.getByText(/The Godfather/i)).toBeInTheDocument();
-    });
+    expect(screen.getByText(new RegExp(moviesData[0].title, "i"))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(moviesData[1].title, "i"))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(moviesData[2].title, "i"))).toBeInTheDocument();
   });
 
   test("handles errors when fetching movies", async () => {
@@ -144,22 +113,20 @@ describe("Home Component", () => {
       expect(mockGetNewMovies).toHaveBeenCalled();
     });
 
-    await waitFor(() => {
-      expect(toast).toHaveBeenCalledWith({
-        variant: "destructive",
-        title: "An error occured",
-        description: "There was a problem fetching ranked movies.",
-      });
-      expect(toast).toHaveBeenCalledWith({
-        variant: "destructive",
-        title: "An error occured",
-        description: "There was a problem fetching featured movies.",
-      });
-      expect(toast).toHaveBeenCalledWith({
-        variant: "destructive",
-        title: "An error occured",
-        description: "There was a problem fetching new movies.",
-      });
+    expect(toast).toHaveBeenCalledWith({
+      variant: "destructive",
+      title: "An error occured",
+      description: "There was a problem fetching ranked movies.",
+    });
+    expect(toast).toHaveBeenCalledWith({
+      variant: "destructive",
+      title: "An error occured",
+      description: "There was a problem fetching featured movies.",
+    });
+    expect(toast).toHaveBeenCalledWith({
+      variant: "destructive",
+      title: "An error occured",
+      description: "There was a problem fetching new movies.",
     });
   });
 });
