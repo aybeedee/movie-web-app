@@ -8,7 +8,9 @@ const config: Options = {
   host: envConfig.POSTGRES_HOST,
   port: Number(envConfig.POSTGRES_PORT),
   dialect: "postgres",
-  ssl: envConfig.POSTGRES_SSL_MODE === "require",
+  dialectOptions: {
+    ssl: envConfig.POSTGRES_SSL_MODE === "require",
+  },
 };
 
 export const sequelize = new Sequelize(config);
